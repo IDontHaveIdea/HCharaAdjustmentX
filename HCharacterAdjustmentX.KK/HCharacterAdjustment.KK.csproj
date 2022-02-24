@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\BuildSettings.Common.props" />
+
+  <Import Project="..\HCharacterAdjustmentX.Core\HCharacterAdjustmentX.Core.projitems" Label="Shared" />
+
+  <Import Project="..\BuildSettings.Koikatu.props" />
+
+  <PropertyGroup>
+    <ProjectGuid>{6FF4B0F9-EE1D-4CCF-8432-E355E54F667D}</ProjectGuid>
+    <RootNamespace>IDHIPlugins</RootNamespace>
+    <AssemblyName>KK_$(MSBuildProjectName.Replace(".KK", ""))</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="BepInEx.ConfigurationManager" Version="16.4.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="IllusionLibs.BepInEx" Version="5.4.15" />
+    <PackageReference Include="IllusionLibs.Koikatu.Assembly-CSharp" Version="2019.4.27.4" />
+    <PackageReference Include="IllusionLibs.Koikatu.Assembly-CSharp-firstpass" Version="2019.4.27.4" />
+    <PackageReference Include="IllusionLibs.Koikatu.UnityEngine" Version="5.6.2.4" />
+    <PackageReference Include="IllusionLibs.Koikatu.UnityEngine.UI" Version="5.6.2.4" />
+    <PackageReference Include="IllusionModdingAPI.KKAPI" Version="1.31.2" />
+    <PackageReference Include="Microsoft.Unity.Analyzers" Version="1.12.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AnimationLoader.Koikatu">
+      <HintPath>..\..\..\..\IllusionGames\IDHIPlugins\lib\KK\AnimationLoader.Koikatu.dll</HintPath>
+    </Reference>
+    <Reference Include="KK_IDHIUtils">
+      <HintPath>..\..\lib\KK\KK_IDHIUtils.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
