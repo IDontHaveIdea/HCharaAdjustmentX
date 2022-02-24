@@ -40,10 +40,10 @@
 
   <ItemGroup>
     <Reference Include="AnimationLoader.KoikatsuSunshine">
-      <HintPath>..\..\..\..\IllusionGames\IDHIPlugins\lib\KKS\AnimationLoader.KoikatsuSunshine.dll</HintPath>
+      <HintPath>..\..\..\..\..\IllusionGames\IDHIPlugins\lib\KKS\AnimationLoader.KoikatsuSunshine.dll</HintPath>
     </Reference>
     <Reference Include="KKS_IDHIUtils">
-      <HintPath>..\..\lib\KKS\KKS_IDHIUtils.dll</HintPath>
+      <HintPath>..\..\..\lib\KKS\KKS_IDHIUtils.dll</HintPath>
     </Reference>
   </ItemGroup>
 

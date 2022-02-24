@@ -36,10 +36,10 @@
 
   <ItemGroup>
     <Reference Include="AnimationLoader.Koikatu">
-      <HintPath>..\..\..\..\IllusionGames\IDHIPlugins\lib\KK\AnimationLoader.Koikatu.dll</HintPath>
+      <HintPath>..\..\..\..\..\IllusionGames\IDHIPlugins\lib\KK\AnimationLoader.Koikatu.dll</HintPath>
     </Reference>
     <Reference Include="KK_IDHIUtils">
-      <HintPath>..\..\lib\KK\KK_IDHIUtils.dll</HintPath>
+      <HintPath>..\..\..\lib\KK\KK_IDHIUtils.dll</HintPath>
     </Reference>
   </ItemGroup>
 
