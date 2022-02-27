@@ -4,12 +4,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using CTRLR = IDHIPlugins.HCharaterAdjustX.HCharacterAdjustXController;
+using CTRLR = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 
 
 namespace IDHIPlugins
 {
-    public partial class HCharaterAdjustX
+    public partial class HCharaAdjustmentX
     {
         public class ButtonsGUI
         {

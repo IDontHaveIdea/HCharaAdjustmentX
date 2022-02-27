@@ -5,12 +5,12 @@ using KKAPI;
 
 using IDHIUtils;
 
-using static IDHIPlugins.HCharaterAdjustX.HCharacterAdjustXController;
+using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 
 
 namespace IDHIPlugins
 {
-    public partial class HCharaterAdjustX
+    public partial class HCharaAdjustmentX
     {
         #region private classes
         internal class ButtonsInterface
@@ -41,7 +41,7 @@ namespace IDHIPlugins
                 set
                 {
 #if DEBUG
-                    Log.Info($"[ButtonsInterface] Trigger ShowInterface for {_chaType} with " +
+                    _Log.Info($"[ButtonsInterface] Trigger ShowInterface for {_chaType} with " +
                         $"value {value}");
 #endif
                     _showInterface = value;
@@ -49,7 +49,7 @@ namespace IDHIPlugins
                     {
                         _botones[_chaType]?.Clear();
 #if DEBUG
-                        Log.Info($"[ButtonsInterface] Clear interface " +
+                        _Log.Info($"[ButtonsInterface] Clear interface " +
                             $"buttons({_botones[_chaType]?.Count}) for" +
                             $" {_chaType} with value {value}");
 #endif
@@ -59,7 +59,7 @@ namespace IDHIPlugins
                         return;
                     }
 #if DEBUG
-                    Log.Info($"[ButtonsInterface] Call SetupInterface for {_chaType} with " +
+                    _Log.Info($"[ButtonsInterface] Call SetupInterface for {_chaType} with " +
                         $"value {value}");
 #endif
                     SetupInterface(_chaType);

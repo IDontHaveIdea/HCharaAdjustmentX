@@ -9,12 +9,12 @@ using KKAPI;
 using UnityEngine;
 
 using IDHIUtils;
-using static IDHIPlugins.HCharaterAdjustX.HCharacterAdjustXController;
+using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 
 
 namespace IDHIPlugins
 {
-    public partial class HCharaterAdjustX
+    public partial class HCharaAdjustmentX
     {
         #region private fields
         // TODO: Use a properties class to have one dictionary
@@ -70,7 +70,7 @@ namespace IDHIPlugins
                     foreach (var moveButton in _botones[CharacterType.Heroine])
                     {
                         GUI.contentColor = moveButton.ForegroundColor;
-                        GUI.backgroundColor = SvgColor.mediumorchid;
+                        GUI.backgroundColor = _SvgColor.mediumorchid;
                         GUI.backgroundColor.AlphaMultiplied(1f);
                         if (GUI.Button(moveButton.Position, moveButton.Text))
                         {
@@ -88,7 +88,7 @@ namespace IDHIPlugins
                     foreach (var moveButton in _botones[CharacterType.Player])
                     {
                         GUI.contentColor = moveButton.ForegroundColor;
-                        GUI.backgroundColor = SvgColor.blue;
+                        GUI.backgroundColor = _SvgColor.blue;
                         GUI.backgroundColor.AlphaMultiplied(1f);
                         if (GUI.Button(moveButton.Position, moveButton.Text))
                         {
@@ -112,7 +112,7 @@ namespace IDHIPlugins
         static private void SetupInterface(CharacterType chaType)
         {
 #if DEBUG
-            Log.Info($"[SetupInterface] Trigger for {chaType}");
+            _Log.Info($"[SetupInterface] Trigger for {chaType}");
 
 #endif
             var _chaControl = chaType switch
@@ -133,8 +133,8 @@ namespace IDHIPlugins
 
             _botones[chaType] = GetController(_chaControl).buttons.ToList();
 #if DEBUG
-            Log.Info($"[SetupInterface] Define {_botones[chaType].Count} buttons for {chaType}");
-            Log.Info($"[SetupInterface] Can display buttons for {chaType} {_buttonsInterface[chaType].ShowInterface}");
+            _Log.Info($"[SetupInterface] Define {_botones[chaType].Count} buttons for {chaType}");
+            _Log.Info($"[SetupInterface] Can display buttons for {chaType} {_buttonsInterface[chaType].ShowInterface}");
 #endif
         }
 
@@ -143,7 +143,7 @@ namespace IDHIPlugins
         /// </summary>
         static public void ToggleGroupGuideObject(bool state)
         {
-            Log.Info($"Yes Batman is {state}!!");
+            _Log.Info($"Yes Batman is {state}!!");
             _hprocInstance.sprite.axis.tglDraw.isOn = state;
             _hprocInstance.sprite.MoveAxisDraw(_hprocInstance.sprite.axis.tglDraw.isOn);
             _hprocInstance.guideObject.gameObject.SetActive(state);
