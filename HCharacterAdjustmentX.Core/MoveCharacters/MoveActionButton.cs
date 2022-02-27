@@ -5,8 +5,8 @@ using UnityEngine;
 
 using IDHIUtils;
 
-using SHCA = IDHIPlugins.HCharaterAdjustX;
-using static IDHIPlugins.HCharaterAdjustX.HCharacterAdjustXController;
+using SHCA = IDHIPlugins.HCharaAdjustmentX;
+using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 using static IDHIPlugins.MoveEvent;
 
 namespace IDHIPlugins
@@ -45,7 +45,7 @@ namespace IDHIPlugins
         public void TriggerEvent()
         {
 #if DEBUG
-            Log.Info($"SHCA0035: {Text} Button pressed for {ChaType} ");
+            SHCA._Log.Info($"SHCA0035: {Text} Button pressed for {ChaType} ");
 #endif
             InvokeOnMoveRequest(null, new MoveRequestEventArgs(ChaType, Move));
         }

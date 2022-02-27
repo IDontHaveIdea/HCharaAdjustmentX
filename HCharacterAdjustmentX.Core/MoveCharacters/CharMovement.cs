@@ -8,13 +8,13 @@ using UnityEngine;
 
 using IDHIUtils;
 
-using CharacterType = IDHIPlugins.HCharaterAdjustX.HCharacterAdjustXController.CharacterType;
+using CharacterType = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController.CharacterType;
 using MoveType = IDHIPlugins.MoveEvent.MoveType;
 
 
 namespace IDHIPlugins
 {
-    public partial class HCharaterAdjustX
+    public partial class HCharaAdjustmentX
     {
         /// <summary>
         /// Take care of movement requests
@@ -24,7 +24,7 @@ namespace IDHIPlugins
             #region private fields
             static internal HSceneGuideObject _guideObject;
             static internal ChaControl _chaControl;
-            static internal HCharacterAdjustXController _controller;
+            static internal HCharaAdjusmentXController _controller;
             static internal bool _doShortcutMove;
             static internal bool _positiveMove;
             static internal string _animationGUID = "";
@@ -63,22 +63,22 @@ namespace IDHIPlugins
                 _pathFemaleBase = _hprocInstance.flags.nowAnimationInfo.pathFemaleBase.assetpath;
                 if (_animationGUID == null)
                 {
-                    Log.Level(LogLevel.Warning, $"SHCA0028: No animationGUID.");
+                    _Log.Level(LogLevel.Warning, $"SHCA0028: No animationGUID.");
                 }
                 if (_animationID < 0)
                 {
-                    Log.Level(LogLevel.Warning, $"SHCA0029: No animationID.");
+                    _Log.Level(LogLevel.Warning, $"SHCA0029: No animationID.");
                 }
 #if DEBUG
                 if (_animationGUID != null)
                 {
-                    Log.Info($"SHCA0030: Move {move} requested for ID: {_animationID} - name" +
+                    _Log.Info($"SHCA0030: Move {move} requested for ID: {_animationID} - name" +
                         $" {Translate(_animationGUID)} ({_animationGUID}).");
-                    Log.Info($"SHCA0031: asset {_pathFemaleBase}");
+                    _Log.Info($"SHCA0031: asset {_pathFemaleBase}");
                 }
                 else
                 {
-                    Log.Info($"SHCA0032: Move {move} requested for ID: {_animationID}.");
+                    _Log.Info($"SHCA0032: Move {move} requested for ID: {_animationID}.");
                 }
 #endif
                 // Normal button press
@@ -156,7 +156,7 @@ namespace IDHIPlugins
                 {
 #if DEBUG
                     var tmp = _chaControl.transform.position;
-                    Log.Info($"SHCA0033: Move from position" +
+                    _Log.Info($"SHCA0033: Move from position" +
                         $" ({tmp.x }, {tmp.y}, {tmp.z}) {chaType}" +
                              $" to position" +
                         $" ({_newPosition.x }, {_newPosition.y}, {_newPosition.z}) {chaType}");

@@ -10,12 +10,12 @@ using IDHIUtils;
 
 namespace IDHIPlugins
 {
-    public partial class HCharaterAdjustX
+    public partial class HCharaAdjustmentX
     {
         /// <summary>
         /// Move events
         /// </summary>
-        public partial class HCharacterAdjustXController : CharaCustomFunctionController
+        public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
             static public event EventHandler<MoveRequestEventArgs> OnMoveRequest;
 
@@ -35,8 +35,14 @@ namespace IDHIPlugins
             /// </summary>
             /// <param name="_sender"></param>
             /// <param name="_args"></param>
-            static internal void InvokeOnMoveRequest(object _sender, MoveRequestEventArgs _args) =>
+            static internal void InvokeOnMoveRequest(object _sender, MoveRequestEventArgs _args)
+            {
                 OnMoveRequest?.Invoke(_sender, _args);
+            }
+
+            // static internal void InvokeOnMoveRequest(object _sender, MoveRequestEventArgs _args) =>
+            //     OnMoveRequest?.Invoke(_sender, _args);
+
 
             /// <summary>
             /// Add action to OnMoveRequest event
@@ -45,7 +51,7 @@ namespace IDHIPlugins
             {
                 OnMoveRequest += (_sender, _args) => 
                 {
-                    Log.Info($"Call to action {_args.Move} - {_args.ChaType}");
+                    _Log.Info($"Call to action {_args.Move} - {_args.ChaType}");
                     CharMovement.Move(_args.ChaType, _args.Move);
                 };
             }
