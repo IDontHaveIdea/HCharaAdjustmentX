@@ -11,7 +11,7 @@ using IDHIUtils;
 
 namespace IDHIPlugins
 {
-    public partial class HCharaterAdjustX
+    public partial class HCharaAdjustmentX
     {
         // Controller
         static internal Vector3 _newPosition = Vector3.zero;
@@ -20,7 +20,7 @@ namespace IDHIPlugins
         static internal Vector3 _udAdjustUnit = new(0, 0.01f, 0);
         static internal float _fAdjustStep = 0.01f;
 
-        public partial class HCharacterAdjustXController : CharaCustomFunctionController
+        public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
             #region private fields
             internal CharacterType _chaType = CharacterType.Unknown;
@@ -40,7 +40,7 @@ namespace IDHIPlugins
             #region private methods
             internal void Init(HSceneProc hSceneProc, CharacterType characterType)
             {
-                Log.Info($"SHCA0002: Initialization for {characterType}");
+                _Log.Info($"SHCA0002: Initialization for {characterType}");
                 _chaType = characterType;
                 CreateGuideObject(hSceneProc, characterType);
                 SetOriginalPosition();
@@ -61,8 +61,10 @@ namespace IDHIPlugins
             /// <summary>
             /// Save original position
             /// </summary>
-            internal void SetOriginalPosition() =>
+            internal void SetOriginalPosition()
+            {
                 _originalPosition = ChaControl.transform.position;
+            }
             #endregion
 
             #region public methods
@@ -82,7 +84,7 @@ namespace IDHIPlugins
                         ChaControl.transform.position = _originalPosition;
                     }
 #if DEBUG
-                    Log.Info($"SHCA0003: Reset position for {_chaType}");
+                    _Log.Info($"SHCA0003: Reset position for {_chaType}");
 #endif
                 }
             }
@@ -126,7 +128,7 @@ namespace IDHIPlugins
                         _udAdjustUnit.y = _fAdjustStep;
                         DoRecalc = false;
 #if DEBUG
-                        Log.Info($"SHCA0036: Calculation for {_chaType} " +
+                        _Log.Info($"SHCA0036: Calculation for {_chaType} " +
                             $"with Step {_fAdjustStep} - " +
                             $"TF ({ChaControl.transform.forward.x }, " +
                             $"{ChaControl.transform.forward.y}, " +
@@ -148,7 +150,7 @@ namespace IDHIPlugins
                         if (Heroine.Menu.Value.IsDown())
                         {
 #if DEBUG
-                            Log.Info($"[SHCAdjustController] Toggle interface for {_chaType} " +
+                            _Log.Info($"[SHCAdjustController] Toggle interface for {_chaType} " +
                                 $"current {_buttonsInterface[_chaType].ShowInterface}");
 #endif
                             _buttonsInterface[_chaType].ShowInterface =
@@ -160,7 +162,7 @@ namespace IDHIPlugins
                         if (Player.Menu.Value.IsDown())
                         {
 #if DEBUG
-                            Log.Info($"[SHCAdjustController] Toggle interface for {_chaType} " +
+                            _Log.Info($"[SHCAdjustController] Toggle interface for {_chaType} " +
                                 $"current {_buttonsInterface[_chaType].ShowInterface}");
 #endif
                             _buttonsInterface[_chaType].ShowInterface =

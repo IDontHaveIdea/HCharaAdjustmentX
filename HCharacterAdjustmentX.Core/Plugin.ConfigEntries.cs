@@ -7,12 +7,12 @@ using BepInEx.Configuration;
 
 using KKAPI.Utilities;
 
-using IDHIUtils;
+//using IDHIUtils;
 
 
 namespace IDHIPlugins
 {
-    public partial class HCharaterAdjustX
+    public partial class HCharaAdjustmentX
     {
         static internal KeyShortcuts Heroine = new();
         static internal KeyShortcuts Heroine3P = new();
@@ -29,7 +29,7 @@ namespace IDHIPlugins
             {
                 #region HCharaAdjustment Functionality
 #if DEBUG
-                Log.Info($"SHCA0036: Creating Shortcuts for Guide");
+                _Log.Info($"SHCA0036: Creating Shortcuts for Guide");
 #endif
                 Heroine.GuideObject = Config.Bind(
                     section: sectionKeys,
@@ -147,13 +147,13 @@ namespace IDHIPlugins
                         sectionKeys,
                         "Reset Player Position"));
 #if DEBUG
-                Log.Info($"SHCA0037: Removing Shortcuts for Guide");
+                _Log.Info($"SHCA0037: Removing Shortcuts for Guide");
 #endif
                 #endregion
             }
 
 #if DEBUG
-            Log.Info($"SHCA0038: Creating Shortcuts for Characters");
+            _Log.Info($"SHCA0038: Creating Shortcuts for Characters");
 #endif
             #region Heroine
             Heroine.Menu = Config.Bind(
@@ -193,7 +193,7 @@ namespace IDHIPlugins
 
             #region Steps
 #if DEBUG
-            Log.Info($"SHCA0039: Creating Shortcuts for Steps");
+            _Log.Info($"SHCA0039: Creating Shortcuts for Steps");
 #endif
 
             sectionKeys = "Movement Step";
@@ -211,7 +211,7 @@ namespace IDHIPlugins
                 {
                     _fAdjustStep = cfgAdjustmentStep.Value;
 #if DEBUG
-                    Log.Info($"SHCA0040: Movement step read in configuration - {cfgAdjustmentStep.Value}");
+                    _Log.Info($"SHCA0040: Movement step read in configuration - {cfgAdjustmentStep.Value}");
 #endif
                 }
             };

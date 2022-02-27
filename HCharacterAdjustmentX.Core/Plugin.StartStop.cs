@@ -7,15 +7,13 @@ using UnityEngine.SceneManagement;
 
 using BepInEx.Logging;
 
-using IDHIUtils;
-
 using static IDHIPlugins.HProcScene;
-using static IDHIPlugins.HCharaterAdjustX.HCharacterAdjustXController;
+using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 
 
 namespace IDHIPlugins
 {
-    public partial class HCharaterAdjustX
+    public partial class HCharaAdjustmentX
     {
         /// <summary>
         /// Wait for screen with name HProc this is a H scene loading.
@@ -27,7 +25,6 @@ namespace IDHIPlugins
         {
             if (scene.name == "HProc")
             {
-                Log.Warning($"XXXX: Start SHCA.");
                 _sceneName = scene.name;
                 Hooks.Init();
                 HProcScene.HSHooks.Init();
@@ -41,7 +38,7 @@ namespace IDHIPlugins
         private void OnHProcExit(object s, EventArgs e)
         {
 #if DEBUG
-            Log.Info($"SHCA0024: Removing patches and disabling SHCA.");
+            _Log.Info($"SHCA0024: Removing patches and disabling SHCA.");
 #endif
             SetControllerEnabled(false);
             if (_hprocInstance != null)
@@ -52,12 +49,13 @@ namespace IDHIPlugins
             try
             {
                 _hookInstance.UnpatchSelf();
+                _hookInstance = null;
             }
             catch (Exception ex) {
-                Log.Level(LogLevel.Error, $"SHCA0034: {ex}");
+                _Log.Level(LogLevel.Error, $"SHCA0034: {ex}");
             }
 #if DEBUG
-            Log.Info($"SHCA0025: Removing patches and disabling SHCA OK.");
+            _Log.Info($"SHCA0025: Removing patches and disabling SHCA OK.");
 #endif
             HProcScene.OnHSceneExiting -= OnHProcExit;
         }
@@ -65,7 +63,7 @@ namespace IDHIPlugins
         private void OnHProcFinishedLoading(object s, HSceneFinishedLoadingEventArgs e)
         {
 #if DEBUG
-            Log.Info($"SHCA0041: Enabling SHCA..");
+            _Log.Info($"SHCA0041: Enabling SHCA..");
 #endif
             SetupController(e.Instance);
             enabled = true;
@@ -84,7 +82,7 @@ namespace IDHIPlugins
             // verify if is a scene we support
             if (!IsSupportedScene)
             {
-                Log.Warning($"SHCA0006: No Way José!! The _mode {_mode}" +
+                _Log.Warning($"SHCA0006: No Way José!! The _mode {_mode}" +
                     $" is not supported.");
                 return;
             }
@@ -118,12 +116,12 @@ namespace IDHIPlugins
                     {
                         GetController(Heroines[i]).enabled = setState;
 #if DEBUG
-                        Log.Info($"SHCA0014: Controller {setEnabled(setState)} for {(CharacterType)i}");
+                        _Log.Info($"SHCA0014: Controller {setEnabled(setState)} for {(CharacterType)i}");
 #endif
                     }
                     catch (Exception e)
                     {
-                        Log.Level(LogLevel.Warning, $"SHCA0016: Error trying to " +
+                        _Log.Level(LogLevel.Warning, $"SHCA0016: Error trying to " +
                             $"{setEnabled(setState)} the Controller for {(CharacterType)i} - {e}");
                     }
                 }
@@ -132,16 +130,16 @@ namespace IDHIPlugins
                 {
                     GetController(HProcScene.Player).enabled = setState;
 #if DEBUG
-                    Log.Info($"SHCA0015: Controller {setEnabled(setState)} for Player");
+                    _Log.Info($"SHCA0015: Controller {setEnabled(setState)} for Player");
 #endif
                 }
                 catch (Exception e)
                 {
-                    Log.Level(LogLevel.Warning, $"SHCA0017: Error trying to " +
+                    _Log.Level(LogLevel.Warning, $"SHCA0017: Error trying to " +
                         $"{setEnabled(setState)} the Controller for Player - \n{e}");
                 }
             }
-            catch { Log.Level(LogLevel.Error, $"No Heroines found."); }
+            catch { _Log.Level(LogLevel.Error, $"No Heroines found."); }
         }
 
         static readonly internal Func<bool, string> setEnabled = state =>

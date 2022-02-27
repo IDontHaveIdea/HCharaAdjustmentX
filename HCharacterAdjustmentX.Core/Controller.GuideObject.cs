@@ -12,9 +12,9 @@ using IDHIUtils;
 
 namespace IDHIPlugins
 {
-    public partial class HCharaterAdjustX
+    public partial class HCharaAdjustmentX
     {
-        public partial class HCharacterAdjustXController : CharaCustomFunctionController
+        public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
             public HSceneGuideObject _guideObject;
 
@@ -39,7 +39,7 @@ namespace IDHIPlugins
                         + _guideObject.amountOffset.rotation;
 #endif
 #if DEBUG
-                    Log.Info($"SHCA0026: Creating character guide object for {characterType}");
+                    _Log.Info($"SHCA0026: Creating character guide object for {characterType}");
 #endif
                 }
             }
@@ -71,7 +71,7 @@ namespace IDHIPlugins
 #endif
 
 #if DEBUG
-                Log.Info($"Guide should show.");
+                _Log.Info($"Guide should show.");
 #endif
             }
 
@@ -86,7 +86,7 @@ namespace IDHIPlugins
                 }
                 _guideObject.gameObject.SetActive(false);
 #if DEBUG
-                Log.Info($"Guide should hide");
+                _Log.Info($"Guide should hide");
 #endif
             }
 

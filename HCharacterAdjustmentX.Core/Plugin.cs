@@ -2,16 +2,17 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using KKAPI;
 using KKAPI.Chara;
 using KKAPI.Utilities;
 
+using AnimationLoader;
+
 using IDHIUtils;
 
-using SHCA = IDHIPlugins.HCharaterAdjustX.HCharacterAdjustXController;
+using SHCA = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 
 
 namespace IDHIPlugins
@@ -35,33 +36,29 @@ namespace IDHIPlugins
     ///
     /// </remarks>
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
-    [BepInDependency(IDHIUtils.PInfo.GUID, IDHIUtils.PInfo.Version)]
-    [BepInDependency("essuhauled.animationloader", "1.1.2")]
-    //[BepInDependency("essuhauled.animationloader", AnimationLoader)]
+    [BepInDependency(Utilities.GUID, Utilities.Version)]
+    [BepInDependency(SwapAnim.GUID, SwapAnim.Version)]
     [BepInProcess(KoikatuAPI.GameProcessName)]
-    [BepInPlugin(PInfo.GUID, PInfo.PluginDisplayName, PInfo.Version)]
-    public partial class HCharaterAdjustX : BaseUnityPlugin
+    [BepInPlugin(GUID, PluginDisplayName, Version)]
+    public partial class HCharaAdjustmentX : BaseUnityPlugin
     {
-        #region Fields definitions
         static internal ConfigEntry<bool> DebugInfo;
 
         static internal bool _registered = false;
         static internal bool _showGroupGuide = false;
         static internal string _sceneName;
         static internal string _activeScene;
-        #endregion
+        static internal Logg _Log = new();
+        static internal SvgColor _SvgColor = new();
 
-        #region Properties
         static internal bool IsAibu { get; set; } = false;
         static internal bool IsHoushi { get; set; } = false;
         static internal bool IsSonyu { get; set; } = false;
         static internal bool IsSupportedScene { get; set; } = false;       
-        #endregion
 
-        #region Unity methods
         private void Awake()
         {
-            Log.SetLogSource(base.Logger);
+            _Log.LogSource = base.Logger;
 
             DebugInfo = Config.Bind(
             section: "Debug",
@@ -73,18 +70,13 @@ namespace IDHIPlugins
                 tags: new ConfigurationManagerAttributes { Order = 1, IsAdvanced = true }));
             DebugInfo.SettingChanged += (_sender, _args) =>
             {
-                Log.Enabled = DebugInfo.Value;
-#if DEBUG
-                Log.Level(LogLevel.Info, $"0028: Log.Enabled set to {Log.Enabled}");
-#endif
+                _Log.Enabled = DebugInfo.Value;
+                _Log.Level(LogLevel.Info, $"0028: Log.Enabled set to {_Log.Enabled}");
             };
-            Log.Enabled = DebugInfo.Value;
-#if DEBUG
-            Log.Level(LogLevel.Info, $"0028: Log.Enabled set to {Log.Enabled}");
-#endif
-            Log.Info($"SHCA0001: SimpleHCharaAdjust Loaded.");
-            SvgColor.Init();
-            CharacterApi.RegisterExtraBehaviour<SHCA>(PInfo.GUID);
+            _Log.Enabled = DebugInfo.Value;
+            _Log.Level(LogLevel.Info, $"0028: Log.Enabled set to {_Log.Enabled}");
+            _Log.Info($"SHCA0001: HCharaAdjustmentX Loaded.");
+            CharacterApi.RegisterExtraBehaviour<SHCA>(GUID);
 
             // Monitor loaded scenes
             SceneManager.sceneLoaded += MonitorHProc;
@@ -94,12 +86,12 @@ namespace IDHIPlugins
 #if DEBUG
         private void OnEnable()
         {
-            Log.Info($"1313: [OnEnabled] Called.");
+            _Log.Info($"1313: [OnEnabled] Called.");
         }
 
         private void OnDisable()
         {
-            Log.Info("1314: [OnDisabled] Called.");
+            _Log.Info("1314: [OnDisabled] Called.");
         }
 #endif
 
@@ -109,9 +101,7 @@ namespace IDHIPlugins
         /// </summary>
         private void Start()
         {
-#if DEBUG
-            Log.Info("1315: Start Called.");
-#endif
+            _Log.Info("1315: Start Called.");
 
             // TODO: Decide if pull request or still look to see if can integrate.
             // HCAdjustment.Init();
@@ -127,18 +117,16 @@ namespace IDHIPlugins
             // Start in disabled mode
             enabled = false;
         }
-        #endregion
 
-        #region public methods
         /// <summary>
         /// Get controller for characters
         /// </summary>
         /// <param name="chaControl"></param>
         /// <returns></returns>
-        static public HCharacterAdjustXController GetController(ChaControl chaControl) =>
-            chaControl == null || chaControl.gameObject == null
-            ? null : chaControl.GetComponent<HCharacterAdjustXController>();
-
-        #endregion
+        static public HCharaAdjusmentXController GetController(ChaControl chaControl)
+        {
+            return ((chaControl == null) || (chaControl.gameObject == null))
+                ? null : chaControl.GetComponent<HCharaAdjusmentXController>();
+        }
     }
 }

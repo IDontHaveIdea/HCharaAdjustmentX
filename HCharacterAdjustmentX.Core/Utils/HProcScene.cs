@@ -11,7 +11,7 @@ using HarmonyLib;
 
 using IDHIUtils;
 
-using SHCA = IDHIPlugins.HCharaterAdjustX;
+using SHCA = IDHIPlugins.HCharaAdjustmentX;
 
 
 namespace IDHIPlugins
@@ -68,8 +68,10 @@ namespace IDHIPlugins
             }
         }
 
-        static internal void InvokeOnHSceneStartLoading(object _sender, EventArgs _args) =>
+        static internal void InvokeOnHSceneStartLoading(object _sender, EventArgs _args)
+        {
             OnHSceneStartLoading?.Invoke(_sender, _args);
+        }
         #endregion
 
         #region private methods
@@ -79,17 +81,17 @@ namespace IDHIPlugins
 
             OnHSceneStartLoading += (_sender, _args) =>
             {
-                Log.Info($"SHCA0009: [OnHSceneStartLoading]");
+                SHCA._Log.Info($"SHCA0009: [OnHSceneStartLoading]");
             };
 
             OnHSceneFinishedLoading += (_sender, _args) =>
             {
-                Log.Info($"SHCA0010: [OnHSceneFinishedLoading]");
+                SHCA._Log.Info($"SHCA0010: [OnHSceneFinishedLoading]");
             };
 
             OnHSceneExiting += (_sender, _args) =>
             {
-                Log.Info($"SHCA0011: [OnHSceneExiting]");
+                SHCA._Log.Info($"SHCA0011: [OnHSceneExiting]");
             };
         }
         #endregion
@@ -101,7 +103,7 @@ namespace IDHIPlugins
                 _hsHookInstance = Harmony.CreateAndPatchAll(typeof(HSHooks));
                 if (_hsHookInstance == null)
                 {
-                    Log.Level(LogLevel.Error, $"SHCA0012: [CharHScene] Cannot patch the " +
+                    SHCA._Log.Level(LogLevel.Error, $"SHCA0012: [CharHScene] Cannot patch the " +
                         $"system.");
                     throw new ApplicationException($"SHCA0012: [CharHScene] Cannot patch the " +
                         $"system.");
@@ -114,7 +116,7 @@ namespace IDHIPlugins
                 _hsHookInstance.Patch(HSceneProcType.GetMethod("SetShortcutKey", AccessTools.all),
                     postfix: new HarmonyMethod(typeof(HSHooks), nameof(HSHooks.SetShortcutKeyPostfix)));
 #if DEBUG
-                Log.Info($"SHCA0036: Patch seams OK.");
+                SHCA._Log.Info($"SHCA0036: Patch seams OK.");
 #endif
             }
 
@@ -134,7 +136,7 @@ namespace IDHIPlugins
             {
                 if (Kuuhou)
                 {
-                    Log.Level(LogLevel.Warning, $"SHCA0013: [SetShortcutKey] Already loaded.");
+                    SHCA._Log.Level(LogLevel.Warning, $"SHCA0013: [SetShortcutKey] Already loaded.");
                     return;
                 }
                 Kuuhou = true;

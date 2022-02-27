@@ -16,7 +16,7 @@ using UnityEngine.SceneManagement;
 
 using IDHIUtils;
 
-using static IDHIPlugins.HCharaterAdjustX;
+using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
@@ -33,9 +33,8 @@ namespace IDHIPlugins
                 return;
             }
             var tmp = instance.flags.lstHeroine[0].chaCtrl.transform;
-            Log.Info($"SHCA0016: Scene -  {_sceneName}");
-            Log.Info($"SHCA0017: Female transform position (" +
-                $"{tmp.position.x}, {tmp.position.y}, {tmp.position.z})");
+            _Log.Info($"SHCA0016: Scene -  {_sceneName} Female transform position ("
+                + $"{tmp.position.x}, {tmp.position.y}, {tmp.position.z})");
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace IDHIPlugins
 #if DEBUG
             if (message != null)
             {
-                Log.Info($"SHCA0018: [ResetPositionAll]  - {message}");
+                _Log.Info($"SHCA0018: [ResetPositionAll]  - {message}");
             }
 #endif
             var heroines = _hprocInstance.flags.lstHeroine;
@@ -90,7 +89,7 @@ namespace IDHIPlugins
 #if DEBUG
             if (message != null)
             {
-                Log.Info($"SHCA0019: [SetOrigianalPositionAll]  - {message}");
+                _Log.Info($"SHCA0019: [SetOrigianalPositionAll]  - {message}");
             }
 #endif
             var heroines = _hprocInstance.flags.lstHeroine;
@@ -228,7 +227,7 @@ namespace IDHIPlugins
 #if DEBUG
             if (message != null)
             {
-                Log.Info($"SHCA0020: [RecalcAdjustmentAll]  - {message}");
+                _Log.Info($"SHCA0020: [RecalcAdjustmentAll]  - {message}");
             }
 #endif
             var heroines = _hprocInstance.flags.lstHeroine;
