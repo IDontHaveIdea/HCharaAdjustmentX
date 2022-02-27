@@ -35,6 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Reference Include="AnimationLoader.Koikatu">
       <HintPath>..\..\..\..\..\IllusionGames\IDHIPlugins\lib\KK\AnimationLoader.Koikatu.dll</HintPath>
     </Reference>
