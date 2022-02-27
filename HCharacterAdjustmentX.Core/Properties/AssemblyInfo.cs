@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("https://github.com/IDontHaveIdea/SimpleHCharaAdjust")]
+[assembly: AssemblyCompany("https://github.com/IDontHaveIdea/HCharaAdjustmentX.git")]
 [assembly: AssemblyCopyright("Copyright ©IDontHaveIdea  2021-2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
