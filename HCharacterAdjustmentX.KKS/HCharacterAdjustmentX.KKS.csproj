@@ -39,6 +39,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Reference Include="AnimationLoader.KoikatsuSunshine">
       <HintPath>..\..\..\..\..\IllusionGames\IDHIPlugins\lib\KKS\AnimationLoader.KoikatsuSunshine.dll</HintPath>
     </Reference>
