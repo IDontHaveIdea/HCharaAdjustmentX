@@ -1,4 +1,7 @@
-﻿using BepInEx;
+﻿//
+// HCharaAdjustmentX entry point
+//
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 
