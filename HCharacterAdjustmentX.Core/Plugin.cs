@@ -41,8 +41,8 @@ namespace IDHIPlugins
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
     [BepInDependency(Utilities.GUID, Utilities.Version)]
     [BepInDependency(SwapAnim.GUID, SwapAnim.Version)]
-    [BepInProcess(KoikatuAPI.GameProcessName)]
     [BepInPlugin(GUID, PluginDisplayName, Version)]
+    [BepInProcess(KoikatuAPI.GameProcessName)]
     public partial class HCharaAdjustmentX : BaseUnityPlugin
     {
         static internal ConfigEntry<bool> DebugInfo;
@@ -74,10 +74,10 @@ namespace IDHIPlugins
             DebugInfo.SettingChanged += (_sender, _args) =>
             {
                 _Log.Enabled = DebugInfo.Value;
-                _Log.Level(LogLevel.Info, $"0028: Log.Enabled set to {_Log.Enabled}");
+                _Log.Info($"0028: Log.Enabled set to {_Log.Enabled}");
             };
             _Log.Enabled = DebugInfo.Value;
-            _Log.Level(LogLevel.Info, $"0028: Log.Enabled set to {_Log.Enabled}");
+            _Log.Info($"0028: Log.Enabled set to {_Log.Enabled}");
             _Log.Info($"SHCA0001: HCharaAdjustmentX Loaded.");
             CharacterApi.RegisterExtraBehaviour<SHCA>(GUID);
 

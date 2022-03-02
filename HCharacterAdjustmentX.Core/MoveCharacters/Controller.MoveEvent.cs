@@ -40,10 +40,6 @@ namespace IDHIPlugins
                 OnMoveRequest?.Invoke(_sender, _args);
             }
 
-            // static internal void InvokeOnMoveRequest(object _sender, MoveRequestEventArgs _args) =>
-            //     OnMoveRequest?.Invoke(_sender, _args);
-
-
             /// <summary>
             /// Add action to OnMoveRequest event
             /// </summary>
