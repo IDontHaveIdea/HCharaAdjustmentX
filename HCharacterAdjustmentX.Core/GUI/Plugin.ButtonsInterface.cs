@@ -76,13 +76,13 @@ namespace IDHIPlugins
                 switch (_chaType)
                 {
                     case CharacterType.Heroine:
-                        _chaControl = HProcScene.Heroines[0];
+                        _chaControl = Heroines[0];
                         break;
                     case CharacterType.Player:
-                        _chaControl = HProcScene.Player;
+                        _chaControl = Player;
                         break;
                     case CharacterType.Heroine3P:
-                        _chaControl = HProcScene.Heroines[1];
+                        _chaControl = Heroines[1];
                         break;
                     case CharacterType.Janitor:
                         break;

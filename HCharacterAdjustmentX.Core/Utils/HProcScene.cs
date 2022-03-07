@@ -33,21 +33,21 @@ namespace IDHIPlugins
         /// </summary>
         static public bool Nakadashi { get; internal set; }
 
-        static public HSceneProc Instance { get; internal set; }
+        //static public HSceneProc Instance { get; internal set; }
         /// <summary>
         /// Sprites
         /// </summary>
-        static public List<HSprite> Sprites { get; internal set; } = new List<HSprite>();
+        //static public List<HSprite> Sprites { get; internal set; } = new List<HSprite>();
 
         /// <summary>
         /// Female list
         /// </summary>
-        static public List<ChaControl> Heroines { get; internal set; }
+        //static public List<ChaControl> Heroines { get; internal set; }
 
         /// <summary>
         /// Player
         /// </summary>
-        static public ChaControl Player { get; internal set; }
+        //static public ChaControl Player { get; internal set; }
         #endregion
 
         #region events
@@ -125,8 +125,8 @@ namespace IDHIPlugins
                 OnHSceneExiting?.Invoke(null, null);
                 Nakadashi = false;
                 Kuuhou = false;
-                Heroines = null;
-                Sprites.Clear();
+                //Heroines = null;
+                //Sprites.Clear();
                 _hsHookInstance.UnpatchSelf();
                 _hsHookInstance = null;
             }
@@ -140,10 +140,11 @@ namespace IDHIPlugins
                     return;
                 }
                 Kuuhou = true;
-                Instance = __instance;
-                Heroines = ___lstFemale;
-                Player = ___male;
-                Sprites.Add(___sprite);
+                Nakadashi = true;
+                //Instance = __instance;
+                //Heroines = ___lstFemale;
+                //Player = ___male;
+                //Sprites.Add(___sprite);
                 OnHSceneFinishedLoading?.Invoke(null, 
                     new HSceneFinishedLoadingEventArgs(__instance, ___lstFemale, ___male));
             }

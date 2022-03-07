@@ -117,9 +117,9 @@ namespace IDHIPlugins
 #endif
             var _chaControl = chaType switch
             {
-                CharacterType.Heroine => HProcScene.Heroines[0],
-                CharacterType.Player => HProcScene.Player,
-                CharacterType.Heroine3P => HProcScene.Heroines[1],
+                CharacterType.Heroine => Heroines[0],
+                CharacterType.Player => Player,
+                CharacterType.Heroine3P => Heroines[1],
                 _ => null,
             };
 
@@ -143,7 +143,9 @@ namespace IDHIPlugins
         /// </summary>
         static public void ToggleGroupGuideObject(bool state)
         {
-            _Log.Info($"Yes Batman is {state}!!");
+#if DEBUG
+            _Log.Info($"XXXX: Yes Batman is {state}!!");
+#endif
             _hprocInstance.sprite.axis.tglDraw.isOn = state;
             _hprocInstance.sprite.MoveAxisDraw(_hprocInstance.sprite.axis.tglDraw.isOn);
             _hprocInstance.guideObject.gameObject.SetActive(state);
@@ -155,7 +157,7 @@ namespace IDHIPlugins
         /// <returns></returns>
         static private bool CanShow()
         {
-            if (!HProcScene.Player.visibleAll) // character is not showing
+            if (!Player.visibleAll) // character is not showing
             {
                 return false;
             }

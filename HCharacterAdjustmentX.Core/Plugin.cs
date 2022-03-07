@@ -74,10 +74,14 @@ namespace IDHIPlugins
             DebugInfo.SettingChanged += (_sender, _args) =>
             {
                 _Log.Enabled = DebugInfo.Value;
+#if DEBUG
                 _Log.Info($"0028: Log.Enabled set to {_Log.Enabled}");
+#endif
             };
             _Log.Enabled = DebugInfo.Value;
+#if DEBUG
             _Log.Info($"0028: Log.Enabled set to {_Log.Enabled}");
+#endif
             _Log.Info($"SHCA0001: HCharaAdjustmentX Loaded.");
             CharacterApi.RegisterExtraBehaviour<SHCA>(GUID);
 

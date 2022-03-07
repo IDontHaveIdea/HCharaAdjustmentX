@@ -2,12 +2,13 @@
 // Buttons interface handling
 //
 using System;
+using System.Collections.Generic;
 
 using UnityEngine.SceneManagement;
 
 using BepInEx.Logging;
 
-using static IDHIPlugins.HProcScene;
+//using static IDHIPlugins.HProcScene;
 using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 
 
@@ -15,6 +16,22 @@ namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
     {
+        /// <summary>
+        /// HSceneProc instance
+        /// </summary>
+        static public HSceneProc Instance { get; internal set; }
+
+        /// <summary>
+        /// Female list
+        /// </summary>
+        static public List<ChaControl> Heroines { get; internal set; }
+
+        /// <summary>
+        /// Player
+        /// </summary>
+        static public ChaControl Player { get; internal set; }
+
+
         /// <summary>
         /// Wait for screen with name HProc this is a H scene loading.
         /// This will enable HProcScene and SHCAdjustController
@@ -60,12 +77,14 @@ namespace IDHIPlugins
             HProcScene.OnHSceneExiting -= OnHProcExit;
         }
 
-        private void OnHProcFinishedLoading(object s, HSceneFinishedLoadingEventArgs e)
+        private void OnHProcFinishedLoading(object s, HProcScene.HSceneFinishedLoadingEventArgs e)
         {
 #if DEBUG
             _Log.Info($"SHCA0041: Enabling SHCA..");
 #endif
             SetupController(e.Instance);
+            Heroines = e.Heroines;
+            Player = e.Male;
             enabled = true;
             SetControllerEnabled(true);
             HProcScene.OnHSceneFinishedLoading -= OnHProcFinishedLoading;
@@ -82,7 +101,7 @@ namespace IDHIPlugins
             // verify if is a scene we support
             if (!IsSupportedScene)
             {
-                _Log.Warning($"SHCA0006: No Way José!! The _mode {_mode}" +
+                _Log.Warning($"SHCA0006: The _mode {_mode}" +
                     $" is not supported.");
                 return;
             }
@@ -128,7 +147,7 @@ namespace IDHIPlugins
 
                 try
                 {
-                    GetController(HProcScene.Player).enabled = setState;
+                    GetController(Player).enabled = setState;
 #if DEBUG
                     _Log.Info($"SHCA0015: Controller {setEnabled(setState)} for Player");
 #endif

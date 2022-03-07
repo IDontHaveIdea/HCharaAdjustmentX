@@ -14,9 +14,9 @@ namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
     {
-        static internal KeyShortcuts Heroine = new();
-        static internal KeyShortcuts Heroine3P = new();
-        static internal KeyShortcuts Player = new();
+        static internal KeyShortcuts KeyHeroine = new();
+        static internal KeyShortcuts KeyHeroine3P = new();
+        static internal KeyShortcuts KeyPlayer = new();
         static internal ConfigEntry<KeyboardShortcut> GroupGuide { get; set; }
         static internal ConfigEntry<float> cfgAdjustmentStep;
         
@@ -31,7 +31,7 @@ namespace IDHIPlugins
 #if DEBUG
                 _Log.Info($"SHCA0036: Creating Shortcuts for Guide");
 #endif
-                Heroine.GuideObject = Config.Bind(
+                KeyHeroine.GuideObject = Config.Bind(
                     section: sectionKeys,
                     key: "Show Female 1 Guide Object",
                     defaultValue: new KeyboardShortcut(KeyCode.O),
@@ -39,7 +39,7 @@ namespace IDHIPlugins
                         description: "Show the guide object for adjusting girl 1 position",
                         acceptableValues: null,
                         tags: new ConfigurationManagerAttributes { Order = 35 }));
-                Heroine.GuideObjectReset = Config.Bind(
+                KeyHeroine.GuideObjectReset = Config.Bind(
                     section: sectionKeys,
                     key: "Reset Female 1 Position",
                     defaultValue: new KeyboardShortcut(KeyCode.O, KeyCode.RightControl),
@@ -49,7 +49,7 @@ namespace IDHIPlugins
                         tags: new ConfigurationManagerAttributes { Order = 34 }));
                 if (bheroine3P)
                 {
-                    Heroine3P.GuideObject = Config.Bind(
+                    KeyHeroine3P.GuideObject = Config.Bind(
                         section: sectionKeys,
                         key: "Show Female 2 Guide Object",
                         defaultValue: new KeyboardShortcut(KeyCode.P),
@@ -57,7 +57,7 @@ namespace IDHIPlugins
                             description: "Show the guide object for adjusting girl 2 position",
                             acceptableValues: null,
                             tags: new ConfigurationManagerAttributes { Order = 33 }));
-                    Heroine3P.GuideObjectReset = Config.Bind(
+                    KeyHeroine3P.GuideObjectReset = Config.Bind(
                         section: sectionKeys,
                         key: "Reset Female 2 Position",
                         defaultValue: new KeyboardShortcut(KeyCode.P, KeyCode.RightControl),
@@ -66,7 +66,7 @@ namespace IDHIPlugins
                             acceptableValues: null,
                             tags: new ConfigurationManagerAttributes { Order = 32, Browsable = false }));
                 }
-                Player.GuideObject = Config.Bind(
+                KeyPlayer.GuideObject = Config.Bind(
                     section: sectionKeys,
                     key: "Show Player Guide Object",
                     defaultValue: new KeyboardShortcut(KeyCode.G),
@@ -74,7 +74,7 @@ namespace IDHIPlugins
                         description: "Show the guide object for adjusting the boy's position",
                         acceptableValues: null,
                         tags: new ConfigurationManagerAttributes { Order = 31 }));
-                Player.GuideObjectReset = Config.Bind(
+                KeyPlayer.GuideObjectReset = Config.Bind(
                     section: sectionKeys,
                     key: "Reset Player Position",
                     defaultValue: new KeyboardShortcut(KeyCode.I, KeyCode.RightControl),
@@ -97,52 +97,52 @@ namespace IDHIPlugins
             {
                 #region HCharaAdjustment Functionality Off
                 // if HCharaAdjustment is detected eliminate conflicting shortcuts from configuration file
-                Heroine.GuideObject = Config.Bind(
+                KeyHeroine.GuideObject = Config.Bind(
                     sectionKeys,
                     "Show Female 1 Guide Object",
                     new KeyboardShortcut());
-                Heroine.GuideObject.ConfigFile.Remove(
+                KeyHeroine.GuideObject.ConfigFile.Remove(
                     new ConfigDefinition(sectionKeys,
                     "Show Female 1 Guide Object"));
-                Heroine.GuideObjectReset = Config.Bind(
+                KeyHeroine.GuideObjectReset = Config.Bind(
                     sectionKeys,
                     "Reset Female 1 Position",
                     new KeyboardShortcut());
-                Heroine.GuideObjectReset.ConfigFile.Remove(
+                KeyHeroine.GuideObjectReset.ConfigFile.Remove(
                     new ConfigDefinition(
                         sectionKeys,
                         "Reset Female 1 Position"));
 
-                Heroine3P.GuideObjectReset = Config.Bind(
+                KeyHeroine3P.GuideObjectReset = Config.Bind(
                     sectionKeys,
                     "Reset Female 2 Position",
                     new KeyboardShortcut());
-                Heroine3P.GuideObjectReset.ConfigFile.Remove(
+                KeyHeroine3P.GuideObjectReset.ConfigFile.Remove(
                     new ConfigDefinition(
                         sectionKeys,
                         "Reset Female 2 Position"));
-                Heroine3P.GuideObject = Config.Bind(
+                KeyHeroine3P.GuideObject = Config.Bind(
                     sectionKeys,
                     "Show Female 2 Guide Object",
                     new KeyboardShortcut());
-                Heroine3P.GuideObject.ConfigFile.Remove(
+                KeyHeroine3P.GuideObject.ConfigFile.Remove(
                     new ConfigDefinition(
                         sectionKeys,
                         "Show Female 2 Guide Object"));
 
-                Player.GuideObject = Config.Bind(
+                KeyPlayer.GuideObject = Config.Bind(
                     sectionKeys,
                     "Show Player Guide Object",
                     new KeyboardShortcut());
-                Player.GuideObject.ConfigFile.Remove(
+                KeyPlayer.GuideObject.ConfigFile.Remove(
                     new ConfigDefinition(
                         sectionKeys,
                         "Show Player Guide Object"));
-                Player.GuideObjectReset = Config.Bind(
+                KeyPlayer.GuideObjectReset = Config.Bind(
                     sectionKeys,
                     "Reset Player Position",
                     new KeyboardShortcut());
-                Player.GuideObjectReset.ConfigFile.Remove(
+                KeyPlayer.GuideObjectReset.ConfigFile.Remove(
                     new ConfigDefinition(
                         sectionKeys,
                         "Reset Player Position"));
@@ -156,7 +156,7 @@ namespace IDHIPlugins
             _Log.Info($"SHCA0038: Creating Shortcuts for Characters");
 #endif
             #region Heroine
-            Heroine.Menu = Config.Bind(
+            KeyHeroine.Menu = Config.Bind(
                 section: sectionKeys,
                 key: "Toggle button interface for Heroine.",
                 defaultValue: new KeyboardShortcut(KeyCode.L),
@@ -167,10 +167,10 @@ namespace IDHIPlugins
             #endregion Female
 
             #region Player
-            Player.Menu = Config.Bind(
+            KeyPlayer.Menu = Config.Bind(
                 section: sectionKeys,
                 key: "Toggle button interface for Player.",
-                defaultValue: new KeyboardShortcut(KeyCode.L, KeyCode.RightAlt),
+                defaultValue: new KeyboardShortcut(KeyCode.L, KeyCode.RightAlt, KeyCode.AltGr),
                 configDescription: new ConfigDescription(
                     description: "Show movement buttons",
                     acceptableValues: null,
@@ -180,7 +180,7 @@ namespace IDHIPlugins
             #region Heroine3P
             if (bheroine3P)
             {
-                Heroine.Menu = Config.Bind(
+                KeyHeroine.Menu = Config.Bind(
                     section: sectionKeys,
                     key: "Toggle button interface Heroine 2.",
                     defaultValue: new KeyboardShortcut(KeyCode.L),

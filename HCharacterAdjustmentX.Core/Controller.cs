@@ -142,12 +142,12 @@ namespace IDHIPlugins
                     }
                     if (_chaType == CharacterType.Heroine)
                     {
-                        if (Heroine.GuideObject.Value.IsDown())
+                        if (KeyHeroine.GuideObject.Value.IsDown())
                         {
                             ToggleGuideObject();
                         }
 
-                        if (Heroine.Menu.Value.IsDown())
+                        if (KeyHeroine.Menu.Value.IsDown())
                         {
 #if DEBUG
                             _Log.Info($"[SHCAdjustController] Toggle interface for {_chaType} " +
@@ -159,7 +159,7 @@ namespace IDHIPlugins
                     }
                     if (_chaType == CharacterType.Player)
                     {
-                        if (Player.Menu.Value.IsDown())
+                        if (KeyPlayer.Menu.Value.IsDown())
                         {
 #if DEBUG
                             _Log.Info($"[SHCAdjustController] Toggle interface for {_chaType} " +
