@@ -18,14 +18,14 @@ namespace IDHIPlugins
     {
         #region private fields
         // TODO: Use a properties class to have one dictionary
-        static internal Dictionary<CharacterType, ButtonsInterface> _buttonsInterface =
+        internal static Dictionary<CharacterType, ButtonsInterface> _buttonsInterface =
             new()
             {
                 { CharacterType.Heroine, new ButtonsInterface(CharacterType.Heroine) },
                 { CharacterType.Player, new ButtonsInterface(CharacterType.Player) },
                 { CharacterType.Heroine3P, new ButtonsInterface(CharacterType.Heroine3P) }
             };
-        static internal Dictionary<CharacterType, List<MoveActionButton>> _botones =
+        internal static Dictionary<CharacterType, List<MoveActionButton>> _botones =
             new()
             {
                 { CharacterType.Heroine, null },
@@ -35,7 +35,7 @@ namespace IDHIPlugins
         #endregion
 
         #region Properties
-        static internal bool ShowGroupGuide
+        internal static bool ShowGroupGuide
         {
             get
             {
@@ -109,7 +109,7 @@ namespace IDHIPlugins
         #endregion
 
         #region private methods
-        static private void SetupInterface(CharacterType chaType)
+        private static void SetupInterface(CharacterType chaType)
         {
 #if DEBUG
             _Log.Info($"[SetupInterface] Trigger for {chaType}");
@@ -132,20 +132,13 @@ namespace IDHIPlugins
             }
 
             _botones[chaType] = GetController(_chaControl).buttons.ToList();
-#if DEBUG
-            _Log.Info($"[SetupInterface] Define {_botones[chaType].Count} buttons for {chaType}");
-            _Log.Info($"[SetupInterface] Can display buttons for {chaType} {_buttonsInterface[chaType].ShowInterface}");
-#endif
         }
 
         /// <summary>
         /// Toogle the group guide object on/off
         /// </summary>
-        static public void ToggleGroupGuideObject(bool state)
+        public static void ToggleGroupGuideObject(bool state)
         {
-#if DEBUG
-            _Log.Info($"XXXX: Yes Batman is {state}!!");
-#endif
             _hprocInstance.sprite.axis.tglDraw.isOn = state;
             _hprocInstance.sprite.MoveAxisDraw(_hprocInstance.sprite.axis.tglDraw.isOn);
             _hprocInstance.guideObject.gameObject.SetActive(state);
@@ -155,7 +148,7 @@ namespace IDHIPlugins
         /// Conditions when the group guide should be hidden
         /// </summary>
         /// <returns></returns>
-        static private bool CanShow()
+        private static bool CanShow()
         {
             if (!Player.visibleAll) // character is not showing
             {

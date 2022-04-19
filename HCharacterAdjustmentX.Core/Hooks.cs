@@ -14,16 +14,16 @@ namespace IDHIPlugins
     public partial class HCharaAdjustmentX
     {
         // Hooks
-        static internal Harmony _hookInstance;
-        static internal HSceneProc _hprocInstance;
-        static internal HFlag.EMode _mode;
+        internal static Harmony _hookInstance;
+        internal static HSceneProc _hprocInstance;
+        internal static HFlag.EMode _mode;
 
         internal partial class Hooks
         {
             /// <summary>
             /// Patch system and save patch instance
             /// </summary>
-            static internal void Init()
+            internal static void Init()
             {
                 _hookInstance = Harmony.CreateAndPatchAll(typeof(Hooks));
             }
@@ -33,7 +33,7 @@ namespace IDHIPlugins
             /// </summary>
             [HarmonyPostfix]
             [HarmonyPatch(typeof(HSceneProc), nameof(HSceneProc.ChangeCategory))]
-            static private void ChangeCategoryPostfix(HPointData _data, int _category)
+            private static void ChangeCategoryPostfix(HPointData _data, int _category)
             {
                 if (!IsSupportedScene)
                 {
@@ -49,7 +49,7 @@ namespace IDHIPlugins
             /// <param name="_nextAinmInfo"></param>
             [HarmonyPrefix]
             [HarmonyPatch(typeof(HSceneProc), nameof(HSceneProc.ChangeAnimator))]
-            static private void ChangeAnimatorPrefix(
+            private static void ChangeAnimatorPrefix(
                 HSceneProc.AnimationListInfo _nextAinmInfo)
             {
                 if (_nextAinmInfo == null)

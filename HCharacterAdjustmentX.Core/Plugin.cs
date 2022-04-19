@@ -45,19 +45,19 @@ namespace IDHIPlugins
     [BepInProcess(KoikatuAPI.GameProcessName)]
     public partial class HCharaAdjustmentX : BaseUnityPlugin
     {
-        static internal ConfigEntry<bool> DebugInfo;
+        internal static ConfigEntry<bool> DebugInfo;
 
-        static internal bool _registered = false;
-        static internal bool _showGroupGuide = false;
-        static internal string _sceneName;
-        static internal string _activeScene;
-        static internal Logg _Log = new();
-        static internal SvgColor _SvgColor = new();
+        internal static bool _registered = false;
+        internal static bool _showGroupGuide = false;
+        internal static string _sceneName;
+        internal static string _activeScene;
+        internal static Logg _Log = new();
+        internal static SvgColor _SvgColor = new();
 
-        static internal bool IsAibu { get; set; } = false;
-        static internal bool IsHoushi { get; set; } = false;
-        static internal bool IsSonyu { get; set; } = false;
-        static internal bool IsSupportedScene { get; set; } = false;       
+        internal static bool IsAibu { get; set; } = false;
+        internal static bool IsHoushi { get; set; } = false;
+        internal static bool IsSonyu { get; set; } = false;
+        internal static bool IsSupportedScene { get; set; } = false;       
 
         private void Awake()
         {
@@ -130,7 +130,7 @@ namespace IDHIPlugins
         /// </summary>
         /// <param name="chaControl"></param>
         /// <returns></returns>
-        static public HCharaAdjusmentXController GetController(ChaControl chaControl)
+        public static HCharaAdjusmentXController GetController(ChaControl chaControl)
         {
             return ((chaControl == null) || (chaControl.gameObject == null))
                 ? null : chaControl.GetComponent<HCharaAdjusmentXController>();

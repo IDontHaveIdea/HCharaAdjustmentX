@@ -5,7 +5,7 @@ namespace IDHIPlugins
 {
     public struct MoveEvent
     {
-        static readonly public List<string> buttonLabels =
+        public static readonly List<string> buttonLabels =
             new()
             {
                 "Up",
@@ -18,14 +18,14 @@ namespace IDHIPlugins
                 "Load",
                 "Reset"
             };
-        static readonly public List<string> doubleWidthLabels =
+        public static readonly List<string> doubleWidthLabels =
             new()
             {
                 buttonLabels[8]
             };
         public enum MoveType { UP, DOWN, LEFT, RIGHT, APART, CLOSER, SAVE, LOAD, RESET, UNKNOWN }
 
-        static readonly public Dictionary<string, MoveType> EventLabel =
+        public static readonly Dictionary<string, MoveType> EventLabel =
             new()
             {
                 { buttonLabels[0], MoveType.UP },

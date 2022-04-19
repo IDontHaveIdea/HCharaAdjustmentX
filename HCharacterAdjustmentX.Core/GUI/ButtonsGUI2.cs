@@ -18,37 +18,19 @@ namespace IDHIPlugins
             #region private fields
             //private const float height = 25f;
             //private const float width = 57f;
-            readonly private float _width;
-            readonly private float _heigth;
+            private readonly float _width;
+            private readonly float _heigth;
             private List<MoveActionButton> _buttons = new();
             #endregion
 
             #region public properties
-            public List<MoveActionButton> Buttons
-            {
-                get
-                {
-                    return _buttons;
-                }
-            }
+            public List<MoveActionButton> Buttons => _buttons;
 
-            public float Height
-            {
-                get
-                {
-                    return _heigth;
-                }
-            }
+            public float Height => _heigth;
 
-            public float Width
-            {
-                get
-                {
-                    return _width;
-                }
-            }
+            public float Width => _width;
 
-            static public CharacterType CharType
+            public static CharacterType CharType
             {
                 get; private set;
             } = CharacterType.Unknown;

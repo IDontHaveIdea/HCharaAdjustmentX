@@ -26,7 +26,7 @@ namespace IDHIPlugins
         /// Show some information for Heroine 1
         /// </summary>
         /// <param name="instance"></param>
-        static internal void InitialPositionInfo(HSceneProc instance)
+        internal static void InitialPositionInfo(HSceneProc instance)
         {
             if (!HProcScene.Nakadashi || (instance == null))
             {
@@ -41,7 +41,7 @@ namespace IDHIPlugins
         /// Save H _mode flag
         /// </summary>
         /// <param name="emode"></param>
-        static internal void SetMode(HFlag.EMode emode)
+        internal static void SetMode(HFlag.EMode emode)
         {
             // set various flags
             _mode = emode;
@@ -55,7 +55,7 @@ namespace IDHIPlugins
         /// Move characters to saved original position
         /// </summary>
         /// <param name="message"></param>
-        static internal void ResetPositionAll(string message = null)
+        internal static void ResetPositionAll(string message = null)
         {
             if (_hprocInstance == null)
             {
@@ -80,7 +80,7 @@ namespace IDHIPlugins
         /// from original position saved
         /// </summary>
         /// <param name="message"></param>
-        static internal void SetOriginalPositionAll(string message = null)
+        internal static void SetOriginalPositionAll(string message = null)
         {
             if (_hprocInstance == null)
             {
@@ -120,7 +120,7 @@ namespace IDHIPlugins
         /// <param name="names"></param>
         /// <param name="quotes"></param>
         /// <returns></returns>
-        static internal string CategoryList(List<HSceneProc.Category> categories, bool names = false, bool quotes = true)
+        internal static string CategoryList(List<HSceneProc.Category> categories, bool names = false, bool quotes = true)
         {
             var tmp = "";
             var first = true;
@@ -161,7 +161,7 @@ namespace IDHIPlugins
         /// <param name="names"></param>
         /// <param name="quotes"></param>
         /// <returns></returns>
-        static internal string CategoryList(List<int> categories, bool names = false, bool quotes = true)
+        internal static string CategoryList(List<int> categories, bool names = false, bool quotes = true)
         {
             var tmp = "";
             var first = true;
@@ -218,7 +218,7 @@ namespace IDHIPlugins
         /// Turn on recalculation flag
         /// </summary>
         /// <param name="message"></param>
-        static internal void RecalcAdjustmentAll(string message = null)
+        internal static void RecalcAdjustmentAll(string message = null)
         {
             if (_hprocInstance == null)
             {
@@ -243,7 +243,7 @@ namespace IDHIPlugins
         /// </summary>
         /// <param name="chaControl"></param>
         /// <returns></returns>
-        static internal bool IsNewPosition(ChaControl chaControl)
+        internal static bool IsNewPosition(ChaControl chaControl)
         {
             var controller = GetController(chaControl);
             var newPosition = chaControl.transform.position;
@@ -262,7 +262,7 @@ namespace IDHIPlugins
         /// </summary>
         /// <param name="currentScene"></param>
         /// <param name="newScene"></param>
-        static public void SceneChanged(Scene previousScene, Scene newScene)
+        public static void SceneChanged(Scene previousScene, Scene newScene)
         {
             _activeScene = newScene.name;
         }

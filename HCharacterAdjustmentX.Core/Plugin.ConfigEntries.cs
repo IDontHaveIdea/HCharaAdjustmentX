@@ -14,11 +14,11 @@ namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
     {
-        static internal KeyShortcuts KeyHeroine = new();
-        static internal KeyShortcuts KeyHeroine3P = new();
-        static internal KeyShortcuts KeyPlayer = new();
-        static internal ConfigEntry<KeyboardShortcut> GroupGuide { get; set; }
-        static internal ConfigEntry<float> cfgAdjustmentStep;
+        internal static KeyShortcuts KeyHeroine = new();
+        internal static KeyShortcuts KeyHeroine3P = new();
+        internal static KeyShortcuts KeyPlayer = new();
+        internal static ConfigEntry<KeyboardShortcut> GroupGuide { get; set; }
+        internal static ConfigEntry<float> cfgAdjustmentStep;
         
         internal void ConfigEntries(bool bHCAInstalled, bool bheroine3P = false)
         {

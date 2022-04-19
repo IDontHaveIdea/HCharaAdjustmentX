@@ -17,7 +17,7 @@ namespace IDHIPlugins
         /// </summary>
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
-            static public event EventHandler<MoveRequestEventArgs> OnMoveRequest;
+            public static event EventHandler<MoveRequestEventArgs> OnMoveRequest;
 
             public class MoveRequestEventArgs : EventArgs
             {
@@ -35,7 +35,7 @@ namespace IDHIPlugins
             /// </summary>
             /// <param name="_sender"></param>
             /// <param name="_args"></param>
-            static internal void InvokeOnMoveRequest(object _sender, MoveRequestEventArgs _args)
+            internal static void InvokeOnMoveRequest(object _sender, MoveRequestEventArgs _args)
             {
                 OnMoveRequest?.Invoke(_sender, _args);
             }
@@ -43,7 +43,7 @@ namespace IDHIPlugins
             /// <summary>
             /// Add action to OnMoveRequest event
             /// </summary>
-            static internal void RegisterMovementEvents()
+            internal static void RegisterMovementEvents()
             {
                 OnMoveRequest += (_sender, _args) => 
                 {

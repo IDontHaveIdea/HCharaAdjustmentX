@@ -22,14 +22,14 @@ namespace IDHIPlugins
         internal class CharMovement
         {
             #region private fields
-            static internal HSceneGuideObject _guideObject;
-            static internal ChaControl _chaControl;
-            static internal HCharaAdjusmentXController _controller;
-            static internal bool _doShortcutMove;
-            static internal bool _positiveMove;
-            static internal string _animationGUID = "";
-            static internal int _animationID = 0;
-            static internal string _pathFemaleBase = "";
+            internal static HSceneGuideObject _guideObject;
+            internal static ChaControl _chaControl;
+            internal static HCharaAdjusmentXController _controller;
+            internal static bool _doShortcutMove;
+            internal static bool _positiveMove;
+            internal static string _animationGUID = "";
+            internal static int _animationID = 0;
+            internal static string _pathFemaleBase = "";
             #endregion
 
             /// <summary>
@@ -38,7 +38,7 @@ namespace IDHIPlugins
             /// <param name="chaType">Character type</param>
             /// <param name="move">Move triggered</param>
             /// <returns></returns>
-            static public bool Move(CharacterType chaType, MoveType move)
+            public static bool Move(CharacterType chaType, MoveType move)
             {
                 _doShortcutMove = false;
 
@@ -169,7 +169,7 @@ namespace IDHIPlugins
                 return _doShortcutMove;
             }
 
-            static internal string Translate(string name)
+            internal static string Translate(string name)
             {
                 // if (!TranslationHelper.TryTranslate(name, out string tmp))
                 if (!TranslationHelper.TryTranslate(name, out var tmp))
@@ -180,7 +180,7 @@ namespace IDHIPlugins
                 return tmp;
             }
 
-            static readonly internal Func<bool, Vector3, Vector3, Vector3> setDirection =
+            internal static readonly Func<bool, Vector3, Vector3, Vector3> setDirection =
                 (sign, trans, adjustment) =>
                     {
                         var tmp = new Vector3(0, 0, 0);

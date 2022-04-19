@@ -18,20 +18,20 @@ namespace IDHIPlugins
 {
     public partial class HProcScene
     {
-        static internal Harmony _hsHookInstance;
-        static internal Type HSceneProcType;
+        internal static Harmony _hsHookInstance;
+        internal static Type HSceneProcType;
         //static internal SHCA mother;
 
         #region public properties
         /// <summary>
         /// HProcScene Hooks loaded if true
         /// </summary>
-        static public bool Kuuhou { get; internal set; }
+        public static bool Kuuhou { get; internal set; }
 
         /// <summary>
         /// True if we are inside an HScene
         /// </summary>
-        static public bool Nakadashi { get; internal set; }
+        public static bool Nakadashi { get; internal set; }
 
         //static public HSceneProc Instance { get; internal set; }
         /// <summary>
@@ -51,9 +51,9 @@ namespace IDHIPlugins
         #endregion
 
         #region events
-        static public event EventHandler OnHSceneStartLoading;
-        static public event EventHandler OnHSceneExiting;
-        static public event EventHandler<HSceneFinishedLoadingEventArgs> OnHSceneFinishedLoading;
+        public static event EventHandler OnHSceneStartLoading;
+        public static event EventHandler OnHSceneExiting;
+        public static event EventHandler<HSceneFinishedLoadingEventArgs> OnHSceneFinishedLoading;
         public class HSceneFinishedLoadingEventArgs : EventArgs
         {
             public HSceneProc Instance { get; }
@@ -68,14 +68,14 @@ namespace IDHIPlugins
             }
         }
 
-        static internal void InvokeOnHSceneStartLoading(object _sender, EventArgs _args)
+        internal static void InvokeOnHSceneStartLoading(object _sender, EventArgs _args)
         {
             OnHSceneStartLoading?.Invoke(_sender, _args);
         }
         #endregion
 
         #region private methods
-        static internal void Init()
+        internal static void Init()
         {
             //mother = obj;
 
@@ -98,7 +98,7 @@ namespace IDHIPlugins
 
         internal class HSHooks
         {
-            static internal void Init()
+            internal static void Init()
             {
                 _hsHookInstance = Harmony.CreateAndPatchAll(typeof(HSHooks));
                 if (_hsHookInstance == null)
@@ -120,7 +120,7 @@ namespace IDHIPlugins
 #endif
             }
 
-            static private void OnDestroyPrefix()
+            private static void OnDestroyPrefix()
             {
                 OnHSceneExiting?.Invoke(null, null);
                 Nakadashi = false;
@@ -131,7 +131,7 @@ namespace IDHIPlugins
                 _hsHookInstance = null;
             }
 
-            static private void SetShortcutKeyPostfix(HSceneProc __instance,
+            private static void SetShortcutKeyPostfix(HSceneProc __instance,
                 List<ChaControl> ___lstFemale, ChaControl ___male, HSprite ___sprite)
             {
                 if (Kuuhou)

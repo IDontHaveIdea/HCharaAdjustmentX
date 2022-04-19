@@ -19,17 +19,17 @@ namespace IDHIPlugins
         /// <summary>
         /// HSceneProc instance
         /// </summary>
-        static public HSceneProc Instance { get; internal set; }
+        public static HSceneProc Instance { get; internal set; }
 
         /// <summary>
         /// Female list
         /// </summary>
-        static public List<ChaControl> Heroines { get; internal set; }
+        public static List<ChaControl> Heroines { get; internal set; }
 
         /// <summary>
         /// Player
         /// </summary>
-        static public ChaControl Player { get; internal set; }
+        public static ChaControl Player { get; internal set; }
 
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace IDHIPlugins
             HProcScene.OnHSceneFinishedLoading -= OnHProcFinishedLoading;
         }
 
-        static private void SetupController(HSceneProc instance)
+        private static void SetupController(HSceneProc instance)
         {
             CharacterType chType;
             _hprocInstance = instance;  // HSceneProc instance will be used later
@@ -125,7 +125,7 @@ namespace IDHIPlugins
         /// Method to enable/disabled the characters controllers
         /// </summary>
         /// <param name="setState"></param>
-        static internal void SetControllerEnabled(bool setState = true)
+        internal static void SetControllerEnabled(bool setState = true)
         {
             try
             {
@@ -161,7 +161,7 @@ namespace IDHIPlugins
             catch { _Log.Level(LogLevel.Error, $"No Heroines found."); }
         }
 
-        static readonly internal Func<bool, string> setEnabled = state =>
+        internal static readonly Func<bool, string> setEnabled = state =>
             state ? "set to enabled" : "set to disabled";
     }
 }

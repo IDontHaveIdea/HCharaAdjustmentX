@@ -14,11 +14,11 @@ namespace IDHIPlugins
     public partial class HCharaAdjustmentX
     {
         // Controller
-        static internal Vector3 _newPosition = Vector3.zero;
-        static internal Vector3 _clAdjustUnit = Vector3.zero;
-        static internal Vector3 _lrAdjustUnit = Vector3.zero;
-        static internal Vector3 _udAdjustUnit = new(0, 0.01f, 0);
-        static internal float _fAdjustStep = 0.01f;
+        internal static Vector3 _newPosition = Vector3.zero;
+        internal static Vector3 _clAdjustUnit = Vector3.zero;
+        internal static Vector3 _lrAdjustUnit = Vector3.zero;
+        internal static Vector3 _udAdjustUnit = new(0, 0.01f, 0);
+        internal static float _fAdjustStep = 0.01f;
 
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
@@ -98,14 +98,14 @@ namespace IDHIPlugins
             /// This must be defined.
             /// </summary>
             /// <param name="currentGameMode"></param>
-            override protected void OnCardBeingSaved(GameMode currentGameMode)
+            protected override void OnCardBeingSaved(GameMode currentGameMode)
             {
             }
 
             /// <summary>
             /// 
             /// </summary>
-            override protected void Update()
+            protected override void Update()
             {
                 if (HProcScene.Nakadashi && IsSupportedScene && (_chaType != CharacterType.Unknown))
                 {
