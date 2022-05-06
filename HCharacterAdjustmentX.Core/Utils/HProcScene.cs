@@ -132,7 +132,7 @@ namespace IDHIPlugins
             }
 
             private static void SetShortcutKeyPostfix(HSceneProc __instance,
-                List<ChaControl> ___lstFemale, ChaControl ___male, HSprite ___sprite)
+                List<ChaControl> ___lstFemale, ChaControl ___male) //, HSprite ___sprite)
             {
                 if (Kuuhou)
                 {
