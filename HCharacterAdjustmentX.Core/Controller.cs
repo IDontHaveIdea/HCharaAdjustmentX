@@ -14,7 +14,7 @@ namespace IDHIPlugins
     public partial class HCharaAdjustmentX
     {
         // Controller
-        internal static Vector3 _newPosition = Vector3.zero;
+        //internal static Vector3 _newPosition = Vector3.zero;
         internal static Vector3 _forwardZAxisAdjustUnit = Vector3.zero;
         internal static Vector3 _rightXAxisAdjustUnit = Vector3.zero;
         internal static Vector3 _upYAxisAdjustUnit = Vector3.zero;
