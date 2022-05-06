@@ -34,7 +34,10 @@ namespace IDHIPlugins
             #endregion
 
             /// <summary>
-            /// Check for configured key shortcuts and execute the type of movement desired       
+            /// Check for configured key shortcuts and execute the type of movement desired
+            ///
+            /// TODO:
+            ///     Clasify positions for correct relative left/right and forward/backwards
             /// </summary>
             /// <param name="chaType">Character type</param>
             /// <param name="moveType">Move triggered</param>
@@ -85,21 +88,19 @@ namespace IDHIPlugins
                 // Normal button press
                 var originalPosition = _controller._originalPosition;
                 var movement = _controller._movement;
+                Vector3 newPosition = new(0, 0, 0);
                 switch (moveType)
                 {
                     case MoveType.RESET:
-                        _newPosition = _controller._originalPosition;
                         _controller.ResetPosition();
                         break;
 
                     case MoveType.UP:
-                        _newPosition = _chaControl.transform.position + _upYAxisAdjustUnit;
                         movement.y += _fAdjustStep;
                         _doShortcutMove = true;
                         break;
 
                     case MoveType.DOWN:
-                        _newPosition = _chaControl.transform.position - _upYAxisAdjustUnit;
                         movement.y -= _fAdjustStep;
                         _doShortcutMove = true;
                         break;
@@ -107,12 +108,10 @@ namespace IDHIPlugins
                     case MoveType.RIGHT:
                         if (chaType == CharacterType.Player)
                         {
-                            _newPosition = _chaControl.transform.position - _rightXAxisAdjustUnit;
                             movement.x -= _fAdjustStep;
                         }
                         else
                         {
-                            _newPosition = _chaControl.transform.position + _rightXAxisAdjustUnit;
                             movement.x += _fAdjustStep;
                         }
                         _doShortcutMove = true;
@@ -121,12 +120,10 @@ namespace IDHIPlugins
                     case MoveType.LEFT:
                         if (chaType == CharacterType.Player)
                         {
-                            _newPosition = _chaControl.transform.position + _rightXAxisAdjustUnit;
                             movement.x += _fAdjustStep;
                         }
                         else
                         {
-                            _newPosition = _chaControl.transform.position - _rightXAxisAdjustUnit;
                             movement.x -= _fAdjustStep;
                         }
                         _doShortcutMove = true;
@@ -135,12 +132,10 @@ namespace IDHIPlugins
                     case MoveType.CLOSER:
                         if (chaType == CharacterType.Player)
                         {
-                            _newPosition = _chaControl.transform.position - _forwardZAxisAdjustUnit;
                             movement.z -= _fAdjustStep;
                         }
                         else
                         {
-                            _newPosition = _chaControl.transform.position + _forwardZAxisAdjustUnit;
                             movement.z += _fAdjustStep;
                         }
                         _doShortcutMove = true;
@@ -149,12 +144,10 @@ namespace IDHIPlugins
                     case MoveType.APART:
                         if (chaType == CharacterType.Player)
                         {
-                            _newPosition = _chaControl.transform.position + _forwardZAxisAdjustUnit;
                             movement.z += _fAdjustStep;
                         }
                         else
                         {
-                            _newPosition = _chaControl.transform.position - _forwardZAxisAdjustUnit;
                             movement.z -= _fAdjustStep;
                         }
                         _doShortcutMove = true;
@@ -169,19 +162,19 @@ namespace IDHIPlugins
                 {
 #if DEBUG
                     var tmp = _chaControl.transform.position;
-                    var newPosition = RecalcPosition(_chaControl, originalPosition, movement);
+                    newPosition = RecalcPosition(_chaControl, originalPosition, movement);
                     _Log.Info($"SHCA0033: Move {chaType}\n" +
                         $"from position {tmp.ToString("F7")} " +
-                        $" to position {_newPosition.ToString("F7")}\n" +
+                        $" to position {newPosition.ToString("F7")}\n" +
                         $" for movement {movement.ToString("F7")} " +
                         $" to recalc {newPosition.ToString("F7")}");
 #endif
                     _doShortcutMove = false;
-                    _chaControl.transform.position = _newPosition;
+                    _chaControl.transform.position = newPosition;
                     _guideObject.amount.position = _chaControl.transform.position;
                     _controller._movement = movement;
+                    _controller._lastMovePosition = tmp;
                 }
-                _controller._lastMovePosition = _newPosition;
                 return _doShortcutMove;
             }
 
