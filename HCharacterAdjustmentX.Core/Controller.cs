@@ -15,9 +15,10 @@ namespace IDHIPlugins
     {
         // Controller
         internal static Vector3 _newPosition = Vector3.zero;
-        internal static Vector3 _clAdjustUnit = Vector3.zero;
-        internal static Vector3 _lrAdjustUnit = Vector3.zero;
-        internal static Vector3 _udAdjustUnit = new(0, 0.01f, 0);
+        internal static Vector3 _forwardZAxisAdjustUnit = Vector3.zero;
+        internal static Vector3 _rightXAxisAdjustUnit = Vector3.zero;
+        internal static Vector3 _upYAxisAdjustUnit = Vector3.zero;
+        //internal static Vector3 _udAdjustUnit = new(0, 0.01f, 0);
         internal static float _fAdjustStep = 0.01f;
 
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
@@ -26,6 +27,7 @@ namespace IDHIPlugins
             internal CharacterType _chaType = CharacterType.Unknown;
             internal Vector3 _lastMovePosition = new(0, 0, 0);
             internal Vector3 _originalPosition = new(0, 0, 0);
+            internal Vector3 _movement = new(0, 0, 0);
             #endregion
 
             #region public fields
@@ -83,6 +85,7 @@ namespace IDHIPlugins
                     {
                         ChaControl.transform.position = _originalPosition;
                     }
+                    _movement = Vector3.zero;
 #if DEBUG
                     _Log.Info($"SHCA0003: Reset position for {_chaType}");
 #endif
@@ -123,21 +126,16 @@ namespace IDHIPlugins
                     if (DoRecalc)
                     {
                         _fAdjustStep = cfgAdjustmentStep.Value;
-                        _clAdjustUnit = ChaControl.transform.forward * _fAdjustStep;
-                        _lrAdjustUnit = ChaControl.transform.right * _fAdjustStep;
-                        _udAdjustUnit.y = _fAdjustStep;
+                        _forwardZAxisAdjustUnit = ChaControl.transform.forward * _fAdjustStep;
+                        _rightXAxisAdjustUnit = ChaControl.transform.right * _fAdjustStep;
+                        _upYAxisAdjustUnit = ChaControl.transform.up * _fAdjustStep;
                         DoRecalc = false;
 #if DEBUG
                         _Log.Info($"SHCA0036: Calculation for {_chaType} " +
-                            $"with Step {_fAdjustStep} - " +
-                            $"TF ({ChaControl.transform.forward.x }, " +
-                            $"{ChaControl.transform.forward.y}, " +
-                            $"{ChaControl.transform.forward.z}), " +
-                            $"TF ({ChaControl.transform.position.x }, " +
-                            $"{ChaControl.transform.position.y}, " +
-                            $"{ChaControl.transform.position.z}), " +
-                            $"CL ({_clAdjustUnit.x }, {_clAdjustUnit.y}, {_clAdjustUnit.z}), " +
-                            $"LR ({_lrAdjustUnit.x }, {_lrAdjustUnit.y}, {_lrAdjustUnit.z})");
+                            $"with Step {_fAdjustStep}:\n" +
+                            $"forward (z,  blue) {_forwardZAxisAdjustUnit.ToString("F7")}\n" +
+                            $"  right (x,   red) {_rightXAxisAdjustUnit.ToString("F7")}\n" +
+                            $"     up (y, green) {_upYAxisAdjustUnit.ToString("F7")})");
 #endif
                     }
                     if (_chaType == CharacterType.Heroine)
