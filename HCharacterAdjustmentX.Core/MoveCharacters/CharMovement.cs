@@ -10,6 +10,7 @@ using IDHIUtils;
 
 using CharacterType = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController.CharacterType;
 using MoveType = IDHIPlugins.MoveEvent.MoveType;
+using static FaceScreenShot;
 
 
 namespace IDHIPlugins
@@ -36,9 +37,9 @@ namespace IDHIPlugins
             /// Check for configured key shortcuts and execute the type of movement desired       
             /// </summary>
             /// <param name="chaType">Character type</param>
-            /// <param name="move">Move triggered</param>
+            /// <param name="moveType">Move triggered</param>
             /// <returns></returns>
-            public static bool Move(CharacterType chaType, MoveType move)
+            public static bool Move(CharacterType chaType, MoveType moveType)
             {
                 _doShortcutMove = false;
 
@@ -72,17 +73,19 @@ namespace IDHIPlugins
 #if DEBUG
                 if (_animationGUID != null)
                 {
-                    _Log.Info($"SHCA0030: Move {move} requested for ID: {_animationID} - name" +
+                    _Log.Info($"SHCA0030: Move {moveType} requested for ID: {_animationID} - name" +
                         $" {Translate(_animationGUID)} ({_animationGUID}).");
                     _Log.Info($"SHCA0031: asset {_pathFemaleBase}");
                 }
                 else
                 {
-                    _Log.Info($"SHCA0032: Move {move} requested for ID: {_animationID}.");
+                    _Log.Info($"SHCA0032: Move {moveType} requested for ID: {_animationID}.");
                 }
 #endif
                 // Normal button press
-                switch (move)
+                var originalPosition = _controller._originalPosition;
+                var movement = _controller._movement;
+                switch (moveType)
                 {
                     case MoveType.RESET:
                         _newPosition = _controller._originalPosition;
@@ -90,23 +93,27 @@ namespace IDHIPlugins
                         break;
 
                     case MoveType.UP:
-                        _newPosition = _chaControl.transform.position + _udAdjustUnit;
+                        _newPosition = _chaControl.transform.position + _upYAxisAdjustUnit;
+                        movement.y += _fAdjustStep;
                         _doShortcutMove = true;
                         break;
 
                     case MoveType.DOWN:
-                        _newPosition = _chaControl.transform.position - _udAdjustUnit;
+                        _newPosition = _chaControl.transform.position - _upYAxisAdjustUnit;
+                        movement.y -= _fAdjustStep;
                         _doShortcutMove = true;
                         break;
 
                     case MoveType.RIGHT:
                         if (chaType == CharacterType.Player)
                         {
-                            _newPosition = _chaControl.transform.position - _lrAdjustUnit;
+                            _newPosition = _chaControl.transform.position - _rightXAxisAdjustUnit;
+                            movement.x -= _fAdjustStep;
                         }
                         else
                         {
-                            _newPosition = _chaControl.transform.position + _lrAdjustUnit;
+                            _newPosition = _chaControl.transform.position + _rightXAxisAdjustUnit;
+                            movement.x += _fAdjustStep;
                         }
                         _doShortcutMove = true;
                         break;
@@ -114,11 +121,13 @@ namespace IDHIPlugins
                     case MoveType.LEFT:
                         if (chaType == CharacterType.Player)
                         {
-                            _newPosition = _chaControl.transform.position + _lrAdjustUnit;
+                            _newPosition = _chaControl.transform.position + _rightXAxisAdjustUnit;
+                            movement.x += _fAdjustStep;
                         }
                         else
                         {
-                            _newPosition = _chaControl.transform.position - _lrAdjustUnit;
+                            _newPosition = _chaControl.transform.position - _rightXAxisAdjustUnit;
+                            movement.x -= _fAdjustStep;
                         }
                         _doShortcutMove = true;
                         break;
@@ -126,11 +135,13 @@ namespace IDHIPlugins
                     case MoveType.CLOSER:
                         if (chaType == CharacterType.Player)
                         {
-                            _newPosition = _chaControl.transform.position - _clAdjustUnit;
+                            _newPosition = _chaControl.transform.position - _forwardZAxisAdjustUnit;
+                            movement.z -= _fAdjustStep;
                         }
                         else
                         {
-                            _newPosition = _chaControl.transform.position + _clAdjustUnit;
+                            _newPosition = _chaControl.transform.position + _forwardZAxisAdjustUnit;
+                            movement.z += _fAdjustStep;
                         }
                         _doShortcutMove = true;
                         break;
@@ -138,11 +149,13 @@ namespace IDHIPlugins
                     case MoveType.APART:
                         if (chaType == CharacterType.Player)
                         {
-                            _newPosition = _chaControl.transform.position + _clAdjustUnit;
+                            _newPosition = _chaControl.transform.position + _forwardZAxisAdjustUnit;
+                            movement.z += _fAdjustStep;
                         }
                         else
                         {
-                            _newPosition = _chaControl.transform.position - _clAdjustUnit;
+                            _newPosition = _chaControl.transform.position - _forwardZAxisAdjustUnit;
+                            movement.z -= _fAdjustStep;
                         }
                         _doShortcutMove = true;
                         break;
@@ -156,17 +169,51 @@ namespace IDHIPlugins
                 {
 #if DEBUG
                     var tmp = _chaControl.transform.position;
-                    _Log.Info($"SHCA0033: Move from position" +
-                        $" ({tmp.x }, {tmp.y}, {tmp.z}) {chaType}" +
-                             $" to position" +
-                        $" ({_newPosition.x }, {_newPosition.y}, {_newPosition.z}) {chaType}");
+                    var newPosition = RecalcPosition(_chaControl, originalPosition, movement);
+                    _Log.Info($"SHCA0033: Move {chaType}\n" +
+                        $"from position {tmp.ToString("F7")} " +
+                        $" to position {_newPosition.ToString("F7")}\n" +
+                        $" for movement {movement.ToString("F7")} " +
+                        $" to recalc {newPosition.ToString("F7")}");
 #endif
                     _doShortcutMove = false;
                     _chaControl.transform.position = _newPosition;
                     _guideObject.amount.position = _chaControl.transform.position;
+                    _controller._movement = movement;
                 }
                 _controller._lastMovePosition = _newPosition;
                 return _doShortcutMove;
+            }
+
+            internal static Vector3 RecalcPosition(ChaControl chaControl, Vector3 original, Vector3 move)
+            {
+                try
+                {
+                    var rightXAxis = chaControl.transform.right * move.x;
+                    var upYAxis = chaControl.transform.up * move.y;
+                    var forwardZAxis = chaControl.transform.forward * move.z;
+
+                    var newPosition = original;
+
+                    newPosition += rightXAxis;
+                    newPosition += upYAxis;
+                    newPosition += forwardZAxis;
+#if DEBUG
+                    _Log.Info($"SHCA0033: Move {chaControl.name}\n" +
+                        $"original position {original.ToString("F7")}\n" +
+                        $"      move vector {move.ToString("F7")}\n" +
+                        $"          right x {rightXAxis.ToString("F7")}\n" +
+                        $"             up y {upYAxis.ToString("F7")}\n" +
+                        $"        forward z {forwardZAxis.ToString("F7")}\n" +
+                        $"        to recalc {newPosition.ToString("F7")}");
+#endif
+                    return newPosition;
+                }
+                catch (Exception e)
+                {
+                    _Log.Error($"0010: Cannot adjust positoin {chaControl.name} - {e}.");
+                }
+                return Vector3.zero;
             }
 
             internal static string Translate(string name)
