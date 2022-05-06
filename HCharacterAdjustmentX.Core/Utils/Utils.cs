@@ -246,10 +246,10 @@ namespace IDHIPlugins
         internal static bool IsNewPosition(ChaControl chaControl)
         {
             var controller = GetController(chaControl);
-            var newPosition = chaControl.transform.position;
+            var currentPosition = chaControl.transform.position;
             var originalPosition = controller._originalPosition;
             var lastMovePosition = controller._lastMovePosition;
-            if (newPosition != originalPosition && newPosition != lastMovePosition)
+            if (currentPosition != originalPosition && currentPosition != lastMovePosition)
             {
                 return true;
             }
