@@ -39,7 +39,7 @@ namespace IDHIPlugins
     ///
     /// </remarks>
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
-    [BepInDependency(Utilities.GUID, Utilities.Version)]
+    [BepInDependency(IDHIUtils.Info.GUID, IDHIUtils.Info.Version)]
     [BepInDependency(SwapAnim.GUID, SwapAnim.Version)]
     [BepInPlugin(GUID, PluginDisplayName, Version)]
     [BepInProcess(KoikatuAPI.GameProcessName)]

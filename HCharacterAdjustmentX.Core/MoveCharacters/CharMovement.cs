@@ -152,7 +152,17 @@ namespace IDHIPlugins
                         }
                         _doShortcutMove = true;
                         break;
+#if DEBUG
+                    case MoveType.SAVE:
+                        var tmp = _chaControl.transform.position;
+                        var rot = _chaControl.transform.rotation;
 
+                        var strTmp = $"{chaType} position={tmp.ToString("F7")} rotation={rot.ToString("F7")}\n";
+                                              
+                        _Log.Info($"[SAVE]\n\n{strTmp}\n");
+                        _doShortcutMove = false;
+                        break;
+#endif
                     default:
                         _doShortcutMove = false;
                         break;
