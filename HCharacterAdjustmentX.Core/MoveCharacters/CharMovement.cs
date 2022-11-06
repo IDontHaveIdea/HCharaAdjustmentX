@@ -171,6 +171,10 @@ namespace IDHIPlugins
                 if (_doShortcutMove)
                 {
                     var tmp = _chaControl.transform.position;
+                    if (!_controller.Moved)
+                    {
+                        _controller.Moved = true;
+                    }
                     newPosition = RecalcPosition(_chaControl, originalPosition, movement);
 #if DEBUG
                     _Log.Info($"SHCA0033: Move {chaType}\n" +
