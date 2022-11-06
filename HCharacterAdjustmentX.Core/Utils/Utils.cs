@@ -1,20 +1,11 @@
-﻿using System;
+﻿//
+// Utils.cs
+//
 using System.Collections.Generic;
 
-using BepInEx;
-using BepInEx.Configuration;
-using BepInEx.Logging;
-
-using KKAPI;
-using KKAPI.Chara;
-using KKAPI.Maker;
-using KKAPI.Maker.UI.Sidebar;
-using KKAPI.Utilities;
-
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
 using IDHIUtils;
+
+using UnityEngine.SceneManagement;
 
 using static IDHIPlugins.HCharaAdjustmentX;
 
@@ -62,9 +53,10 @@ namespace IDHIPlugins
                 return;
             }
 #if DEBUG
+            var calllingMethod = Utilities.CallingMethod();
             if (message != null)
             {
-                _Log.Info($"SHCA0018: [ResetPositionAll]  - {message}");
+                _Log.Info($"SHCA0018: [ResetPositionAll] Called by - [{calllingMethod}]");
             }
 #endif
             var heroines = _hprocInstance.flags.lstHeroine;
@@ -87,9 +79,10 @@ namespace IDHIPlugins
                 return;
             }
 #if DEBUG
+            var calllingMethod = Utilities.CallingMethod();
             if (message != null)
             {
-                _Log.Info($"SHCA0019: [SetOrigianalPositionAll]  - {message}");
+                _Log.Info($"SHCA0019: [SetOrigianalPositionAll] Called by - [{calllingMethod}]");
             }
 #endif
             var heroines = _hprocInstance.flags.lstHeroine;
@@ -225,9 +218,10 @@ namespace IDHIPlugins
                 return;
             }
 #if DEBUG
+            var calllingMethod = Utilities.CallingMethod();
             if (message != null)
             {
-                _Log.Info($"SHCA0020: [RecalcAdjustmentAll]  - {message}");
+                _Log.Info($"SHCA0020: [RecalcAdjustmentAll] Called by - [{calllingMethod}]");
             }
 #endif
             var heroines = _hprocInstance.flags.lstHeroine;
