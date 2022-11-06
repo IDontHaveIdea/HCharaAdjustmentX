@@ -38,7 +38,17 @@ namespace IDHIPlugins
 
             #region properties
             public bool DoRecalc { get; set; } = true;
-            public bool Moved => _moved;
+            public bool Moved
+            {
+                get
+                {
+                    return _moved;
+                }
+                set
+                {
+                    _moved = value;
+                }
+            }
             #endregion
 
             #region private methods
@@ -68,6 +78,8 @@ namespace IDHIPlugins
             internal void SetOriginalPosition()
             {
                 _originalPosition = ChaControl.transform.position;
+                _lastMovePosition = ChaControl.transform.position;
+                _moved = false;
             }
             #endregion
 
