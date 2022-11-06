@@ -60,6 +60,7 @@ namespace IDHIPlugins
                 try
                 {
                     Utils.SetMode(_nextAinmInfo.mode);
+                    Utils.ResetPositionAll("from[ChangeAnimator]");
                     Utils.RecalcAdjustmentAll(" from [ChangeAnimator]");
                     Utils.SetOriginalPositionAll(" from [ChangeAnimator]");
                 }
