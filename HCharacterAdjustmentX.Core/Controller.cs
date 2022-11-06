@@ -20,6 +20,7 @@ namespace IDHIPlugins
         internal static Vector3 _upYAxisAdjustUnit = Vector3.zero;
         //internal static Vector3 _udAdjustUnit = new(0, 0.01f, 0);
         internal static float _fAdjustStep = 0.01f;
+        internal static bool _moved = false;
 
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
@@ -37,6 +38,7 @@ namespace IDHIPlugins
 
             #region properties
             public bool DoRecalc { get; set; } = true;
+            public bool Moved => _moved;
             #endregion
 
             #region private methods
