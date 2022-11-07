@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 
 using UnityEngine;
+using MessagePack;
+
 using HSceneUtility;
 
 using KKAPI;
@@ -14,13 +16,12 @@ namespace IDHIPlugins
     public partial class HCharaAdjustmentX
     {
         // Controller
-        //internal static Vector3 _newPosition = Vector3.zero;
         internal static Vector3 _forwardZAxisAdjustUnit = Vector3.zero;
         internal static Vector3 _rightXAxisAdjustUnit = Vector3.zero;
         internal static Vector3 _upYAxisAdjustUnit = Vector3.zero;
-        //internal static Vector3 _udAdjustUnit = new(0, 0.01f, 0);
         internal static float _fAdjustStep = 0.01f;
         internal static bool _moved = false;
+        internal static Dictionary<string, PositionData> MoveData = new();
 
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
@@ -117,6 +118,14 @@ namespace IDHIPlugins
             /// <param name="currentGameMode"></param>
             protected override void OnCardBeingSaved(GameMode currentGameMode)
             {
+            }
+
+            protected override void OnReload(GameMode currentGameMode, bool maintainState)
+            {
+                if (maintainState)
+                {
+                    return;
+                }
             }
 
             /// <summary>
