@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\MoveEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.ConfigEntries.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Plugin.Data.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.Info.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.StartStop.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
