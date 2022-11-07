@@ -221,6 +221,7 @@ namespace IDHIPlugins
 
 #endif
             }
+
             GetController(_hprocInstance.flags.player.chaCtrl).SetOriginalPosition();
         }
 
