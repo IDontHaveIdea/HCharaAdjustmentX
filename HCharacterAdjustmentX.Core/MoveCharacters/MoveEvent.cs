@@ -16,14 +16,29 @@ namespace IDHIPlugins
                 "Closer",
                 "Save",
                 "Load",
+                "Test1",
+                "Test2",
                 "Reset"
             };
         public static readonly List<string> doubleWidthLabels =
             new()
             {
-                buttonLabels[8]
+                buttonLabels[10]
             };
-        public enum MoveType { UP, DOWN, LEFT, RIGHT, APART, CLOSER, SAVE, LOAD, RESET, UNKNOWN }
+        public enum MoveType
+        {
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT,
+            APART,
+            CLOSER,
+            SAVE,
+            LOAD,
+            TEST1,
+            TEST2,
+            RESET,
+            UNKNOWN }
 
         public static readonly Dictionary<string, MoveType> EventLabel =
             new()
@@ -36,7 +51,9 @@ namespace IDHIPlugins
                 { buttonLabels[5], MoveType.CLOSER },
                 { buttonLabels[6], MoveType.SAVE },
                 { buttonLabels[7], MoveType.LOAD },
-                { buttonLabels[8], MoveType.RESET }
+                { buttonLabels[8], MoveType.SAVE },
+                { buttonLabels[9], MoveType.LOAD },
+                { buttonLabels[10], MoveType.RESET }
             };
     }
 }

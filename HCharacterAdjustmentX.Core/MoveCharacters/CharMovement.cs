@@ -153,7 +153,9 @@ namespace IDHIPlugins
                         _doShortcutMove = true;
                         break;
 #if DEBUG
-                    case MoveType.SAVE:
+                    //case MoveType.SAVE:
+                    //    _controller
+                    case MoveType.TEST1:
                         var tmp = _chaControl.transform.position;
                         var rot = _chaControl.transform.rotation;
 
@@ -225,7 +227,6 @@ namespace IDHIPlugins
 
             internal static string Translate(string name)
             {
-                // if (!TranslationHelper.TryTranslate(name, out string tmp))
                 if (!TranslationHelper.TryTranslate(name, out var tmp))
                 {
                     return name;
