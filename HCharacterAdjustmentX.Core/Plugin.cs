@@ -11,7 +11,7 @@ using KKAPI;
 using KKAPI.Chara;
 using KKAPI.Utilities;
 
-using AnimationLoader;
+//using AnimationLoader;
 
 using IDHIUtils;
 
@@ -40,7 +40,8 @@ namespace IDHIPlugins
     /// </remarks>
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
     [BepInDependency(IDHIUtils.Info.GUID, IDHIUtils.Info.Version)]
-    [BepInDependency(SwapAnim.GUID, SwapAnim.Version)]
+    //[BepInDependency(SwapAnim.GUID, SwapAnim.Version)]
+    [BepInDependency("essuhauled.animationloader", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(GUID, PluginDisplayName, Version)]
     [BepInProcess(KoikatuAPI.GameProcessName)]
     public partial class HCharaAdjustmentX : BaseUnityPlugin
@@ -53,6 +54,7 @@ namespace IDHIPlugins
         internal static string _activeScene;
         internal static Logg _Log = new();
         internal static SvgColor _SvgColor = new();
+        internal static IDHIUtils.AnimationLoader _animationLoader = new();
 
         internal static bool IsAibu { get; set; } = false;
         internal static bool IsHoushi { get; set; } = false;
