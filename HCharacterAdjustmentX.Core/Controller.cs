@@ -5,11 +5,14 @@ using MessagePack;
 
 using HSceneUtility;
 
+using ExtensibleSaveFormat;
 using KKAPI;
 using KKAPI.Chara;
 
 using IDHIUtils;
-
+using System;
+using KKAPI.MainGame;
+using ADV.Commands.Camera;
 
 namespace IDHIPlugins
 {
@@ -21,7 +24,8 @@ namespace IDHIPlugins
         internal static Vector3 _upYAxisAdjustUnit = Vector3.zero;
         internal static float _fAdjustStep = 0.01f;
         internal static bool _moved = false;
-        internal static Dictionary<string, PositionData> MoveData = new();
+        //internal static Dictionary<string, PositionData> MoveData = new();
+        //internal static CMoveData CMoveDataCMoveData = new();
 
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
@@ -30,6 +34,8 @@ namespace IDHIPlugins
             internal Vector3 _lastMovePosition = new(0, 0, 0);
             internal Vector3 _originalPosition = new(0, 0, 0);
             internal Vector3 _movement = new(0, 0, 0);
+            internal Dictionary<string,
+                Dictionary<CharacterType, PositionData>> MoveData = new();
             #endregion
 
             #region public fields
@@ -80,6 +86,7 @@ namespace IDHIPlugins
             {
                 _originalPosition = ChaControl.transform.position;
                 _lastMovePosition = ChaControl.transform.position;
+                _movement = Vector3.zero;
                 _moved = false;
             }
             #endregion
@@ -101,8 +108,10 @@ namespace IDHIPlugins
                         ChaControl.transform.position = _originalPosition;
                     }
                     _movement = Vector3.zero;
+                    _moved = false;
 #if DEBUG
-                    _Log.Info($"SHCA0003: Reset position for {_chaType}");
+                    _Log.Info($"SHCA0003: Reset position for {_chaType} " +
+                        $"[{_originalPosition}]");
 #endif
                 }
             }
@@ -110,7 +119,7 @@ namespace IDHIPlugins
 
             #region unity methods
             /// <summary>
-            /// TODO: Save and read information about any movement done.  
+            /// TODO: Verify if data is saved to the card in Maker when called from room.
             /// Need to identify 3P and Darkness scene.  
             /// For now it won't be supported. Message to remember.
             /// This must be defined.
@@ -118,13 +127,120 @@ namespace IDHIPlugins
             /// <param name="currentGameMode"></param>
             protected override void OnCardBeingSaved(GameMode currentGameMode)
             {
+                if (currentGameMode == GameMode.Maker)
+                {
+                    _Log.Warning($"[OnCardBeingSaved] Maker out.");
+                    return;
+                }
+#if DEBUG
+                var calllingMethod = Utilities.CallingMethod();
+                _Log.Warning($"[OnCardBeingSaved] Calling Method {calllingMethod}.");
+#endif
+                SaveData();
             }
 
             protected override void OnReload(GameMode currentGameMode, bool maintainState)
             {
+                if (currentGameMode == GameMode.Maker)
+                {
+                    _Log.Warning($"[OnReload] Maker out.");
+                    return;
+                }
+
                 if (maintainState)
                 {
+                    _Log.Warning($"[OnReload] Maintain state out.");
                     return;
+                }
+#if DEBUG
+                var calllingMethod = Utilities.CallingMethod();
+                _Log.Warning($"[OnReload] Calling Method {calllingMethod}.");
+#endif
+                ReadData();
+            }
+
+            public void ReadData()
+            {
+                var calllingMethod = Utilities.CallingMethod();
+                var heroine = ChaControl.GetHeroine();
+                var chaName = $"{ChaControl.name.Trim()} " +
+                    $"({ChaControl.chaFile.parameter.fullname.Trim()})";
+                var name = chaName;
+
+                _Log.Warning($"[ReadData] Calling Method {calllingMethod}.");
+
+                if (heroine != null)
+                {                    
+                    name = $"{heroine.Name.Trim()} ({chaName})";
+                }
+
+                _Log.Warning($"[ReadData] Load data for {name}.");
+
+                var data = GetExtendedData();
+                // MoveData.Load(data)
+                if (data != null)
+                {
+                    Dictionary<string, PositionDataPair> MoveDataSerialize;
+
+                    if (data.data.TryGetValue(nameof(MoveData),
+                        out var loadedMoveData)
+                        && loadedMoveData != null)
+                    {
+                        MoveDataSerialize = MessagePackSerializer
+                            .Deserialize<Dictionary<string, PositionDataPair>>
+                            ((byte[])loadedMoveData);
+                        if (MoveDataSerialize != null)
+                        {
+                            //MoveData.Clear();
+                            MoveData = RestoreMoveData(MoveDataSerialize);
+#if DEBUG
+                            PrintData(MoveData);
+#endif
+                        }
+                        else
+                        {
+                            _Log.Error($"[ReadData] Can't unpack data for {name}.");
+                        }
+                    }
+                }
+            }
+
+            public void SaveData(bool clear = false)
+            {
+                var calllingMethod = Utilities.CallingMethod();
+                var heroine = ChaControl.GetHeroine();
+                var chaName = $"{ChaControl.name.Trim()}";
+                var name = chaName;
+
+                if (heroine != null)
+                {
+                    name = $"{heroine.Name.Trim()} ({chaName})";
+                }
+#if DEBUG
+                _Log.Warning($"[SaveData] Calling Method={calllingMethod} name={name}.");
+#endif
+                if (MoveData.Count == 0)
+                {
+                    _Log.Error($"[SaveData] No Data name={name}.");
+                    if (clear)
+                    {
+                        SetExtendedData(null);
+                    }
+                }
+                else
+                {
+                    var MoveDataSerialize = PrepareSerialize(MoveData);
+
+                    var data = new PluginData {
+                        version = 1
+                    };
+                    data.data.Add(nameof(MoveData),
+                        MessagePackSerializer.Serialize(MoveDataSerialize));
+                    SetExtendedData(data);
+#if DEBUG
+                    var Moving = RestoreMoveData(MoveDataSerialize);
+                    PrintData(Moving);
+#endif
                 }
             }
 
