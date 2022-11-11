@@ -15,7 +15,7 @@ using KKAPI.Utilities;
 
 using IDHIUtils;
 
-using SHCA = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
+using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 
 
 namespace IDHIPlugins
@@ -85,7 +85,7 @@ namespace IDHIPlugins
             _Log.Info($"0028: Log.Enabled set to {_Log.Enabled}");
 #endif
             _Log.Info($"SHCA0001: HCharaAdjustmentX Loaded.");
-            CharacterApi.RegisterExtraBehaviour<SHCA>(GUID);
+            CharacterApi.RegisterExtraBehaviour<CTRL>(GUID);
 
             // Monitor loaded scenes
             SceneManager.sceneLoaded += MonitorHProc;
@@ -121,7 +121,7 @@ namespace IDHIPlugins
 
             // Initializing HProcScene
             HProcScene.Init();            
-            SHCA.RegisterMovementEvents();
+            CTRL.RegisterMovementEvents();
 
             // Start in disabled mode
             enabled = false;
@@ -134,6 +134,28 @@ namespace IDHIPlugins
         /// <returns></returns>
         public static HCharaAdjusmentXController GetController(ChaControl chaControl)
         {
+            return ((chaControl == null) || (chaControl.gameObject == null))
+                ? null : chaControl.GetComponent<HCharaAdjusmentXController>();
+        }
+
+        /// <summary>
+        /// Get controller for character by CharacterType
+        /// </summary>
+        /// <param name="chaType"></param>
+        /// <returns></returns>
+        public static HCharaAdjusmentXController GetControllerByType(CTRL.CharacterType chaType)
+        {
+            ChaControl chaControl = null;
+
+            if (chaType == CTRL.CharacterType.Player)
+            {
+                chaControl = _hprocInstance.flags.player?.chaCtrl;
+            }
+            else
+            {
+                chaControl = _hprocInstance.flags.lstHeroine[(int)chaType]?.chaCtrl;
+            }
+
             return ((chaControl == null) || (chaControl.gameObject == null))
                 ? null : chaControl.GetComponent<HCharaAdjusmentXController>();
         }
