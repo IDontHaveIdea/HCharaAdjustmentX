@@ -17,6 +17,7 @@ namespace IDHIPlugins
         internal static Harmony _hookInstance;
         internal static HSceneProc _hprocInstance;
         internal static HFlag.EMode _mode;
+        internal static string _animationKey = "";
 
         internal partial class Hooks
         {
@@ -47,7 +48,7 @@ namespace IDHIPlugins
             /// Set the new original position when changing positions not using the H point picker
             /// </summary>
             /// <param name="_nextAinmInfo"></param>
-            [HarmonyPrefix]
+            [HarmonyPostfix]
             [HarmonyPatch(typeof(HSceneProc), nameof(HSceneProc.ChangeAnimator))]
             private static void ChangeAnimatorPrefix(
                 HSceneProc.AnimationListInfo _nextAinmInfo)
@@ -56,12 +57,17 @@ namespace IDHIPlugins
                 {
                     return;
                 }
-
+                _animationKey = "";
                 try
                 {
+                    _animationKey = _animationLoader
+                        .GetAnimationKey(_nextAinmInfo);
+                    _Log.Level(LogLevel.Error, $"Animation Key={_animationKey}");
                     Utils.SetMode(_nextAinmInfo.mode);
-                    Utils.RecalcAdjustmentAll(" from [ChangeAnimator]");
-                    Utils.SetOriginalPositionAll(" from [ChangeAnimator]");
+                    Utils.ResetPositionAll();
+                    Utils.RecalcAdjustmentAll();
+                    Utils.SetOriginalPositionAll();
+                    Utils.InitialPosition();
                 }
                 catch (Exception e)
                 {
