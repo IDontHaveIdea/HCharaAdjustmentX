@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using BepInEx.Logging;
 using HSceneUtility;
@@ -152,23 +153,57 @@ namespace IDHIPlugins
                         }
                         _doShortcutMove = true;
                         break;
+                    case MoveType.SAVE:
+                        if (!_animationKey.IsNullOrEmpty())
+                        {
+                            var Position =
+                                new Dictionary<CharacterType, PositionData> {
+                                    [chaType] = new(_controller._movement,
+                                    Vector3.zero)
+                                };
+                            _controller.MoveData[_animationKey] = Position;
+                            _Log.Level(LogLevel.Error, $"Save Data=" +
+                                $"{_controller.MoveData[_animationKey][chaType]
+                                .PositionAdjustment.ToString("F7")}");
+                        }
+                        _doShortcutMove = false;
+                        _controller.SaveData(true);
+                        break;
+                    case MoveType.LOAD:
+                        if (!_animationKey.IsNullOrEmpty())
+                        {
+                            _controller.MoveData.TryGetValue(_animationKey,
+                                out var position);
+                            if (position != null)
+                            {
+                                // Use TryGetValue
+                                movement = position[chaType]
+                                   .PositionAdjustment;
+                                _Log.Level(LogLevel.Error, $"Load Data={movement}");
+                            }
+                        }
+                        _doShortcutMove = true;
+                        break;
 #if DEBUG
-                    //case MoveType.SAVE:
-                    //    _controller
+                    // Buttons for testing
                     case MoveType.TEST1:
                         var tmp = _chaControl.transform.position;
                         var rot = _chaControl.transform.rotation;
 
                         var strTmp = $"{chaType} position={tmp.ToString("F7")} rotation={rot.ToString("F7")}\n";
                                               
-                        _Log.Info($"[SAVE]\n\n{strTmp}\n");
+                        _Log.Info($"[Move.TEST1]\n\n{strTmp}\n");
                         _doShortcutMove = false;
                         break;
 #endif
+                    // Execute a move event with current parameters used
+                    // for automatic position adjustment
+                    case MoveType.MOVE:
+                        _doShortcutMove = true;
+                        break;
                     default:
                         _doShortcutMove = false;
                         break;
-
                 }
                 if (_doShortcutMove)
                 {
@@ -189,7 +224,7 @@ namespace IDHIPlugins
                     _chaControl.transform.position = newPosition;
                     _guideObject.amount.position = _chaControl.transform.position;
                     _controller._movement = movement;
-                    _controller._lastMovePosition = tmp;
+                    _controller._lastMovePosition = newPosition;
                 }
                 return _doShortcutMove;
             }
