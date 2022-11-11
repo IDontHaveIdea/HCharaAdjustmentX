@@ -87,7 +87,6 @@ namespace IDHIPlugins
             Player = e.Male;
             enabled = true;
             SetControllerEnabled(true);
-            MoveData.Clear();
             HProcScene.OnHSceneFinishedLoading -= OnHProcFinishedLoading;
         }
 
