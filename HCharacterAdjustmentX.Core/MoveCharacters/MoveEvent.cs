@@ -16,8 +16,10 @@ namespace IDHIPlugins
                 "Closer",
                 "Save",
                 "Load",
+#if DEBUG
                 "Test1",
                 "Test2",
+#endif
                 "Reset"
             };
         public static readonly List<string> doubleWidthLabels =
@@ -35,9 +37,12 @@ namespace IDHIPlugins
             CLOSER,
             SAVE,
             LOAD,
+#if DEBUG
             TEST1,
             TEST2,
+#endif
             RESET,
+            MOVE,
             UNKNOWN }
 
         public static readonly Dictionary<string, MoveType> EventLabel =
@@ -51,9 +56,13 @@ namespace IDHIPlugins
                 { buttonLabels[5], MoveType.CLOSER },
                 { buttonLabels[6], MoveType.SAVE },
                 { buttonLabels[7], MoveType.LOAD },
-                { buttonLabels[8], MoveType.SAVE },
-                { buttonLabels[9], MoveType.LOAD },
+#if DEBUG
+                { buttonLabels[8], MoveType.TEST1 },
+                { buttonLabels[9], MoveType.TEST2 },
                 { buttonLabels[10], MoveType.RESET }
+#else
+                { buttonLabels[8], MoveType.RESET }
+#endif
             };
     }
 }
