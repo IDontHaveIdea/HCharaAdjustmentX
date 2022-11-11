@@ -3,11 +3,16 @@
 //
 using System.Collections.Generic;
 
+using BepInEx.Logging;
+
 using IDHIUtils;
 
 using UnityEngine.SceneManagement;
 
+using static FaceScreenShot;
+using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 using static IDHIPlugins.HCharaAdjustmentX;
+
 
 namespace IDHIPlugins
 {
@@ -124,7 +129,6 @@ namespace IDHIPlugins
             var controller = GetController(chaControl);
             var currentPosition = chaControl.transform.position;
             var originalPosition = controller._originalPosition;
-            var lastMovePosition = controller._lastMovePosition;
             if (currentPosition != originalPosition)
             {
                 return true;
@@ -132,13 +136,17 @@ namespace IDHIPlugins
             return false;
         }
 
-        internal static bool IsPositionMoved(ChaControl chaControl)
+        /// <summary>
+        /// Determine if there is a change in original position
+        /// </summary>
+        /// <param name="chaControl"></param>
+        /// <returns></returns>
+        internal static bool IsSamePosition(ChaControl chaControl)
         {
             var controller = GetController(chaControl);
             var currentPosition = chaControl.transform.position;
-            var originalPosition = controller._originalPosition;
             var lastMovePosition = controller._lastMovePosition;
-            if (currentPosition != lastMovePosition)
+            if (currentPosition == lastMovePosition)
             {
                 return true;
             }
@@ -161,10 +169,57 @@ namespace IDHIPlugins
         }
 
         /// <summary>
+        /// Show some information for Heroine 1
+        /// </summary>
+        /// <param name="instance"></param>
+        internal static void InitialPosition()
+        {
+            if (_hprocInstance == null)
+            {
+                return;
+            }
+#if DEBUG
+            var calllingMethod = Utilities.CallingMethod();
+            _Log.Info($"[InitialPosition] Called by - [{calllingMethod}]");
+#endif
+            var heroines = _hprocInstance.flags.lstHeroine;
+            HCharaAdjusmentXController ctrl;
+            for (var i = 0; i < heroines.Count; i++)
+            {
+                ctrl = GetController(heroines[i].chaCtrl);
+                if (ctrl.MoveData.Count > 0)
+                {
+                    ctrl.MoveData.TryGetValue(_animationKey,
+                        out var position);
+                    if (position != null)
+                    {
+                        // Use TryGetValue
+                        position.TryGetValue(ctrl._chaType, out var data);
+                        if (data != null)
+                        {
+                            var movement = data.PositionAdjustment;
+                            ctrl._movement = movement;
+                            CTRL.InvokeOnMoveRequest(null,
+                                new CTRL.MoveRequestEventArgs(
+                                    ctrl._chaType, MoveEvent.MoveType.MOVE));
+                            _Log.Info($"[InitialPosition] InvokeOnMoveRequest - [{movement}]");
+                        }
+                    }
+                }
+            }
+            /*ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
+            if (ctrl.Moved
+                && IsSamePosition(_hprocInstance.flags.player.chaCtrl))
+            {
+                ctrl.ResetPosition();
+            }*/
+        }
+
+        /// <summary>
         /// Move characters to saved original position
         /// </summary>
         /// <param name="message"></param>
-        internal static void ResetPositionAll(string message = null)
+        internal static void ResetPositionAll()
         {
             if (_hprocInstance == null)
             {
@@ -175,11 +230,27 @@ namespace IDHIPlugins
             _Log.Info($"SHCA0018: [ResetPositionAll] Called by - [{calllingMethod}]");
 #endif
             var heroines = _hprocInstance.flags.lstHeroine;
+            HCharaAdjusmentXController ctrl;
             for (var i = 0; i < heroines.Count; i++)
             {
-                GetController(heroines[i].chaCtrl).ResetPosition();
+                ctrl = GetController(heroines[i].chaCtrl);
+                _Log.Error($"Origial Position {ctrl._originalPosition} " +
+                    $"current {heroines[i].chaCtrl.transform.position} " +
+                    $"_lastMovedPostion={ctrl._lastMovePosition}" +
+                    $"IsNewPositoin={IsNewPosition(heroines[i].chaCtrl)} " +
+                    $"IsSamePosition={IsSamePosition(heroines[i].chaCtrl)}" +
+                    $"Moved={ctrl.Moved}");
+                if (ctrl.Moved && IsSamePosition(heroines[i].chaCtrl))
+                {
+                    ctrl.ResetPosition();
+                }
             }
-            GetController(_hprocInstance.flags.player.chaCtrl).ResetPosition();
+            ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
+            if (ctrl.Moved
+                && IsSamePosition(_hprocInstance.flags.player.chaCtrl))
+            {
+                ctrl.ResetPosition();
+            }
         }
 
         /// <summary>
@@ -193,6 +264,43 @@ namespace IDHIPlugins
             {
                 return;
             }
+//#if DEBUG
+//            var calllingMethod = Utilities.CallingMethod();
+//            _Log.Info($"SHCA0019: [SetOrigianalPositionAll] Called by - [{calllingMethod}]");
+//#endif
+            var heroines = _hprocInstance.flags.lstHeroine;
+            for (var i = 0; i < heroines.Count; i++)
+            {
+                if (IsNewPosition(heroines[i].chaCtrl))
+                {
+                    GetController(heroines[i].chaCtrl).SetOriginalPosition();
+#if DEBUG
+                    if (i == 0)
+                    {
+                        Utils.InitialPositionInfo(_hprocInstance);
+                    }
+#endif
+                }
+            }
+            if (IsNewPosition(_hprocInstance.flags.player.chaCtrl))
+            {
+                GetController(_hprocInstance.flags.player.chaCtrl).SetOriginalPosition();
+            }
+        }
+
+
+
+        /// <summary>
+        /// Set new original position for characters if there is a move 
+        /// from original position saved
+        /// </summary>
+        /// <param name="message"></param>
+        internal static void SetOriginalPositionAllBad(string message = null)
+        {
+            if (_hprocInstance == null)
+            {
+                return;
+            }
 #if DEBUG
             var calllingMethod = Utilities.CallingMethod();
             _Log.Info($"SHCA0019: [SetOrigianalPositionAll] Called by - [{calllingMethod}]");
@@ -200,27 +308,27 @@ namespace IDHIPlugins
             var heroines = _hprocInstance.flags.lstHeroine;
             for (var i = 0; i < heroines.Count; i++)
             {
-                if (IsPositionMoved(heroines[i].chaCtrl))
+/*                if (IsPositionMoved(heroines[i].chaCtrl))
                 {
                     GetController(heroines[i].chaCtrl).ResetPosition();
 #if DEBUG
                     _Log.Info($"[SetOrigianalPositionAll] Called by - [{calllingMethod}] Found is heroine moved position.");
 #endif
-                }
+                }*/
                 GetController(heroines[i].chaCtrl).SetOriginalPosition();
                 if (i == 0)
                 {
                     Utils.InitialPositionInfo(_hprocInstance);
                 }                
             }
-            if (IsPositionMoved(_hprocInstance.flags.player.chaCtrl))
+            /*if (IsPositionMoved(_hprocInstance.flags.player.chaCtrl))
             {
                 GetController(_hprocInstance.flags.player.chaCtrl).ResetPosition();
 #if DEBUG
                 _Log.Info($"SHCA0019: [SetOrigianalPositionAll] Called by - [{calllingMethod}] Found is player move position.");
 
 #endif
-            }
+            }*/
 
             GetController(_hprocInstance.flags.player.chaCtrl).SetOriginalPosition();
         }
