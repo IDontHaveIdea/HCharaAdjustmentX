@@ -7,6 +7,7 @@ using H;
 
 using BepInEx.Logging;
 using HarmonyLib;
+using static HandCtrl;
 
 
 namespace IDHIPlugins
