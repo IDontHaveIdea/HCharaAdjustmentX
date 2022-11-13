@@ -32,22 +32,6 @@ namespace IDHIPlugins
         /// True if we are inside an HScene
         /// </summary>
         public static bool Nakadashi { get; internal set; }
-
-        //static public HSceneProc Instance { get; internal set; }
-        /// <summary>
-        /// Sprites
-        /// </summary>
-        //static public List<HSprite> Sprites { get; internal set; } = new List<HSprite>();
-
-        /// <summary>
-        /// Female list
-        /// </summary>
-        //static public List<ChaControl> Heroines { get; internal set; }
-
-        /// <summary>
-        /// Player
-        /// </summary>
-        //static public ChaControl Player { get; internal set; }
         #endregion
 
         #region events
@@ -125,14 +109,12 @@ namespace IDHIPlugins
                 OnHSceneExiting?.Invoke(null, null);
                 Nakadashi = false;
                 Kuuhou = false;
-                //Heroines = null;
-                //Sprites.Clear();
                 _hsHookInstance.UnpatchSelf();
                 _hsHookInstance = null;
             }
 
             private static void SetShortcutKeyPostfix(HSceneProc __instance,
-                List<ChaControl> ___lstFemale, ChaControl ___male) //, HSprite ___sprite)
+                List<ChaControl> ___lstFemale, ChaControl ___male)
             {
                 if (Kuuhou)
                 {
@@ -141,10 +123,6 @@ namespace IDHIPlugins
                 }
                 Kuuhou = true;
                 Nakadashi = true;
-                //Instance = __instance;
-                //Heroines = ___lstFemale;
-                //Player = ___male;
-                //Sprites.Add(___sprite);
                 OnHSceneFinishedLoading?.Invoke(null, 
                     new HSceneFinishedLoadingEventArgs(__instance, ___lstFemale, ___male));
             }
