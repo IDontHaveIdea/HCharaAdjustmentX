@@ -4,8 +4,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using CTRLR = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
-
+using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
+using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
@@ -23,7 +23,7 @@ namespace IDHIPlugins
             #endregion
 
             #region public properties
-            public List<MoveActionButton> Buttons => _buttons;
+            internal List<MoveActionButton> Buttons => _buttons;
 
             public float Height => _heigth;
 
@@ -42,7 +42,7 @@ namespace IDHIPlugins
             /// <param name="height"></param>
             /// <param name="xOffset"></param>
             /// <param name="yOffset"></param>
-            public ButtonsGUI(CTRLR.CharacterType chaType, float xMargin, float yMargin,
+            internal ButtonsGUI(CTRL.CharacterType chaType, float xMargin, float yMargin,
                 float width, float height,
                 float xOffset = 0f, float yOffset = 0f)
             {
@@ -63,6 +63,11 @@ namespace IDHIPlugins
 
                 foreach (var label in MoveEvent.EventLabel.Keys)
                 {
+                    if (_animationKey.IsNullOrEmpty()
+                        && ((label == "Save") || (label == "Load")))
+                    {
+                        continue;
+                    }
                     if (MoveEvent.doubleWidthLabels.Contains(label))
                     {
                         windowRect.width *= 2;
