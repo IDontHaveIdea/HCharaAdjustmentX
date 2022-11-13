@@ -21,9 +21,9 @@ namespace IDHIPlugins
 
             public class MoveRequestEventArgs : EventArgs
             {
-                public MoveEvent.MoveType Move { get; }
-                public CharacterType ChaType { get; }
-                public MoveRequestEventArgs(CharacterType chaType, MoveEvent.MoveType move)
+                internal MoveEvent.MoveType Move { get; }
+                internal CharacterType ChaType { get; }
+                internal MoveRequestEventArgs(CharacterType chaType, MoveEvent.MoveType move)
                 {
                     ChaType = chaType;
                     Move = move;
