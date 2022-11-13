@@ -16,17 +16,26 @@ namespace IDHIPlugins
     {
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
-            public HSceneGuideObject _guideObject;
+            public HSceneGuideObject GuideObject { get; set; } = null;
 
             /// <summary>
             /// Create a copy of the H scene guide object for each character
             /// </summary>
             internal void CreateGuideObject(HSceneProc hSceneProc, CharacterType characterType)
             {
-                _chaType = characterType;
-                if (_guideObject == null)
+                ChaType = characterType;
+                //var female = hSceneProc.lstFemale[0];
+                if (GuideObject == null)
                 {
-                    _guideObject = Instantiate(hSceneProc.guideObject);
+                    GuideObject = Instantiate(hSceneProc.guideObject);
+                    
+                    //GuideObject = _hprocInstance.guideObject;
+                    //GuideObject = Instantiate(hSceneProc.guideObject,
+                    //    female.transform.position,
+                    //    female.transform.rotation,
+                    //    female.transform);
+                    //GuideObject.transform
+                    //    .SetPositionAndRotation(female.transform.position, female.transform.rotation);
 #if KKSWish
                     var rot = ChaControl.transform.rotation;
                     Vector3 pos = ChaControl.transform.position;
@@ -49,15 +58,16 @@ namespace IDHIPlugins
             /// </summary>
             public void ShowGuideObject()
             {
-                if ((_guideObject == null) || !IsSupportedScene) 
+                if ((GuideObject == null) || !IsSupportedScene) 
                 { 
                     return; 
                 }
-                if (_originalPosition == Vector3.zero)
+                if (OriginalPosition == Vector3.zero)
                 {
                     SetOriginalPosition();
                 }
-                _guideObject.gameObject.SetActive(true);
+                _Log.Error($"Activate GuideObject Layer={GuideObject.gameObject.layer}");
+                GuideObject.gameObject.SetActive(true);
 #if KKSWish
                 var rot = ChaControl.transform.rotation;
                 Vector3 pos = ChaControl.transform.position;
@@ -80,11 +90,11 @@ namespace IDHIPlugins
             /// </summary>
             public void HideGuideObject()
             {
-                if ((_guideObject == null) || !IsSupportedScene)
+                if ((GuideObject == null) || !IsSupportedScene)
                 { 
                     return; 
                 }
-                _guideObject.gameObject.SetActive(false);
+                GuideObject.gameObject.SetActive(false);
 #if DEBUG
                 _Log.Info($"Guide should hide");
 #endif
@@ -95,11 +105,11 @@ namespace IDHIPlugins
             /// </summary>
             public void ToggleGuideObject()
             {
-                if ((_guideObject == null) || !IsSupportedScene)
+                if ((GuideObject == null) || !IsSupportedScene)
                 {
                     return;
                 }
-                if (_guideObject.gameObject.activeInHierarchy)
+                if (GuideObject.gameObject.activeInHierarchy)
                 {
                     HideGuideObject();
                 }
