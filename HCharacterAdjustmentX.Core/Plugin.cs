@@ -24,7 +24,7 @@ namespace IDHIPlugins
     /// This plug-in allows the position adjustment of the female character closer/apart, up/down
     /// or left/right. The movement are in discrete steps and characters maintain alignment no
     /// matter the orientation. They don't move left or right from each other.  This helps in some
-    /// scenes to avoid or lesser the clipping.
+    /// scenes to avoid or lessen the clipping.
     /// </summary>
     /// <remarks>
     ///
@@ -40,14 +40,11 @@ namespace IDHIPlugins
     /// </remarks>
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
     [BepInDependency(IDHIUtils.Info.GUID, IDHIUtils.Info.Version)]
-    //[BepInDependency(SwapAnim.GUID, SwapAnim.Version)]
     [BepInDependency("essuhauled.animationloader", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(GUID, PluginDisplayName, Version)]
     [BepInProcess(KoikatuAPI.GameProcessName)]
     public partial class HCharaAdjustmentX : BaseUnityPlugin
     {
-        internal static ConfigEntry<bool> DebugInfo;
-
         internal static bool _registered = false;
         internal static bool _showGroupGuide = false;
         internal static string _sceneName;
@@ -59,32 +56,22 @@ namespace IDHIPlugins
         internal static bool IsAibu { get; set; } = false;
         internal static bool IsHoushi { get; set; } = false;
         internal static bool IsSonyu { get; set; } = false;
-        internal static bool IsSupportedScene { get; set; } = false;       
+        internal static bool IsSupportedScene { get; set; } = false;
 
         private void Awake()
         {
             _Log.LogSource = base.Logger;
 
-            DebugInfo = Config.Bind(
-            section: "Debug",
-            key: "Debug Information",
-            defaultValue: false,
-            configDescription: new ConfigDescription(
-                description: "Show debug information in Console",
-                acceptableValues: null,
-                tags: new ConfigurationManagerAttributes { Order = 1, IsAdvanced = true }));
-            DebugInfo.SettingChanged += (_sender, _args) =>
-            {
-                _Log.Enabled = DebugInfo.Value;
-#if DEBUG
-                _Log.Info($"0028: Log.Enabled set to {_Log.Enabled}");
-#endif
-            };
+            ConfigDebugEnntry();
             _Log.Enabled = DebugInfo.Value;
 #if DEBUG
-            _Log.Info($"0028: Log.Enabled set to {_Log.Enabled}");
+            _Log.Info($"[Awake] Log.Enabled set to {_Log.Enabled}");
 #endif
-            _Log.Info($"SHCA0001: HCharaAdjustmentX Loaded.");
+            _Log.Info($"[Awake] HCharaAdjustmentX Loaded.");
+            if (!_animationLoader.Installed)
+            {
+                _Log.Message("Cannot locate AnimationLoader saving movement is disabled.");
+            }
             CharacterApi.RegisterExtraBehaviour<CTRL>(GUID);
 
             // Monitor loaded scenes
@@ -112,13 +99,13 @@ namespace IDHIPlugins
         {
             _Log.Info("1315: Start Called.");
 
-            // TODO: Decide if pull request or still look to see if can integrate.
-            // HCAdjustment.Init();
-            // DebugLog($"SHCA0004: HCAdjustment in system - HCAdjustment.Mansai");
-
             // Configuration entries
+            // TODO: Check for KKS_HCharaAdjustment
+#if DEBUG
             ConfigEntries(false);
-
+#else
+            ConfigEntries(true);
+#endif
             // Initializing HProcScene
             HProcScene.Init();            
             CTRL.RegisterMovementEvents();
@@ -143,7 +130,7 @@ namespace IDHIPlugins
         /// </summary>
         /// <param name="chaType"></param>
         /// <returns></returns>
-        public static HCharaAdjusmentXController GetControllerByType(CTRL.CharacterType chaType)
+        internal static HCharaAdjusmentXController GetControllerByType(CTRL.CharacterType chaType)
         {
             ChaControl chaControl = null;
 
