@@ -128,7 +128,7 @@ namespace IDHIPlugins
         {
             var controller = GetController(chaControl);
             var currentPosition = chaControl.transform.position;
-            var originalPosition = controller._originalPosition;
+            var originalPosition = controller.OriginalPosition;
             if (currentPosition != originalPosition)
             {
                 return true;
@@ -145,7 +145,7 @@ namespace IDHIPlugins
         {
             var controller = GetController(chaControl);
             var currentPosition = chaControl.transform.position;
-            var lastMovePosition = controller._lastMovePosition;
+            var lastMovePosition = controller.LastMovePosition;
             if (currentPosition == lastMovePosition)
             {
                 return true;
@@ -172,7 +172,7 @@ namespace IDHIPlugins
         /// Show some information for Heroine 1
         /// </summary>
         /// <param name="instance"></param>
-        internal static void InitialPosition()
+/*        internal static void InitialPosition()
         {
             if (_hprocInstance == null)
             {
@@ -189,31 +189,77 @@ namespace IDHIPlugins
                 ctrl = GetController(heroines[i].chaCtrl);
                 if (ctrl.MoveData.Count > 0)
                 {
-                    ctrl.MoveData.TryGetValue(_animationKey,
+                    ctrl.MoveData.Data.TryGetValue(_animationKey,
                         out var position);
                     if (position != null)
                     {
                         // Use TryGetValue
-                        position.TryGetValue(ctrl._chaType, out var data);
+                        position.TryGetValue(ctrl.ChaType, out var data);
                         if (data != null)
                         {
                             var movement = data.PositionAdjustment;
-                            ctrl._movement = movement;
+                            ctrl.Movement = movement;
                             CTRL.InvokeOnMoveRequest(null,
                                 new CTRL.MoveRequestEventArgs(
-                                    ctrl._chaType, MoveEvent.MoveType.MOVE));
+                                    ctrl.ChaType, MoveEvent.MoveType.MOVE));
                             _Log.Info($"[InitialPosition] InvokeOnMoveRequest - [{movement}]");
                         }
                     }
                 }
             }
-            /*ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
+            / * ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
             if (ctrl.Moved
                 && IsSamePosition(_hprocInstance.flags.player.chaCtrl))
             {
                 ctrl.ResetPosition();
-            }*/
+            } * /
+        }*/
+
+        /// <summary>
+        /// Show some information for Heroine 1
+        /// </summary>
+        /// <param name="instance"></param>
+        internal static void InitialPosition()
+        {
+            if (_hprocInstance == null)
+            {
+                return;
+            }
+            if (_animationKey.IsNullOrEmpty())
+            {
+                return;
+            }
+#if DEBUG
+            var calllingMethod = Utilities.CallingMethod();
+            _Log.Info($"[CInitialPosition] Called by - [{calllingMethod}]");
+#endif
+            var heroines = _hprocInstance.flags.lstHeroine;
+            HCharaAdjusmentXController ctrl;
+            for (var i = 0; i < heroines.Count; i++)
+            {
+                ctrl = GetController(heroines[i].chaCtrl);
+                if (ctrl.MoveData.Data.Count > 0)
+                {
+                    ctrl.MoveData.Data.TryGetValue(_animationKey,
+                        out var position);
+                    if (position != null)
+                    {
+                        // Use TryGetValue
+                        position.TryGetValue(ctrl.ChaType, out var data);
+                        if (data != null)
+                        {
+                            var movement = data.Position;
+                            ctrl.Movement = movement;
+                            CTRL.InvokeOnMoveRequest(null,
+                                new CTRL.MoveRequestEventArgs(
+                                    ctrl.ChaType, MoveEvent.MoveType.MOVE));
+                            _Log.Info($"[InitialPosition] InvokeOnMoveRequest - [{movement}]");
+                        }
+                    }
+                }
+            }
         }
+
 
         /// <summary>
         /// Move characters to saved original position
@@ -234,9 +280,9 @@ namespace IDHIPlugins
             for (var i = 0; i < heroines.Count; i++)
             {
                 ctrl = GetController(heroines[i].chaCtrl);
-                _Log.Error($"Origial Position {ctrl._originalPosition} " +
+                _Log.Error($"Origial Position {ctrl.OriginalPosition} " +
                     $"current {heroines[i].chaCtrl.transform.position} " +
-                    $"_lastMovedPostion={ctrl._lastMovePosition}" +
+                    $"_lastMovedPostion={ctrl.LastMovePosition}" +
                     $"IsNewPositoin={IsNewPosition(heroines[i].chaCtrl)} " +
                     $"IsSamePosition={IsSamePosition(heroines[i].chaCtrl)}" +
                     $"Moved={ctrl.Moved}");
