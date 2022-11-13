@@ -1,17 +1,18 @@
 ﻿//
 // Plugin.Data
 //
+using System.Text;
 using System.Collections.Generic;
 
 using UnityEngine;
 using MessagePack;
 
+using KKAPI;
+using ExtensibleSaveFormat;
+
 using IDHIUtils;
 
 using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
-using System.Text;
-using System;
-using ExtensibleSaveFormat;
 
 namespace IDHIPlugins
 {
@@ -24,30 +25,30 @@ namespace IDHIPlugins
         public class PositionDataPair
         {
             [Key(0)]
-            public Vector3 HeroinePositionAdjustment;
+            public Vector3 HeroinePosition;
             [Key(1)]
-            public Vector3 PlayerPositionAdjustment;
+            public Vector3 PlayerPosition;
             [Key(2)]
-            public Vector3 HeroineRotationAdjustment;
+            public Vector3 HeroineRotation;
             [Key(3)]
-            public Vector3 PlayerRotationAdjustment;
+            public Vector3 PlayerRotation;
 
             public PositionDataPair()
             {
-                HeroinePositionAdjustment = Vector3.zero;
-                PlayerPositionAdjustment = Vector3.zero;
-                HeroineRotationAdjustment = Vector3.zero;
-                PlayerRotationAdjustment = Vector3.zero;
+                HeroinePosition = Vector3.zero;
+                PlayerPosition = Vector3.zero;
+                HeroineRotation = Vector3.zero;
+                PlayerRotation = Vector3.zero;
             }
 
             public PositionDataPair(
                 Vector3 heroineAdjustment,
                 Vector3 playerAdjustment)
             {
-                HeroinePositionAdjustment = heroineAdjustment;
-                PlayerPositionAdjustment = playerAdjustment;
-                HeroineRotationAdjustment = Vector3.zero;
-                PlayerRotationAdjustment = Vector3.zero;
+                HeroinePosition = heroineAdjustment;
+                PlayerPosition = playerAdjustment;
+                HeroineRotation = Vector3.zero;
+                PlayerRotation = Vector3.zero;
             }
 
             public PositionDataPair(
@@ -56,10 +57,10 @@ namespace IDHIPlugins
                 Vector3 heroineRotation,
                 Vector3 playerRotation)
             {
-                HeroinePositionAdjustment = heroineAdjustment;
-                PlayerPositionAdjustment = playerAdjustment;
-                HeroineRotationAdjustment = heroineRotation;
-                PlayerRotationAdjustment = playerRotation;
+                HeroinePosition = heroineAdjustment;
+                PlayerPosition = playerAdjustment;
+                HeroineRotation = heroineRotation;
+                PlayerRotation = playerRotation;
             }
         }
 
@@ -67,211 +68,105 @@ namespace IDHIPlugins
         /// Simpler easier to manage
         /// TODO: Work on rotation
         /// </summary>
-        [MessagePackObject]
+        //[MessagePackObject(true)]
         public class PositionData
         {
-            [Key(0)]
-            public Vector3 PositionAdjustment;
-            [Key(1)]
-            public Vector3 RotationAdjustment;
+            //[Key(0)]
+            public Vector3 Position;
+            //[Key(1)]
+            public Vector3 Rotation;
 
             public PositionData()
             {
-                PositionAdjustment = Vector3.zero;
-                RotationAdjustment = Vector3.zero;
+                Position = Vector3.zero;
+                Rotation = Vector3.zero;
             }
 
             public PositionData(
                 Vector3 position,
                 Vector3 rotation)
             {
-                PositionAdjustment = position;
-                RotationAdjustment = rotation;
+                Position = position;
+                Rotation = rotation;
             }
         }
 
-        /// <summary>
-        /// Converts MoveData to a format that can be serialized
-        /// </summary>
-        /// <param name="MoveData">movement data</param>
-        /// <returns></returns>
-        internal static Dictionary<string, PositionDataPair> PrepareSerialize(
-            Dictionary<string,
-                Dictionary<CTRL.CharacterType, PositionData>> MoveData)
-        {
-            var MoveDataToSerialize = new Dictionary<string, PositionDataPair>();
-
-            Vector3 HeroinePositionAdjustment;
-            Vector3 PlayerPositionAdjustment;
-            Vector3 HeroineRotationAdjustment;
-            Vector3 PlayerRotationAdjustment;
-
-            foreach (var item in MoveData)
-            {
-                HeroinePositionAdjustment = Vector3.zero;
-                PlayerPositionAdjustment = Vector3.zero;
-                HeroineRotationAdjustment = Vector3.zero;
-                PlayerRotationAdjustment = Vector3.zero;
-
-                foreach (var character in item.Value)
-                {
-                    if (character.Key == CTRL.CharacterType.Heroine)
-                    {
-                        HeroinePositionAdjustment = character.Value.PositionAdjustment;
-                        HeroineRotationAdjustment = character.Value.RotationAdjustment;
-                    }
-                    if (character.Key == CTRL.CharacterType.Player)
-                    {
-                        PlayerPositionAdjustment = character.Value.PositionAdjustment;
-                        PlayerRotationAdjustment = character.Value.RotationAdjustment;
-                    }
-                }
-                MoveDataToSerialize[item.Key] = new PositionDataPair(
-                    HeroinePositionAdjustment,
-                    PlayerPositionAdjustment,
-                    HeroineRotationAdjustment,
-                    PlayerRotationAdjustment);
-            }
-            return MoveDataToSerialize;
-        }
-
-        /// <summary>
-        /// Converts serialized friendly data to MoveData
-        /// </summary>
-        /// <param name="MoveDataPair"></param>
-        /// <returns></returns>
-        internal static Dictionary<string,
-                Dictionary<CTRL.CharacterType, PositionData>> RestoreMoveData(
-            Dictionary<string, PositionDataPair> MoveDataPair)
-        {
-            var Position = new Dictionary<CTRL.CharacterType, PositionData>();
-            var MoveData = new Dictionary<string,
-                Dictionary<CTRL.CharacterType, PositionData>>();
-
-            foreach (var item in MoveDataPair)
-            {
-                Position.Clear();
-                Position[CTRL.CharacterType.Heroine] = new(
-                    item.Value.HeroinePositionAdjustment,
-                    item.Value.HeroineRotationAdjustment);
-                // Add Player if any vector is non zero.
-                if ((item.Value.PlayerPositionAdjustment != Vector3.zero)
-                    || (item.Value.PlayerRotationAdjustment != Vector3.zero))
-                {
-                    Position[CTRL.CharacterType.Player] = new(
-                    item.Value.PlayerPositionAdjustment,
-                    item.Value.PlayerRotationAdjustment);
-                }
-
-                MoveData[item.Key] = new(Position);
-            }
-
-            return MoveData;
-        }
-
-        internal static void PrintData(Dictionary<string,
-                Dictionary<CTRL.CharacterType, PositionData>> MoveData)
-        {
-            var lines = new StringBuilder();
-
-            foreach (var item in MoveData)
-            {
-                foreach (var character in item.Value)
-                {
-                    lines.AppendLine($"Position={item.Key} " +
-                        $"Character={character.Key} " +
-                        $"Position=" +
-                        $"{character.Value.PositionAdjustment.ToString("F7")} " +
-                        $"Rotation=" +
-                        $"{character.Value.RotationAdjustment.ToString("F7")}");
-                }
-            }
-
-            if (lines.Length > 0)
-            {
-                _Log.Warning($"[PrintData]\n\n{lines.ToString()}\n");
-            }
-        }
-
-        internal static void PrintData(
-            Dictionary<string, PositionDataPair> MoveData)
-        {
-            var lines = new StringBuilder();
-
-            foreach (var item in MoveData)
-            {
-                lines.AppendLine($"Position={item.Key} Heroine" +
-                    $"Position={item.Value.HeroinePositionAdjustment.ToString("F7")} " +
-                    $"Rotation={item.Value.HeroineRotationAdjustment.ToString("F7")}");
-            }
-
-            if (lines.Length > 0)
-            {
-                _Log.Warning($"[PrintData]\n\n{lines.ToString()}\n");
-            }
-        }
-
-
-        /*
-        public sealed class CMoveData
+        public sealed class MoveData
         {
             private Dictionary<string,
-                Dictionary<CTRL.CharacterType, PositionData>> _MoveData;
+                Dictionary<CTRL.CharacterType, PositionData>> _data;
+            private readonly ChaControl _chaControl;
 
-            public Dictionary<string,
-                Dictionary<CTRL.CharacterType, PositionData>> MoveData
+            internal int Count => _data.Count;
+            internal Dictionary<string,
+                Dictionary<CTRL.CharacterType, PositionData>> Data
             {
-                get { return _MoveData; }
-                set { _MoveData = value; }
+                get { return _data; }
+                set { _data = value; }
             }
 
-            public CMoveData()
+            internal MoveData(ChaControl chaControl)
             {
-                _MoveData = new Dictionary<string,
+                _chaControl = chaControl;
+                _data = new Dictionary<string,
                     Dictionary<CTRL.CharacterType, PositionData>>();
+                _data.Clear();
             }
 
-            public Dictionary<CTRL.CharacterType, PositionData> this[string key]
+            internal Dictionary<CTRL.CharacterType, PositionData> this[string key]
             {
-                get { return _MoveData[key]; }
-                set { _MoveData[key] = value; }
+                get { return _data[key]; }
+                set { _data[key] = value; }
             }
 
-
-            public void Load(PluginData data)
+            internal void Load(PluginData data)
             {
-                Dictionary<string, PositionDataPair> MoveDataSerialize;
-
-                if (data.data.TryGetValue(nameof(MoveData),
-                        out var loadedMoveData)
-                        && loadedMoveData != null)
+                var name = _chaControl.chaFile?.parameter.fullname.Trim() ?? "CHACONTROL FAIL";
+                if (data != null)
                 {
-                    MoveDataSerialize = MessagePackSerializer
-                        .Deserialize<Dictionary<string, PositionDataPair>>
-                        ((byte[])loadedMoveData);
-                    if (MoveDataSerialize != null)
+                    Dictionary<string, PositionDataPair> dataDeserialized;
+
+                    if (data.data.TryGetValue(MoveDataID,
+                            out var loadedMoveData)
+                            && loadedMoveData != null)
                     {
-                        MoveData = RestoreMoveData(MoveDataSerialize);
+                        dataDeserialized = MessagePackSerializer
+                            .Deserialize<Dictionary<string, PositionDataPair>>
+                            ((byte[])loadedMoveData);
+                        if (dataDeserialized != null)
+                        {
+                            Data = RestoreMoveData(dataDeserialized);
 #if DEBUG
-                        PrintData(MoveData);
+                            PrintData(Data, name);
 #endif
+                        }
+                        else
+                        {
+                            _Log.Error($"[Load] [{name}] Can't unpack data.");
+                        }
                     }
-                    else
-                    {
-                        _Log.Error($"[ReadData] Can't unpack data for.");
-                    }
+                }
+                else
+                {
+                    _Log.Debug($"[Load] [{name}] PluginData is null.");
+                    Data.Clear();
                 }
             }
 
-            public PluginData Save()
+            internal PluginData Save()
             {
+                var name = _chaControl.chaFile?.parameter.fullname.Trim() ?? "CHACONTROL FAIL";
+
                 var plugData = new PluginData {
                     version = 1
                 };
                 var MoveDataSerialize = PrepareSerialize();
-                plugData.data.Add(nameof(MoveData),
+                plugData.data.Add(MoveDataID,
                         MessagePackSerializer.Serialize(MoveDataSerialize));
-
+#if DEBUG
+                var Moving = RestoreMoveData(MoveDataSerialize);
+                PrintData(Moving, name);
+#endif
                 return plugData.data.Count > 0 ? plugData : null;
             }
 
@@ -284,7 +179,7 @@ namespace IDHIPlugins
                 Vector3 HeroineRotationAdjustment;
                 Vector3 PlayerRotationAdjustment;
 
-                foreach (var item in MoveData)
+                foreach (var item in Data)
                 {
                     HeroinePositionAdjustment = Vector3.zero;
                     PlayerPositionAdjustment = Vector3.zero;
@@ -295,13 +190,13 @@ namespace IDHIPlugins
                     {
                         if (character.Key == CTRL.CharacterType.Heroine)
                         {
-                            HeroinePositionAdjustment = character.Value.PositionAdjustment;
-                            HeroineRotationAdjustment = character.Value.RotationAdjustment;
+                            HeroinePositionAdjustment = character.Value.Position;
+                            HeroineRotationAdjustment = character.Value.Rotation;
                         }
                         if (character.Key == CTRL.CharacterType.Player)
                         {
-                            PlayerPositionAdjustment = character.Value.PositionAdjustment;
-                            PlayerRotationAdjustment = character.Value.RotationAdjustment;
+                            PlayerPositionAdjustment = character.Value.Position;
+                            PlayerRotationAdjustment = character.Value.Rotation;
                         }
                     }
                     MoveDataToSerialize[item.Key] = new PositionDataPair(
@@ -312,7 +207,6 @@ namespace IDHIPlugins
                 }
                 return MoveDataToSerialize;
             }
-
 
             private Dictionary<string,
                 Dictionary<CTRL.CharacterType, PositionData>> RestoreMoveData(
@@ -326,15 +220,15 @@ namespace IDHIPlugins
                 {
                     Position.Clear();
                     Position[CTRL.CharacterType.Heroine] = new(
-                        item.Value.HeroinePositionAdjustment,
-                        item.Value.HeroineRotationAdjustment);
+                        item.Value.HeroinePosition,
+                        item.Value.HeroineRotation);
                     // Add Player if any vector is non zero.
-                    if ((item.Value.PlayerPositionAdjustment != Vector3.zero)
-                        || (item.Value.PlayerRotationAdjustment != Vector3.zero))
+                    if ((item.Value.PlayerPosition != Vector3.zero)
+                        || (item.Value.PlayerRotation != Vector3.zero))
                     {
                         Position[CTRL.CharacterType.Player] = new(
-                        item.Value.PlayerPositionAdjustment,
-                        item.Value.PlayerRotationAdjustment);
+                        item.Value.PlayerPosition,
+                        item.Value.PlayerRotation);
                     }
 
                     MoveData[item.Key] = new(Position);
@@ -342,6 +236,57 @@ namespace IDHIPlugins
 
                 return MoveData;
             }
-        }*/
+        }
+
+        internal static void PrintData(Dictionary<string,
+                Dictionary<CTRL.CharacterType, PositionData>> MoveData,
+                string name = "")
+        {
+            var lines = new StringBuilder();
+#if DEBUG
+            var calllingMethod = Utilities.CallingMethod();
+            lines.AppendLine($"[PrintData] Calling Method {calllingMethod}.");
+#endif
+            foreach (var item in MoveData)
+            {
+                foreach (var character in item.Value)
+                {
+                    lines.AppendLine($"Position={item.Key} " +
+                        $"Character={character.Key} " +
+                        $"Position=" +
+                        $"{character.Value.Position.ToString("F7")} " +
+                        $"Rotation=" +
+                        $"{character.Value.Rotation.ToString("F7")}");
+                }
+            }
+
+            if (lines.Length > 0)
+            {
+                _Log.Warning($"[PrintData] [{name}]\n\n{lines.ToString()}");
+            }
+        }
+
+        internal static void PrintData(
+            Dictionary<string, PositionDataPair> MoveData, string name = "")
+        {
+            var lines = new StringBuilder();
+
+            foreach (var item in MoveData)
+            {
+                lines.AppendLine($"Position={item.Key} Heroine" +
+                    $"Position={item.Value.HeroinePosition.ToString("F7")} " +
+                    $"Rotation={item.Value.HeroineRotation.ToString("F7")}");
+            }
+
+            if (lines.Length > 0)
+            {
+                _Log.Warning($"[PrintData]\n\n{lines.ToString()}\n");
+            }
+        }
+
+        internal static void PrintData(MoveData moveData, string name = "")
+        {
+            PrintData(moveData.Data, name);
+        }
     }
 }
