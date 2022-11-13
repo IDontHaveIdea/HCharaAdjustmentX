@@ -3,7 +3,7 @@
 
 namespace IDHIPlugins
 {
-    public struct MoveEvent
+    public readonly struct MoveEvent
     {
         public static readonly List<string> buttonLabels =
             new()
