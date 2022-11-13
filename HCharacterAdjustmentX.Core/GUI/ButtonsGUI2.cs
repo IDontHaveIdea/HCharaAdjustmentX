@@ -24,13 +24,13 @@ namespace IDHIPlugins
             #endregion
 
             #region public properties
-            public List<MoveActionButton> Buttons => _buttons;
+            internal List<MoveActionButton> Buttons => _buttons;
 
-            public float Height => _heigth;
+            internal float Height => _heigth;
 
-            public float Width => _width;
+            internal float Width => _width;
 
-            public static CharacterType CharType
+            internal static CharacterType CharType
             {
                 get; private set;
             } = CharacterType.Unknown;
