@@ -17,6 +17,8 @@ namespace IDHIPlugins
         internal static KeyShortcuts KeyHeroine = new();
         internal static KeyShortcuts KeyHeroine3P = new();
         internal static KeyShortcuts KeyPlayer = new();
+
+        internal static ConfigEntry<bool> DebugInfo;
         internal static ConfigEntry<KeyboardShortcut> GroupGuide { get; set; }
         internal static ConfigEntry<float> cfgAdjustmentStep;
         
@@ -151,7 +153,6 @@ namespace IDHIPlugins
 #endif
                 #endregion
             }
-
 #if DEBUG
             _Log.Info($"SHCA0038: Creating Shortcuts for Characters");
 #endif
@@ -216,6 +217,27 @@ namespace IDHIPlugins
                 }
             };
             #endregion Steps
+        }
+
+        internal void ConfigDebugEnntry()
+        {
+            DebugInfo = Config.Bind(
+                section: "Debug",
+                key: "Debug Information",
+                defaultValue: false,
+                configDescription: new ConfigDescription(
+                    description: "Show debug information in Console",
+                    acceptableValues: null,
+                    tags: new ConfigurationManagerAttributes {
+                        Order = 1,
+                        IsAdvanced = true }));
+            DebugInfo.SettingChanged += (_sender, _args) =>
+            {
+                _Log.Enabled = DebugInfo.Value;
+#if DEBUG
+                _Log.Info($"[ConfigEntries] Log.Enabled set to {_Log.Enabled}");
+#endif
+            };
         }
     }
 }
