@@ -107,7 +107,7 @@ namespace IDHIPlugins
             ConfigEntries(true);
 #endif
             // Initializing HProcScene
-            HProcScene.Init();            
+            HProcScene.Init();
             CTRL.RegisterMovementEvents();
 
             // Start in disabled mode
