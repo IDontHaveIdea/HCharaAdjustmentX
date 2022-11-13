@@ -61,8 +61,9 @@ namespace IDHIPlugins
                 {
                     throw new NullReferenceException($"SHCA0027: HProc instance invalid.");
                 }
-                _controller = GetController(_chaControl);
-                _guideObject = _controller._guideObject;
+                //_controller = GetController(_chaControl);
+                _controller = GetControllerByType(chaType);
+                _guideObject = _controller.GuideObject;
                 _animationID = _hprocInstance.flags.nowAnimationInfo.id;
                 _animationGUID = _hprocInstance.flags.nowAnimationInfo.nameAnimation;
                 _pathFemaleBase = _hprocInstance.flags.nowAnimationInfo.pathFemaleBase.assetpath;
@@ -87,8 +88,8 @@ namespace IDHIPlugins
                 }
 #endif
                 // Normal button press
-                var originalPosition = _controller._originalPosition;
-                var movement = _controller._movement;
+                var originalPosition = _controller.OriginalPosition;
+                var movement = _controller.Movement;
                 Vector3 newPosition = new(0, 0, 0);
                 switch (moveType)
                 {
@@ -158,28 +159,28 @@ namespace IDHIPlugins
                         {
                             var Position =
                                 new Dictionary<CharacterType, PositionData> {
-                                    [chaType] = new(_controller._movement,
+                                    [chaType] = new(_controller.Movement,
                                     Vector3.zero)
                                 };
                             _controller.MoveData[_animationKey] = Position;
-                            _Log.Level(LogLevel.Error, $"Save Data=" +
+                            _Log.Level(LogLevel.Warning, $"Save Data=" +
                                 $"{_controller.MoveData[_animationKey][chaType]
-                                .PositionAdjustment.ToString("F7")}");
+                                .Position.ToString("F7")}");
                         }
                         _doShortcutMove = false;
-                        _controller.SaveData(true);
+                        _controller.SaveData();
                         break;
                     case MoveType.LOAD:
                         if (!_animationKey.IsNullOrEmpty())
                         {
-                            _controller.MoveData.TryGetValue(_animationKey,
+                            _controller.MoveData.Data.TryGetValue(_animationKey,
                                 out var position);
                             if (position != null)
                             {
                                 // Use TryGetValue
                                 movement = position[chaType]
-                                   .PositionAdjustment;
-                                _Log.Level(LogLevel.Error, $"Load Data={movement}");
+                                   .Position;
+                                _Log.Level(LogLevel.Warning, $"Load Data={movement}");
                             }
                         }
                         _doShortcutMove = true;
@@ -194,6 +195,9 @@ namespace IDHIPlugins
                                               
                         _Log.Info($"[Move.TEST1]\n\n{strTmp}\n");
                         _doShortcutMove = false;
+                        break;
+                    case MoveType.TEST2:
+                        ShowGroupGuide = !ShowGroupGuide;
                         break;
 #endif
                     // Execute a move event with current parameters used
@@ -223,8 +227,8 @@ namespace IDHIPlugins
                     _doShortcutMove = false;
                     _chaControl.transform.position = newPosition;
                     _guideObject.amount.position = _chaControl.transform.position;
-                    _controller._movement = movement;
-                    _controller._lastMovePosition = newPosition;
+                    _controller.Movement = movement;
+                    _controller.LastMovePosition = newPosition;
                 }
                 return _doShortcutMove;
             }
