@@ -7,12 +7,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using MessagePack;
 
-using KKAPI;
 using ExtensibleSaveFormat;
 
 using IDHIUtils;
-
-using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 
 
 namespace IDHIPlugins

@@ -2,16 +2,9 @@
 // HCharaAdjustmentX entry point
 //
 using BepInEx;
-using BepInEx.Configuration;
-using BepInEx.Logging;
-
-using UnityEngine.SceneManagement;
 
 using KKAPI;
 using KKAPI.Chara;
-using KKAPI.Utilities;
-
-//using AnimationLoader;
 
 using IDHIUtils;
 
@@ -21,10 +14,14 @@ using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 namespace IDHIPlugins
 {
     /// <summary>
-    /// This plug-in allows the position adjustment of the female character closer/apart, up/down
-    /// or left/right. The movement are in discrete steps and characters maintain alignment no
-    /// matter the orientation. They don't move left or right from each other.  This helps in some
-    /// scenes to avoid or lessen the clipping.
+    /// This plug-in allows the position adjustment of the female character closer/apart,
+    /// up/down or left/right. The movement are in discrete steps and characters maintain
+    /// alignment no matter the orientation. They don't move left or right from each
+    /// other.  This helps in some scenes to avoid or lessen the clipping.
+    ///
+    /// If AnimationLoader is available it can save the movement of the female character.
+    ///
+    /// TODO: Save Player movement info.
     /// </summary>
     /// <remarks>
     ///

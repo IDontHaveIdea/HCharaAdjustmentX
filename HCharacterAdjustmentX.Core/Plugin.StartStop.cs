@@ -4,13 +4,9 @@
 using System;
 using System.Collections.Generic;
 
-using UnityEngine.SceneManagement;
-
 using BepInEx.Logging;
 
-//using static IDHIPlugins.HProcScene;
 using IDHIUtils;
-using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 
 
 namespace IDHIPlugins

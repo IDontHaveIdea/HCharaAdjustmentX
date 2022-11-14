@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using BepInEx.Logging;
 using HSceneUtility;
 using KKAPI.Utilities;
 
 using UnityEngine;
 
-using IDHIUtils;
-
-//using CharacterTypeX = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController.CharacterTypeX;
 using MoveType = IDHIPlugins.MoveEvent.MoveType;
-using static FaceScreenShot;
 
 
 namespace IDHIPlugins

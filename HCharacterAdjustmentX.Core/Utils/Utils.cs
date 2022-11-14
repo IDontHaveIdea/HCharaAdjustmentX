@@ -3,13 +3,8 @@
 //
 using System.Collections.Generic;
 
-using BepInEx.Logging;
-
 using IDHIUtils;
 
-using UnityEngine.SceneManagement;
-
-using static FaceScreenShot;
 using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 using static IDHIPlugins.HCharaAdjustmentX;
 
@@ -18,7 +13,7 @@ namespace IDHIPlugins
 {
     public class Utils
     {
-        public enum PositionCategory
+        /*public enum PositionCategory
         {
             LieDown = 0,
             Stand = 1,
@@ -35,7 +30,7 @@ namespace IDHIPlugins
             Pool = 1004,
             Ground3P = 1100,
             AquariumCrowded = 1304,
-        }
+        }*/
 
         /// <summary>
         /// Return categories in the string form "{ cat 1, cat 2, ,,,}"
