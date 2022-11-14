@@ -63,7 +63,6 @@ namespace IDHIPlugins
                 {
                     _animationKey = _animationLoader
                         .GetAnimationKey(_nextAinmInfo);
-                    _Log.Level(LogLevel.Error, $"Animation Key={_animationKey}");
                     Utils.SetMode(_nextAinmInfo.mode);
                     Utils.ResetPositionAll();
                     Utils.RecalcAdjustmentAll();
@@ -72,7 +71,7 @@ namespace IDHIPlugins
                 }
                 catch (Exception e)
                 {
-                    _Log.Level(LogLevel.Error, $"SHCA0023: Error - {e.Message}");
+                    _Log.Level(LogLevel.Error, $"HCAX0024: Error - {e.Message}");
                 }
             }
         }

@@ -14,6 +14,7 @@ using IDHIUtils;
 
 using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 
+
 namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
@@ -68,12 +69,9 @@ namespace IDHIPlugins
         /// Simpler easier to manage
         /// TODO: Work on rotation
         /// </summary>
-        //[MessagePackObject(true)]
         public class PositionData
         {
-            //[Key(0)]
             public Vector3 Position;
-            //[Key(1)]
             public Vector3 Rotation;
 
             public PositionData()
@@ -94,12 +92,12 @@ namespace IDHIPlugins
         public sealed class MoveData
         {
             private Dictionary<string,
-                Dictionary<CTRL.CharacterType, PositionData>> _data;
+                Dictionary<CharacterType, PositionData>> _data;
             private readonly ChaControl _chaControl;
 
             internal int Count => _data.Count;
             internal Dictionary<string,
-                Dictionary<CTRL.CharacterType, PositionData>> Data
+                Dictionary<CharacterType, PositionData>> Data
             {
                 get { return _data; }
                 set { _data = value; }
@@ -109,11 +107,11 @@ namespace IDHIPlugins
             {
                 _chaControl = chaControl;
                 _data = new Dictionary<string,
-                    Dictionary<CTRL.CharacterType, PositionData>>();
+                    Dictionary<CharacterType, PositionData>>();
                 _data.Clear();
             }
 
-            internal Dictionary<CTRL.CharacterType, PositionData> this[string key]
+            internal Dictionary<CharacterType, PositionData> this[string key]
             {
                 get { return _data[key]; }
                 set { _data[key] = value; }
@@ -142,20 +140,21 @@ namespace IDHIPlugins
                         }
                         else
                         {
-                            _Log.Error($"[Load] [{name}] Can't unpack data.");
+                            _Log.Error($"HCAX0020: [Load] [{name}] Can't unpack data.");
                         }
                     }
                 }
                 else
                 {
-                    _Log.Debug($"[Load] [{name}] PluginData is null.");
+                    _Log.Debug($"HCAX0021: [Load] [{name}] PluginData is null.");
                     Data.Clear();
                 }
             }
 
             internal PluginData Save()
             {
-                var name = _chaControl.chaFile?.parameter.fullname.Trim() ?? "CHACONTROL FAIL";
+                var name = _chaControl.chaFile?.parameter.fullname.Trim()
+                    ?? "CHACONTROL FAIL";
 
                 var plugData = new PluginData {
                     version = 1
@@ -188,12 +187,12 @@ namespace IDHIPlugins
 
                     foreach (var character in item.Value)
                     {
-                        if (character.Key == CTRL.CharacterType.Heroine)
+                        if (character.Key == CharacterType.Heroine)
                         {
                             HeroinePositionAdjustment = character.Value.Position;
                             HeroineRotationAdjustment = character.Value.Rotation;
                         }
-                        if (character.Key == CTRL.CharacterType.Player)
+                        if (character.Key == CharacterType.Player)
                         {
                             PlayerPositionAdjustment = character.Value.Position;
                             PlayerRotationAdjustment = character.Value.Rotation;
@@ -208,25 +207,25 @@ namespace IDHIPlugins
                 return MoveDataToSerialize;
             }
 
-            private Dictionary<string,
-                Dictionary<CTRL.CharacterType, PositionData>> RestoreMoveData(
-            Dictionary<string, PositionDataPair> MoveDataPair)
+            private static Dictionary<string,
+                Dictionary<CharacterType, PositionData>> RestoreMoveData(
+                    Dictionary<string, PositionDataPair> MoveDataPair)
             {
-                var Position = new Dictionary<CTRL.CharacterType, PositionData>();
+                var Position = new Dictionary<CharacterType, PositionData>();
                 var MoveData = new Dictionary<string,
-                    Dictionary<CTRL.CharacterType, PositionData>>();
+                    Dictionary<CharacterType, PositionData>>();
 
                 foreach (var item in MoveDataPair)
                 {
                     Position.Clear();
-                    Position[CTRL.CharacterType.Heroine] = new(
+                    Position[CharacterType.Heroine] = new(
                         item.Value.HeroinePosition,
                         item.Value.HeroineRotation);
                     // Add Player if any vector is non zero.
                     if ((item.Value.PlayerPosition != Vector3.zero)
                         || (item.Value.PlayerRotation != Vector3.zero))
                     {
-                        Position[CTRL.CharacterType.Player] = new(
+                        Position[CharacterType.Player] = new(
                         item.Value.PlayerPosition,
                         item.Value.PlayerRotation);
                     }
@@ -239,13 +238,13 @@ namespace IDHIPlugins
         }
 
         internal static void PrintData(Dictionary<string,
-                Dictionary<CTRL.CharacterType, PositionData>> MoveData,
+                Dictionary<CharacterType, PositionData>> MoveData,
                 string name = "")
         {
             var lines = new StringBuilder();
 #if DEBUG
             var calllingMethod = Utilities.CallingMethod();
-            lines.AppendLine($"[PrintData] Calling Method {calllingMethod}.");
+            lines.AppendLine($"HCAX0021: [PrintData] Calling Method {calllingMethod}.");
 #endif
             foreach (var item in MoveData)
             {
@@ -262,7 +261,7 @@ namespace IDHIPlugins
 
             if (lines.Length > 0)
             {
-                _Log.Warning($"[PrintData] [{name}]\n\n{lines.ToString()}");
+                _Log.Warning($"HCAX0022: [PrintData] [{name}]\n\n{lines.ToString()}");
             }
         }
 
@@ -280,13 +279,8 @@ namespace IDHIPlugins
 
             if (lines.Length > 0)
             {
-                _Log.Warning($"[PrintData]\n\n{lines.ToString()}\n");
+                _Log.Warning($"HCAX0023: [PrintData]\n\n{lines.ToString()}\n");
             }
-        }
-
-        internal static void PrintData(MoveData moveData, string name = "")
-        {
-            PrintData(moveData.Data, name);
         }
     }
 }

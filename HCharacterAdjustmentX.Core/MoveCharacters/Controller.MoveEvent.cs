@@ -23,7 +23,9 @@ namespace IDHIPlugins
             {
                 internal MoveEvent.MoveType Move { get; }
                 internal CharacterType ChaType { get; }
-                internal MoveRequestEventArgs(CharacterType chaType, MoveEvent.MoveType move)
+
+                internal MoveRequestEventArgs(CharacterType chaType,
+                    MoveEvent.MoveType move)
                 {
                     ChaType = chaType;
                     Move = move;
@@ -35,7 +37,8 @@ namespace IDHIPlugins
             /// </summary>
             /// <param name="_sender"></param>
             /// <param name="_args"></param>
-            internal static void InvokeOnMoveRequest(object _sender, MoveRequestEventArgs _args)
+            internal static void InvokeOnMoveRequest(object _sender,
+                MoveRequestEventArgs _args)
             {
                 OnMoveRequest?.Invoke(_sender, _args);
             }
@@ -47,7 +50,10 @@ namespace IDHIPlugins
             {
                 OnMoveRequest += (_sender, _args) => 
                 {
-                    _Log.Info($"[RegisterMovementEvents] Call to action {_args.Move} - {_args.ChaType}");
+#if DEBUG
+                    _Log.Info($"HCAX0049: [RegisterMovementEvents] Call to action {_args.Move} " +
+                        $"- {_args.ChaType}");
+#endif
                     CharMovement.Move(_args.ChaType, _args.Move);
                 };
             }

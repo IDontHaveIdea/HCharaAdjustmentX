@@ -40,35 +40,23 @@ namespace IDHIPlugins
                 }
                 set
                 {
-#if DEBUG
-                    _Log.Info($"[ButtonsInterface] Trigger ShowInterface for {_chaType} with " +
-                        $"value {value}");
-#endif
                     _showInterface = value;
                     if (_botones[_chaType] != null)
                     {
                         _botones[_chaType]?.Clear();
-#if DEBUG
-                        _Log.Info($"[ButtonsInterface] Clear interface " +
-                            $"buttons({_botones[_chaType]?.Count}) for" +
-                            $" {_chaType} with value {value}");
-#endif
                     }
                     if (!value)
                     {
                         return;
                     }
-#if DEBUG
-                    _Log.Info($"[ButtonsInterface] Call SetupInterface for {_chaType} with " +
-                        $"value {value}");
-#endif
                     SetupInterface(_chaType);
                 }
             }
 
             private bool CanShow()
             {
-                if (!HProcScene.Nakadashi)
+                //if (!HProcScene.Nakadashi)
+                if (!HProcMonitor.Nakadashi)
                 {
                     return false;
                 }

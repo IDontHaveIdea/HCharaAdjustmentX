@@ -48,7 +48,7 @@ namespace IDHIPlugins
                         + _guideObject.amountOffset.rotation;
 #endif
 #if DEBUG
-                    _Log.Info($"SHCA0026: Creating character guide object for {characterType}");
+                    _Log.Info($"HCAX0033: Creating character guide object for {characterType}");
 #endif
                 }
             }
@@ -66,7 +66,6 @@ namespace IDHIPlugins
                 {
                     SetOriginalPosition();
                 }
-                _Log.Error($"Activate GuideObject Layer={GuideObject.gameObject.layer}");
                 GuideObject.gameObject.SetActive(true);
 #if KKSWish
                 var rot = ChaControl.transform.rotation;
@@ -78,10 +77,6 @@ namespace IDHIPlugins
                     + _guideObject.amountOffset.position;
                 _guideObject.amountTotal.rotation = _guideObject.amount.rotation
                     + _guideObject.amountOffset.rotation;
-#endif
-
-#if DEBUG
-                _Log.Info($"Guide should show.");
 #endif
             }
 
@@ -95,9 +90,6 @@ namespace IDHIPlugins
                     return; 
                 }
                 GuideObject.gameObject.SetActive(false);
-#if DEBUG
-                _Log.Info($"Guide should hide");
-#endif
             }
 
             /// <summary>

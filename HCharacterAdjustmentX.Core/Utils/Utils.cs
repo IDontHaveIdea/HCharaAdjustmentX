@@ -159,61 +159,13 @@ namespace IDHIPlugins
         /// <param name="instance"></param>
         internal static void InitialPositionInfo(HSceneProc instance)
         {
-            if (!HProcScene.Nakadashi || (instance == null))
+            //if (!HProcScene.Nakadashi || (instance == null))
+            if (!HProcMonitor.Nakadashi || (instance == null))
             {
                 return;
             }
             var tmp = instance.flags.lstHeroine[0].chaCtrl.transform;
-            _Log.Info($"SHCA0016: Scene -  {_sceneName} Female transform position ("
-                + $"{tmp.position.x}, {tmp.position.y}, {tmp.position.z})");
         }
-
-        /// <summary>
-        /// Show some information for Heroine 1
-        /// </summary>
-        /// <param name="instance"></param>
-/*        internal static void InitialPosition()
-        {
-            if (_hprocInstance == null)
-            {
-                return;
-            }
-#if DEBUG
-            var calllingMethod = Utilities.CallingMethod();
-            _Log.Info($"[InitialPosition] Called by - [{calllingMethod}]");
-#endif
-            var heroines = _hprocInstance.flags.lstHeroine;
-            HCharaAdjusmentXController ctrl;
-            for (var i = 0; i < heroines.Count; i++)
-            {
-                ctrl = GetController(heroines[i].chaCtrl);
-                if (ctrl.MoveData.Count > 0)
-                {
-                    ctrl.MoveData.Data.TryGetValue(_animationKey,
-                        out var position);
-                    if (position != null)
-                    {
-                        // Use TryGetValue
-                        position.TryGetValue(ctrl.ChaType, out var data);
-                        if (data != null)
-                        {
-                            var movement = data.PositionAdjustment;
-                            ctrl.Movement = movement;
-                            CTRL.InvokeOnMoveRequest(null,
-                                new CTRL.MoveRequestEventArgs(
-                                    ctrl.ChaType, MoveEvent.MoveType.MOVE));
-                            _Log.Info($"[InitialPosition] InvokeOnMoveRequest - [{movement}]");
-                        }
-                    }
-                }
-            }
-            / * ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
-            if (ctrl.Moved
-                && IsSamePosition(_hprocInstance.flags.player.chaCtrl))
-            {
-                ctrl.ResetPosition();
-            } * /
-        }*/
 
         /// <summary>
         /// Show some information for Heroine 1
@@ -229,12 +181,10 @@ namespace IDHIPlugins
             {
                 return;
             }
-#if DEBUG
-            var calllingMethod = Utilities.CallingMethod();
-            _Log.Info($"[CInitialPosition] Called by - [{calllingMethod}]");
-#endif
+
             var heroines = _hprocInstance.flags.lstHeroine;
-            HCharaAdjusmentXController ctrl;
+            CTRL ctrl;
+
             for (var i = 0; i < heroines.Count; i++)
             {
                 ctrl = GetController(heroines[i].chaCtrl);
@@ -253,7 +203,6 @@ namespace IDHIPlugins
                             CTRL.InvokeOnMoveRequest(null,
                                 new CTRL.MoveRequestEventArgs(
                                     ctrl.ChaType, MoveEvent.MoveType.MOVE));
-                            _Log.Info($"[InitialPosition] InvokeOnMoveRequest - [{movement}]");
                         }
                     }
                 }
@@ -271,21 +220,11 @@ namespace IDHIPlugins
             {
                 return;
             }
-#if DEBUG
-            var calllingMethod = Utilities.CallingMethod();
-            _Log.Info($"SHCA0018: [ResetPositionAll] Called by - [{calllingMethod}]");
-#endif
             var heroines = _hprocInstance.flags.lstHeroine;
-            HCharaAdjusmentXController ctrl;
+            CTRL ctrl;
             for (var i = 0; i < heroines.Count; i++)
             {
                 ctrl = GetController(heroines[i].chaCtrl);
-                _Log.Error($"Origial Position {ctrl.OriginalPosition} " +
-                    $"current {heroines[i].chaCtrl.transform.position} " +
-                    $"_lastMovedPostion={ctrl.LastMovePosition}" +
-                    $"IsNewPositoin={IsNewPosition(heroines[i].chaCtrl)} " +
-                    $"IsSamePosition={IsSamePosition(heroines[i].chaCtrl)}" +
-                    $"Moved={ctrl.Moved}");
                 if (ctrl.Moved && IsSamePosition(heroines[i].chaCtrl))
                 {
                     ctrl.ResetPosition();
@@ -310,22 +249,12 @@ namespace IDHIPlugins
             {
                 return;
             }
-//#if DEBUG
-//            var calllingMethod = Utilities.CallingMethod();
-//            _Log.Info($"SHCA0019: [SetOrigianalPositionAll] Called by - [{calllingMethod}]");
-//#endif
             var heroines = _hprocInstance.flags.lstHeroine;
             for (var i = 0; i < heroines.Count; i++)
             {
                 if (IsNewPosition(heroines[i].chaCtrl))
                 {
                     GetController(heroines[i].chaCtrl).SetOriginalPosition();
-#if DEBUG
-                    if (i == 0)
-                    {
-                        Utils.InitialPositionInfo(_hprocInstance);
-                    }
-#endif
                 }
             }
             if (IsNewPosition(_hprocInstance.flags.player.chaCtrl))
@@ -333,8 +262,6 @@ namespace IDHIPlugins
                 GetController(_hprocInstance.flags.player.chaCtrl).SetOriginalPosition();
             }
         }
-
-
 
         /// <summary>
         /// Set new original position for characters if there is a move 
@@ -347,35 +274,15 @@ namespace IDHIPlugins
             {
                 return;
             }
-#if DEBUG
-            var calllingMethod = Utilities.CallingMethod();
-            _Log.Info($"SHCA0019: [SetOrigianalPositionAll] Called by - [{calllingMethod}]");
-#endif
             var heroines = _hprocInstance.flags.lstHeroine;
             for (var i = 0; i < heroines.Count; i++)
             {
-/*                if (IsPositionMoved(heroines[i].chaCtrl))
-                {
-                    GetController(heroines[i].chaCtrl).ResetPosition();
-#if DEBUG
-                    _Log.Info($"[SetOrigianalPositionAll] Called by - [{calllingMethod}] Found is heroine moved position.");
-#endif
-                }*/
                 GetController(heroines[i].chaCtrl).SetOriginalPosition();
                 if (i == 0)
                 {
                     Utils.InitialPositionInfo(_hprocInstance);
                 }                
             }
-            /*if (IsPositionMoved(_hprocInstance.flags.player.chaCtrl))
-            {
-                GetController(_hprocInstance.flags.player.chaCtrl).ResetPosition();
-#if DEBUG
-                _Log.Info($"SHCA0019: [SetOrigianalPositionAll] Called by - [{calllingMethod}] Found is player move position.");
-
-#endif
-            }*/
-
             GetController(_hprocInstance.flags.player.chaCtrl).SetOriginalPosition();
         }
 
@@ -403,10 +310,6 @@ namespace IDHIPlugins
             {
                 return;
             }
-#if DEBUG
-            var calllingMethod = Utilities.CallingMethod();
-            _Log.Info($"SHCA0020: [RecalcAdjustmentAll] Called by - [{calllingMethod}]");
-#endif
             var heroines = _hprocInstance.flags.lstHeroine;
             for (var i = 0; i < heroines.Count; i++)
             {
@@ -414,17 +317,5 @@ namespace IDHIPlugins
             }
             GetController(_hprocInstance.flags.player.chaCtrl).DoRecalc = true;
         }
-
-#region public methods
-        /// <summary>
-        /// Save active scene on scene change
-        /// </summary>
-        /// <param name="currentScene"></param>
-        /// <param name="newScene"></param>
-        public static void SceneChanged(Scene previousScene, Scene newScene)
-        {
-            _activeScene = newScene.name;
-        }
-#endregion
     }
 }

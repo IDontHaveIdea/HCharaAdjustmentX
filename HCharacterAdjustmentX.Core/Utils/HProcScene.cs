@@ -1,8 +1,10 @@
 ﻿//
 // HProcScene handle events for start and stop H Scene
-// Enables SHCAdjustController operation is disable
+// Enables HCAXdjustController operation is disable
 // upon start and disabled on H Scene exit
 //
+
+/*
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +13,7 @@ using HarmonyLib;
 
 using IDHIUtils;
 
-using SHCA = IDHIPlugins.HCharaAdjustmentX;
+using HCAX = IDHIPlugins.HCharaAdjustmentX;
 
 
 namespace IDHIPlugins
@@ -20,7 +22,7 @@ namespace IDHIPlugins
     {
         internal static Harmony _hsHookInstance;
         internal static Type HSceneProcType;
-        //static internal SHCA mother;
+        //static internal HCAX mother;
 
         #region public properties
         /// <summary>
@@ -40,10 +42,10 @@ namespace IDHIPlugins
         public static event EventHandler<HSceneFinishedLoadingEventArgs> OnHSceneFinishedLoading;
         public class HSceneFinishedLoadingEventArgs : EventArgs
         {
-            public HSceneProc Instance { get; }
+            public object Instance { get; }
             public List<ChaControl> Heroines { get; }
             public ChaControl Male { get; }
-            public HSceneFinishedLoadingEventArgs(HSceneProc instance,
+            public HSceneFinishedLoadingEventArgs(object instance,
                 List<ChaControl> lstFemale, ChaControl male)
             {
                 Instance = instance;
@@ -65,17 +67,17 @@ namespace IDHIPlugins
 
             OnHSceneStartLoading += (_sender, _args) =>
             {
-                SHCA._Log.Info($"SHCA0009: [OnHSceneStartLoading]");
+                HCAX._Log.Info($"HCAX0009: [OnHSceneStartLoading]");
             };
 
             OnHSceneFinishedLoading += (_sender, _args) =>
             {
-                SHCA._Log.Info($"SHCA0010: [OnHSceneFinishedLoading]");
+                HCAX._Log.Info($"HCAX0010: [OnHSceneFinishedLoading]");
             };
 
             OnHSceneExiting += (_sender, _args) =>
             {
-                SHCA._Log.Info($"SHCA0011: [OnHSceneExiting]");
+                HCAX._Log.Info($"HCAX0011: [OnHSceneExiting]");
             };
         }
         #endregion
@@ -87,9 +89,9 @@ namespace IDHIPlugins
                 _hsHookInstance = Harmony.CreateAndPatchAll(typeof(HSHooks));
                 if (_hsHookInstance == null)
                 {
-                    SHCA._Log.Level(LogLevel.Error, $"SHCA0012: [CharHScene] Cannot patch the " +
+                    HCAX._Log.Level(LogLevel.Error, $"HCAX0012: [CharHScene] Cannot patch the " +
                         $"system.");
-                    throw new ApplicationException($"SHCA0012: [CharHScene] Cannot patch the " +
+                    throw new ApplicationException($"HCAX0012: [CharHScene] Cannot patch the " +
                         $"system.");
                 }
 
@@ -100,7 +102,7 @@ namespace IDHIPlugins
                 _hsHookInstance.Patch(HSceneProcType.GetMethod("SetShortcutKey", AccessTools.all),
                     postfix: new HarmonyMethod(typeof(HSHooks), nameof(HSHooks.SetShortcutKeyPostfix)));
 #if DEBUG
-                SHCA._Log.Info($"SHCA0036: Patch seams OK.");
+                HCAX._Log.Info($"HCAX0036: Patch seams OK.");
 #endif
             }
 
@@ -113,12 +115,12 @@ namespace IDHIPlugins
                 _hsHookInstance = null;
             }
 
-            private static void SetShortcutKeyPostfix(HSceneProc __instance,
+            private static void SetShortcutKeyPostfix(object __instance,
                 List<ChaControl> ___lstFemale, ChaControl ___male)
             {
                 if (Kuuhou)
                 {
-                    SHCA._Log.Level(LogLevel.Warning, $"SHCA0013: [SetShortcutKey] Already loaded.");
+                    HCAX._Log.Level(LogLevel.Warning, $"HCAX0013: [SetShortcutKey] Already loaded.");
                     return;
                 }
                 Kuuhou = true;
@@ -129,3 +131,4 @@ namespace IDHIPlugins
         }
     }
 }
+*/

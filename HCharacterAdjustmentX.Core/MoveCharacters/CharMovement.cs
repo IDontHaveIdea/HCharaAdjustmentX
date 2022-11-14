@@ -9,7 +9,7 @@ using UnityEngine;
 
 using IDHIUtils;
 
-using CharacterType = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController.CharacterType;
+//using CharacterTypeX = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController.CharacterTypeX;
 using MoveType = IDHIPlugins.MoveEvent.MoveType;
 using static FaceScreenShot;
 
@@ -35,10 +35,12 @@ namespace IDHIPlugins
             #endregion
 
             /// <summary>
-            /// Check for configured key shortcuts and execute the type of movement desired
+            /// Check for configured key shortcuts and execute the type of movement
+            /// desired
             ///
             /// TODO:
-            ///     Clasify positions for correct relative left/right and forward/backwards
+            ///     Classify positions for correct relative left/right
+            ///     and forward/backwards
             /// </summary>
             /// <param name="chaType">Character type</param>
             /// <param name="moveType">Move triggered</param>
@@ -59,34 +61,17 @@ namespace IDHIPlugins
                 }
                 if (_chaControl == null)
                 {
-                    throw new NullReferenceException($"SHCA0027: HProc instance invalid.");
+                    throw new NullReferenceException($"HCAX0040: HProc instance " +
+                        $"invalid.");
                 }
-                //_controller = GetController(_chaControl);
+
                 _controller = GetControllerByType(chaType);
                 _guideObject = _controller.GuideObject;
                 _animationID = _hprocInstance.flags.nowAnimationInfo.id;
                 _animationGUID = _hprocInstance.flags.nowAnimationInfo.nameAnimation;
-                _pathFemaleBase = _hprocInstance.flags.nowAnimationInfo.pathFemaleBase.assetpath;
-                if (_animationGUID == null)
-                {
-                    _Log.Level(LogLevel.Warning, $"SHCA0028: No animationGUID.");
-                }
-                if (_animationID < 0)
-                {
-                    _Log.Level(LogLevel.Warning, $"SHCA0029: No animationID.");
-                }
-#if DEBUG
-                if (_animationGUID != null)
-                {
-                    _Log.Info($"SHCA0030: Move {moveType} requested for ID: {_animationID} - name" +
-                        $" {Translate(_animationGUID)} ({_animationGUID}).");
-                    _Log.Info($"SHCA0031: asset {_pathFemaleBase}");
-                }
-                else
-                {
-                    _Log.Info($"SHCA0032: Move {moveType} requested for ID: {_animationID}.");
-                }
-#endif
+                _pathFemaleBase = _hprocInstance.flags.nowAnimationInfo
+                    .pathFemaleBase.assetpath;
+
                 // Normal button press
                 var originalPosition = _controller.OriginalPosition;
                 var movement = _controller.Movement;
@@ -163,9 +148,6 @@ namespace IDHIPlugins
                                     Vector3.zero)
                                 };
                             _controller.MoveData[_animationKey] = Position;
-                            _Log.Level(LogLevel.Warning, $"Save Data=" +
-                                $"{_controller.MoveData[_animationKey][chaType]
-                                .Position.ToString("F7")}");
                         }
                         _doShortcutMove = false;
                         _controller.SaveData();
@@ -180,7 +162,6 @@ namespace IDHIPlugins
                                 // Use TryGetValue
                                 movement = position[chaType]
                                    .Position;
-                                _Log.Level(LogLevel.Warning, $"Load Data={movement}");
                             }
                         }
                         _doShortcutMove = true;
@@ -191,7 +172,8 @@ namespace IDHIPlugins
                         var tmp = _chaControl.transform.position;
                         var rot = _chaControl.transform.rotation;
 
-                        var strTmp = $"{chaType} position={tmp.ToString("F7")} rotation={rot.ToString("F7")}\n";
+                        var strTmp = $"{chaType} position={tmp.ToString("F7")} " +
+                            $"rotation={rot.ToString("F7")}\n";
                                               
                         _Log.Info($"[Move.TEST1]\n\n{strTmp}\n");
                         _doShortcutMove = false;
@@ -216,9 +198,10 @@ namespace IDHIPlugins
                     {
                         _controller.Moved = true;
                     }
-                    newPosition = RecalcPosition(_chaControl, originalPosition, movement);
+                    newPosition = RecalcPosition(
+                        _chaControl, originalPosition, movement);
 #if DEBUG
-                    _Log.Info($"SHCA0033: Move {chaType}\n" +
+                    _Log.Info($"HCAX0046: Move {chaType}\n" +
                         $"from position {tmp.ToString("F7")} " +
                         $" to position {newPosition.ToString("F7")}\n" +
                         $" for movement {movement.ToString("F7")} " +
@@ -233,7 +216,10 @@ namespace IDHIPlugins
                 return _doShortcutMove;
             }
 
-            internal static Vector3 RecalcPosition(ChaControl chaControl, Vector3 original, Vector3 move)
+            internal static Vector3 RecalcPosition(
+                ChaControl chaControl,
+                Vector3 original,
+                Vector3 move)
             {
                 try
                 {
@@ -247,19 +233,20 @@ namespace IDHIPlugins
                     newPosition += upYAxis;
                     newPosition += forwardZAxis;
 #if DEBUG
-                    _Log.Info($"SHCA0033: Move {chaControl.name}\n" +
+                    _Log.Info($"[RecalcPosition] Move {chaControl.name}\n" +
                         $"original position {original.ToString("F7")}\n" +
                         $"      move vector {move.ToString("F7")}\n" +
                         $"          right x {rightXAxis.ToString("F7")}\n" +
                         $"             up y {upYAxis.ToString("F7")}\n" +
                         $"        forward z {forwardZAxis.ToString("F7")}\n" +
-                        $"        to recalc {newPosition.ToString("F7")}");
+                        $"       to re-calc {newPosition.ToString("F7")}");
 #endif
                     return newPosition;
                 }
                 catch (Exception e)
                 {
-                    _Log.Error($"0010: Cannot adjust positoin {chaControl.name} - {e}.");
+                    _Log.Error($"HCAX0048: Cannot adjust position {chaControl.name} " +
+                        $"- {e}.");
                 }
                 return Vector3.zero;
             }
@@ -274,18 +261,18 @@ namespace IDHIPlugins
                 return tmp;
             }
 
-            internal static readonly Func<bool, Vector3, Vector3, Vector3> setDirection =
-                (sign, trans, adjustment) =>
+            internal static readonly Func<bool, Vector3, Vector3, Vector3> setDirection
+                = (sign, trans, adjustment) =>
+                {
+                    var tmp = new Vector3(0, 0, 0);
+                    if (sign)
                     {
-                        var tmp = new Vector3(0, 0, 0);
-                        if (sign)
-                        {
-                            tmp = (trans + adjustment);
-                            return tmp;
-                        }
-                        tmp = trans - adjustment;
+                        tmp = (trans + adjustment);
                         return tmp;
-                    };
+                    }
+                    tmp = trans - adjustment;
+                    return tmp;
+                };
         }
     }
 }

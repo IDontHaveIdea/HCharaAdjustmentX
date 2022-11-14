@@ -25,6 +25,7 @@ namespace IDHIPlugins
         internal static Vector3 _upYAxisAdjustUnit = Vector3.zero;
         internal static float _fAdjustStep = 0.01f;
         internal const string MoveDataID = "MoveData";
+        public enum CharacterType { Heroine, Heroine3P, Player, Janitor, Group, Unknown }
 
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
@@ -33,23 +34,21 @@ namespace IDHIPlugins
             internal List<MoveActionButton> buttons;
             #endregion
 
-            #region public fields
-            public enum CharacterType { Heroine, Heroine3P, Player, Janitor, Group, Unknown }
-            #endregion
-
             #region properties
             public bool DoRecalc { get; set; } = true;
             public bool Moved { get; set; } = false;
             public Vector3 OriginalPosition { get; set; } = new(0, 0, 0);
             public Vector3 LastMovePosition { get; set; } = new(0, 0, 0);
             public Vector3 Movement { get; set; } = new(0, 0, 0);
-            public CharacterType ChaType { get; set; } = CharacterType.Unknown;
+            internal CharacterType ChaType { get; set; } = CharacterType.Unknown;
             #endregion
 
             #region private methods
             internal void Init(HSceneProc hSceneProc, CharacterType characterType)
             {
-                _Log.Info($"SHCA0002: Initialization for {characterType}");
+#if DEBUG
+                _Log.Info($"HCAX0025: Initialization for {characterType}");
+#endif
                 ChaType = characterType;
                 MoveData ??= new(ChaControl);
                 CreateGuideObject(hSceneProc, characterType);
@@ -99,7 +98,7 @@ namespace IDHIPlugins
                     Movement = Vector3.zero;
                     Moved = false;
 #if DEBUG
-                    _Log.Info($"SHCA0003: Reset position for {ChaType} " +
+                    _Log.Info($"HCAX0026: Reset position for {ChaType} " +
                         $"[{OriginalPosition}]");
 #endif
                 }
@@ -119,7 +118,9 @@ namespace IDHIPlugins
                 {
                     var name = ChaControl.chaFile.parameter.fullname.Trim()
                             ?? string.Empty;
+#if DEBUG
                     _Log.Warning($"[ReadData] [{name}] Data is null.");
+#endif
                 }
             }
 
@@ -130,7 +131,7 @@ namespace IDHIPlugins
                     if (MoveData.Count == 0)
                     {
 #if DEBUG
-                        _Log.Error($"[SaveData] [{name}] MoveData total is 0 setting " +
+                        _Log.Warning($"[SaveData] [{name}] MoveData total is 0 setting " +
                             $"ExtendedData to null.");
 #endif
                         SetExtendedData(null);
@@ -144,7 +145,9 @@ namespace IDHIPlugins
                 {
                     var name = ChaControl.chaFile?.parameter.fullname.Trim()
                         ?? string.Empty;
-                    _Log.Error($"[SaveData] [{name}] MoveData is null.");
+#if DEBUG
+                    _Log.Warning($"[SaveData] [{name}] MoveData is null.");
+#endif
                 }
             }
             #endregion
@@ -158,10 +161,6 @@ namespace IDHIPlugins
             /// <param name="currentGameMode"></param>
             protected override void OnCardBeingSaved(GameMode currentGameMode)
             {
-#if DEBUG
-                //var calllingMethod = Utilities.CallingMethod();
-                //_Log.Warning($"[OnCardBeingSaved] Calling Method {calllingMethod}.");
-#endif
                 SaveData();
             }
 
@@ -169,19 +168,14 @@ namespace IDHIPlugins
             {
                 if (maintainState)
                 {
-                    _Log.Warning($"[OnReload] Maintain state out.");
                     return;
                 }
-#if DEBUG
-                //var calllingMethod = Utilities.CallingMethod();
-                //_Log.Warning($"[OnReload] Calling Method {calllingMethod}.");
-#endif
                 ReadData();
             }
 
             protected override void Update()
             {
-                if (HProcScene.Nakadashi && IsSupportedScene && (ChaType != CharacterType.Unknown))
+                if (HProcMonitor.Nakadashi && IsSupportedScene && (ChaType != CharacterType.Unknown))
                 {
                     if (GuideObject)
                     {
@@ -201,13 +195,6 @@ namespace IDHIPlugins
                         _rightXAxisAdjustUnit = ChaControl.transform.right * _fAdjustStep;
                         _upYAxisAdjustUnit = ChaControl.transform.up * _fAdjustStep;
                         DoRecalc = false;
-#if DEBUG
-                        _Log.Info($"[Update] Calculation for {ChaType} " +
-                            $"with Step {_fAdjustStep}:\n" +
-                            $"forward (z,  blue) {_forwardZAxisAdjustUnit.ToString("F7")}\n" +
-                            $"  right (x,   red) {_rightXAxisAdjustUnit.ToString("F7")}\n" +
-                            $"     up (y, green) {_upYAxisAdjustUnit.ToString("F7")})");
-#endif
                     }
                     if (ChaType == CharacterType.Heroine)
                     {
@@ -218,10 +205,6 @@ namespace IDHIPlugins
 
                         if (KeyHeroine.Menu.Value.IsDown())
                         {
-#if DEBUG
-                            _Log.Info($"[Update] Toggle interface for {ChaType} " +
-                                $"current {_buttonsInterface[ChaType].ShowInterface}");
-#endif
                             _buttonsInterface[ChaType].ShowInterface =
                                 !_buttonsInterface[ChaType].ShowInterface;
                         }
@@ -230,10 +213,6 @@ namespace IDHIPlugins
                     {
                         if (KeyPlayer.Menu.Value.IsDown())
                         {
-#if DEBUG
-                            _Log.Info($"[Update] Toggle interface for {ChaType} " +
-                                $"current {_buttonsInterface[ChaType].ShowInterface}");
-#endif
                             _buttonsInterface[ChaType].ShowInterface =
                                 !_buttonsInterface[ChaType].ShowInterface;
                         }

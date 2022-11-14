@@ -47,8 +47,6 @@ namespace IDHIPlugins
     {
         internal static bool _registered = false;
         internal static bool _showGroupGuide = false;
-        internal static string _sceneName;
-        internal static string _activeScene;
         internal static Logg _Log = new();
         internal static SvgColor _SvgColor = new();
         internal static IDHIUtils.AnimationLoader _animationLoader = new();
@@ -65,29 +63,29 @@ namespace IDHIPlugins
             ConfigDebugEnntry();
             _Log.Enabled = DebugInfo.Value;
 #if DEBUG
-            _Log.Info($"[Awake] Log.Enabled set to {_Log.Enabled}");
+            _Log.Info($"HCAX0001: Log.Enabled set to {_Log.Enabled}");
 #endif
-            _Log.Info($"[Awake] HCharaAdjustmentX Loaded.");
+            _Log.Info($"HCAX0002: HCharaAdjustmentX Loaded.");
             if (!_animationLoader.Installed)
             {
-                _Log.Message("Cannot locate AnimationLoader saving movement is disabled.");
+                _Log.Message("HCAX0003: Cannot locate AnimationLoader saving movement " +
+                    "is disabled.");
             }
             CharacterApi.RegisterExtraBehaviour<CTRL>(GUID);
 
             // Monitor loaded scenes
-            SceneManager.sceneLoaded += MonitorHProc;
-            SceneManager.activeSceneChanged += Utils.SceneChanged;
+            // SceneManager.activeSceneChanged += Utils.SceneChanged;
         }
 
 #if DEBUG
         private void OnEnable()
         {
-            _Log.Info($"1313: [OnEnabled] Called.");
+            _Log.Info($"HCAX1313: [OnEnabled] Called.");
         }
 
         private void OnDisable()
         {
-            _Log.Info("1314: [OnDisabled] Called.");
+            _Log.Info("HCAX1314: [OnDisabled] Called.");
         }
 #endif
 
@@ -97,7 +95,9 @@ namespace IDHIPlugins
         /// </summary>
         private void Start()
         {
-            _Log.Info("1315: Start Called.");
+#if DEBUG
+            _Log.Info("HCAX1315: Start Called.");
+#endif
 
             // Configuration entries
             // TODO: Check for KKS_HCharaAdjustment
@@ -106,8 +106,10 @@ namespace IDHIPlugins
 #else
             ConfigEntries(true);
 #endif
-            // Initializing HProcScene
-            HProcScene.Init();
+            // Hook to HProcMonitor
+            HProcMonitor.OnHSceneStartLoading += OnHStart;
+            HProcMonitor.OnHSceneExiting += OnHProcExit;
+            HProcMonitor.OnHSceneFinishedLoading += OnHProcFinishedLoading;
             CTRL.RegisterMovementEvents();
 
             // Start in disabled mode
@@ -130,11 +132,11 @@ namespace IDHIPlugins
         /// </summary>
         /// <param name="chaType"></param>
         /// <returns></returns>
-        internal static HCharaAdjusmentXController GetControllerByType(CTRL.CharacterType chaType)
+        public static HCharaAdjusmentXController GetControllerByType(CharacterType chaType)
         {
             ChaControl chaControl = null;
 
-            if (chaType == CTRL.CharacterType.Player)
+            if (chaType == CharacterType.Player)
             {
                 chaControl = _hprocInstance.flags.player?.chaCtrl;
             }

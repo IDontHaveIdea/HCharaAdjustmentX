@@ -24,9 +24,7 @@ namespace IDHIPlugins
 
             #region public properties
             internal List<MoveActionButton> Buttons => _buttons;
-
             public float Height => _heigth;
-
             public float Width => _width;
             #endregion
 
@@ -42,7 +40,7 @@ namespace IDHIPlugins
             /// <param name="height"></param>
             /// <param name="xOffset"></param>
             /// <param name="yOffset"></param>
-            internal ButtonsGUI(CTRL.CharacterType chaType, float xMargin, float yMargin,
+            internal ButtonsGUI(CharacterType chaType, float xMargin, float yMargin,
                 float width, float height,
                 float xOffset = 0f, float yOffset = 0f)
             {

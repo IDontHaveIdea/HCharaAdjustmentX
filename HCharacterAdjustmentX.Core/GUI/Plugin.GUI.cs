@@ -66,7 +66,6 @@ namespace IDHIPlugins
                 // TODO: check how not to execute every frame
                 if (_botones[CharacterType.Heroine].Count > 0)
                 {
-                    //DebugLog($"[OnGui] Setup {_botones[CharacterType.Heroine].Count} buttons for {CharacterType.Heroine}.");
                     foreach (var moveButton in _botones[CharacterType.Heroine])
                     {
                         GUI.contentColor = moveButton.ForegroundColor;
@@ -84,7 +83,6 @@ namespace IDHIPlugins
             {
                 if (_botones[CharacterType.Player]?.Count > 0)
                 {
-                    //DebugLog($"[OnGui] Setup {_botones[CharacterType.Heroine].Count} buttons for {CharacterType.Heroine}.");
                     foreach (var moveButton in _botones[CharacterType.Player])
                     {
                         GUI.contentColor = moveButton.ForegroundColor;
@@ -111,10 +109,6 @@ namespace IDHIPlugins
         #region private methods
         private static void SetupInterface(CharacterType chaType)
         {
-#if DEBUG
-            _Log.Info($"[SetupInterface] Trigger for {chaType}");
-
-#endif
             var _chaControl = chaType switch
             {
                 CharacterType.Heroine => Heroines[0],
@@ -150,15 +144,18 @@ namespace IDHIPlugins
         /// <returns></returns>
         private static bool CanShow()
         {
-            if (!Player.visibleAll) // character is not showing
+            // character is not showing
+            if (!Player.visibleAll)
             {
                 return false;
             }
-            if (SceneApi.GetIsOverlap()) // Some pop up dialog on
+            // Some pop up dialog on
+            if (SceneApi.GetIsOverlap())
             {
                 return false;
             }
-            if (SceneApi.GetIsNowLoadingFade()) // scene still loading or start to exit
+            // scene still loading or start to exit
+            if (SceneApi.GetIsNowLoadingFade())
             {
                 return false;
             }

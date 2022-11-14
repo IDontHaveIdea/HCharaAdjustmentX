@@ -31,7 +31,7 @@ namespace IDHIPlugins
             {
                 #region HCharaAdjustment Functionality
 #if DEBUG
-                _Log.Info($"SHCA0036: Creating Shortcuts for Guide");
+                _Log.Info($"HCAX0014: Creating Shortcuts for Guide");
 #endif
                 KeyHeroine.GuideObject = Config.Bind(
                     section: sectionKeys,
@@ -98,7 +98,8 @@ namespace IDHIPlugins
             else
             {
                 #region HCharaAdjustment Functionality Off
-                // if HCharaAdjustment is detected eliminate conflicting shortcuts from configuration file
+                // if HCharaAdjustment is detected eliminate conflicting shortcuts from
+                // configuration file
                 KeyHeroine.GuideObject = Config.Bind(
                     sectionKeys,
                     "Show Female 1 Guide Object",
@@ -149,12 +150,12 @@ namespace IDHIPlugins
                         sectionKeys,
                         "Reset Player Position"));
 #if DEBUG
-                _Log.Info($"SHCA0037: Removing Shortcuts for Guide");
+                _Log.Info($"HCAX0015: Removing Shortcuts for Guide");
 #endif
                 #endregion
             }
 #if DEBUG
-            _Log.Info($"SHCA0038: Creating Shortcuts for Characters");
+            _Log.Info($"HCAX0016: Creating Shortcuts for Characters");
 #endif
             #region Heroine
             KeyHeroine.Menu = Config.Bind(
@@ -194,7 +195,7 @@ namespace IDHIPlugins
 
             #region Steps
 #if DEBUG
-            _Log.Info($"SHCA0039: Creating Shortcuts for Steps");
+            _Log.Info($"HCAX0017: Creating Shortcuts for Steps");
 #endif
 
             sectionKeys = "Movement Step";
@@ -212,7 +213,7 @@ namespace IDHIPlugins
                 {
                     _fAdjustStep = cfgAdjustmentStep.Value;
 #if DEBUG
-                    _Log.Info($"SHCA0040: Movement step read in configuration - {cfgAdjustmentStep.Value}");
+                    _Log.Info($"HCAX0018: Movement step read in configuration - {cfgAdjustmentStep.Value}");
 #endif
                 }
             };
@@ -235,7 +236,7 @@ namespace IDHIPlugins
             {
                 _Log.Enabled = DebugInfo.Value;
 #if DEBUG
-                _Log.Info($"[ConfigEntries] Log.Enabled set to {_Log.Enabled}");
+                _Log.Info($"HCAX0019: Log.Enabled set to {_Log.Enabled}");
 #endif
             };
         }
