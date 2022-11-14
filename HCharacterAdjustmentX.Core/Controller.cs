@@ -1,19 +1,12 @@
 ﻿using System.Collections.Generic;
 
 using UnityEngine;
-using MessagePack;
 
-using HSceneUtility;
-
-using ExtensibleSaveFormat;
 using KKAPI;
 using KKAPI.Chara;
 
 using IDHIUtils;
-using System;
-using KKAPI.MainGame;
-using ADV.Commands.Camera;
-using KKAPI.Maker;
+using System.Text;
 
 namespace IDHIPlugins
 {
@@ -72,10 +65,19 @@ namespace IDHIPlugins
             /// </summary>
             internal void SetOriginalPosition()
             {
+                var lines = new StringBuilder();
+                // Get calling method name
+                var callingMethod = Utilities.CallingMethod();
+
+                lines.AppendLine($"Original Position={OriginalPosition} Set={ChaControl.transform.position}");
+                lines.AppendLine($"Last Move Position={LastMovePosition} Set={ChaControl.transform.position}");
+                lines.AppendLine($"Movement={Movement} Moved={Moved}");
+
                 OriginalPosition = ChaControl.transform.position;
-                LastMovePosition = ChaControl.transform.position;
+                LastMovePosition = Vector3.zero;
                 Movement = Vector3.zero;
                 Moved = false;
+                _Log.Warning($"[{callingMethod}] ChaType={ChaType}\n{lines}");
             }
             #endregion
 
@@ -85,6 +87,11 @@ namespace IDHIPlugins
             /// </summary>
             public void ResetPosition()
             {
+                var Original = OriginalPosition;
+                // Get calling method name
+                var callingMethod = Utilities.CallingMethod();
+                _Log.Warning($"[{callingMethod}] ResetPosition");
+
                 if (OriginalPosition != Vector3.zero)
                 {
                     if (GuideObject.gameObject.activeInHierarchy)
@@ -96,16 +103,22 @@ namespace IDHIPlugins
                         ChaControl.transform.position = OriginalPosition;
                     }
                     Movement = Vector3.zero;
+                    LastMovePosition= Vector3.zero;
                     Moved = false;
 #if DEBUG
                     _Log.Info($"HCAX0026: Reset position for {ChaType} " +
-                        $"[{OriginalPosition}]");
+                        $"from Original={Original} to=[{OriginalPosition}]");
 #endif
                 }
             }
 
             public void ReadData()
             {
+                // Information for Player is save in Heroine card
+                if (ChaControl.sex == (byte)Sex.Male)
+                {
+                    return;
+                }
                 // Initialize MoveData if null
                 MoveData ??= new(ChaControl);
 
@@ -126,15 +139,20 @@ namespace IDHIPlugins
 
             public void SaveData(bool clear = false)
             {
+                // Information for Player is save in Heroine card
+                if (ChaControl.sex == (byte)Sex.Male)
+                {
+                    return;
+                }
                 if (MoveData != null)
                 {
                     if (MoveData.Count == 0)
                     {
 #if DEBUG
                         _Log.Warning($"[SaveData] [{name}] MoveData total is 0 setting " +
-                            $"ExtendedData to null.");
+                            $"ExtendedData to null(Not Really!).");
 #endif
-                        SetExtendedData(null);
+                        //SetExtendedData(null);
                     }
                     else
                     {
@@ -161,11 +179,19 @@ namespace IDHIPlugins
             /// <param name="currentGameMode"></param>
             protected override void OnCardBeingSaved(GameMode currentGameMode)
             {
+                if (currentGameMode == GameMode.Maker)
+                {
+                    //return;
+                }
                 SaveData();
             }
 
             protected override void OnReload(GameMode currentGameMode, bool maintainState)
             {
+                if (currentGameMode == GameMode.Maker)
+                {
+                    //return;
+                }
                 if (maintainState)
                 {
                     return;

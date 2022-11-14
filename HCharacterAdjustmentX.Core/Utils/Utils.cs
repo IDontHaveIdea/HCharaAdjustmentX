@@ -187,10 +187,12 @@ namespace IDHIPlugins
                 {
                     ctrl.MoveData.Data.TryGetValue(_animationKey,
                         out var position);
+                    _Log.Warning($"POSITION FOR KEY={_animationKey} null={position == null}");
                     if (position != null)
                     {
                         // Use TryGetValue
                         position.TryGetValue(ctrl.ChaType, out var data);
+                        _Log.Warning($"DATA FOR {ctrl.ChaType} null={data == null}");
                         if (data != null)
                         {
                             var movement = data.Position;
@@ -215,6 +217,9 @@ namespace IDHIPlugins
             {
                 return;
             }
+            // Get calling method name
+            var callingMethod = Utilities.CallingMethod();
+            _Log.Warning($"[{callingMethod}] ResetAllPositions");
             var heroines = _hprocInstance.flags.lstHeroine;
             CTRL ctrl;
             for (var i = 0; i < heroines.Count; i++)

@@ -69,9 +69,6 @@ namespace IDHIPlugins
                     "is disabled.");
             }
             CharacterApi.RegisterExtraBehaviour<CTRL>(GUID);
-
-            // Monitor loaded scenes
-            // SceneManager.activeSceneChanged += Utils.SceneChanged;
         }
 
 #if DEBUG
@@ -105,8 +102,6 @@ namespace IDHIPlugins
 #endif
             // Hook to HProcMonitor
             HProcMonitor.OnHSceneStartLoading += OnHStart;
-            HProcMonitor.OnHSceneExiting += OnHProcExit;
-            HProcMonitor.OnHSceneFinishedLoading += OnHProcFinishedLoading;
             CTRL.RegisterMovementEvents();
 
             // Start in disabled mode

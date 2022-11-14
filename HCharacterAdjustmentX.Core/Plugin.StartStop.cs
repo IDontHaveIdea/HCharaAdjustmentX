@@ -20,6 +20,9 @@ namespace IDHIPlugins
         private void OnHStart(object s, EventArgs e)
         {
             Hooks.Init();
+            HProcMonitor.OnHSceneExiting += OnHProcExit;
+            HProcMonitor.OnHSceneFinishedLoading += OnHProcFinishedLoading;
+
         }
 
         private void OnHProcExit(object s, EventArgs e)

@@ -218,6 +218,9 @@ namespace IDHIPlugins
                     Position[CharacterType.Heroine] = new(
                         item.Value.HeroinePosition,
                         item.Value.HeroineRotation);
+
+                    _Log.Warning($"POSITION={item.Value.HeroinePosition.ToString("F7")}");
+
                     // Add Player if any vector is non zero.
                     if ((item.Value.PlayerPosition != Vector3.zero)
                         || (item.Value.PlayerRotation != Vector3.zero))
