@@ -22,6 +22,8 @@ namespace IDHIPlugins
             internal static HSceneGuideObject _guideObject;
             internal static ChaControl _chaControl;
             internal static HCharaAdjusmentXController _controller;
+            internal static HCharaAdjusmentXController _controllerPlayer;
+            internal static HCharaAdjusmentXController _controllerHeroine;
             internal static bool _doShortcutMove;
             internal static bool _positiveMove;
             internal static string _animationGUID = "";
@@ -137,12 +139,26 @@ namespace IDHIPlugins
                     case MoveType.SAVE:
                         if (!_animationKey.IsNullOrEmpty())
                         {
-                            var Position =
+                            _controllerPlayer = GetControllerByType(CharacterType.Player);
+                            _controllerHeroine = GetControllerByType(CharacterType.Heroine);
+
+                            var positions = new Dictionary<CharacterType, PositionData> {
+                                [chaType] = new(_controllerHeroine.Movement,
+                                    Vector3.zero)
+                            };
+
+                            positions[CharacterType.Player] =
+                                new(_controllerPlayer.Movement, Vector3.zero);
+                            positions[CharacterType.Heroine] =
+                                new(_controllerHeroine.Movement, Vector3.zero);
+                            _controller.MoveData[_animationKey] = positions;
+                            /*var Position =
                                 new Dictionary<CharacterType, PositionData> {
                                     [chaType] = new(_controller.Movement,
                                     Vector3.zero)
                                 };
-                            _controller.MoveData[_animationKey] = Position;
+                             _controller.MoveData[_animationKey] = Position;
+                             */
                         }
                         _doShortcutMove = false;
                         _controller.SaveData();
@@ -150,6 +166,9 @@ namespace IDHIPlugins
                     case MoveType.LOAD:
                         if (!_animationKey.IsNullOrEmpty())
                         {
+                            //_controllerPlayer = GetControllerByType(CharacterType.Player);
+                            //_controllerHeroine = GetControllerByType(CharacterType.Heroine);
+
                             _controller.MoveData.Data.TryGetValue(_animationKey,
                                 out var position);
                             if (position != null)
