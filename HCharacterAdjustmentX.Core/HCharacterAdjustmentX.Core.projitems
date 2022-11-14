@@ -26,7 +26,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.Info.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.StartStop.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utils\HProcScene.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\KeyShortcuts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />
   </ItemGroup>
