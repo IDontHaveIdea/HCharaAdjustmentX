@@ -3,35 +3,19 @@
 //
 using System.Collections.Generic;
 
+using UnityEngine;
+
 using IDHIUtils;
 
 using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 using static IDHIPlugins.HCharaAdjustmentX;
+using static HandCtrl;
 
 
 namespace IDHIPlugins
 {
     public class Utils
     {
-        /*public enum PositionCategory
-        {
-            LieDown = 0,
-            Stand = 1,
-            SitChair = 2,
-            Stool = 3,
-            SofaBench = 4,
-            BacklessBench = 5,
-            SchoolDesk = 6,
-            Desk = 7,
-            Wall = 8,
-            StandPool = 9,
-            SitDesk = 10,
-            SquadDesk = 11,
-            Pool = 1004,
-            Ground3P = 1100,
-            AquariumCrowded = 1304,
-        }*/
-
         /// <summary>
         /// Return categories in the string form "{ cat 1, cat 2, ,,,}"
         /// </summary>
@@ -115,6 +99,21 @@ namespace IDHIPlugins
         }
 
         /// <summary>
+        /// Get animation key
+        /// </summary>
+        /// <param name="animation"></param>
+        /// <returns></returns>
+        internal static string GetAnimationKey(HSceneProc.AnimationListInfo animation)
+        {
+            if (_animationLoader.Installed)
+            {
+                return _animationLoader
+                        .GetAnimationKey(animation);
+            }
+            return "";
+        }
+
+        /// <summary>
         /// Determine if there is a change in original position
         /// </summary>
         /// <param name="chaControl"></param>
@@ -122,7 +121,7 @@ namespace IDHIPlugins
         internal static bool IsNewPosition(ChaControl chaControl)
         {
             var controller = GetController(chaControl);
-            var currentPosition = chaControl.transform.position;
+            var currentPosition = _hprocTraverse.nowHpointDataPos;
             var originalPosition = controller.OriginalPosition;
             if (currentPosition != originalPosition)
             {
@@ -138,14 +137,7 @@ namespace IDHIPlugins
         /// <returns></returns>
         internal static bool IsSamePosition(ChaControl chaControl)
         {
-            var controller = GetController(chaControl);
-            var currentPosition = chaControl.transform.position;
-            var lastMovePosition = controller.LastMovePosition;
-            if (currentPosition == lastMovePosition)
-            {
-                return true;
-            }
-            return false;
+            return !IsNewPosition(chaControl);
         }
 
         /// <summary>
@@ -225,14 +217,13 @@ namespace IDHIPlugins
             for (var i = 0; i < heroines.Count; i++)
             {
                 ctrl = GetController(heroines[i].chaCtrl);
-                if (ctrl.Moved && IsSamePosition(heroines[i].chaCtrl))
+                if (IsSamePosition(heroines[i].chaCtrl))
                 {
                     ctrl.ResetPosition();
                 }
             }
             ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
-            if (ctrl.Moved
-                && IsSamePosition(_hprocInstance.flags.player.chaCtrl))
+            if (IsSamePosition(_hprocInstance.flags.player.chaCtrl))
             {
                 ctrl.ResetPosition();
             }
@@ -243,23 +234,54 @@ namespace IDHIPlugins
         /// from original position saved
         /// </summary>
         /// <param name="message"></param>
-        internal static void SetOriginalPositionAll(string message = null)
+        internal static void SetOriginalPositionAll(
+            HSceneProc.AnimationListInfo _nextAinmInfo = null)
         {
             if (_hprocInstance == null)
             {
                 return;
             }
+
+            List<Vector3> movement = new() {
+                new Vector3(0, 0, 0), new Vector3(0, 0, 0) };
+
+            if (_nextAinmInfo != null)
+            {
+                if (_animationLoader.Installed)
+                {
+                    movement = _animationLoader
+                        .GetAnimationMovement(_nextAinmInfo);
+                    _Log.Error($"RECEIVED {movement[0].ToString("F3")} {movement[1].ToString("F3")}");
+                }
+            }
+
             var heroines = _hprocInstance.flags.lstHeroine;
             for (var i = 0; i < heroines.Count; i++)
             {
                 if (IsNewPosition(heroines[i].chaCtrl))
                 {
-                    GetController(heroines[i].chaCtrl).SetOriginalPosition();
+                    var ctrl = GetController(heroines[i].chaCtrl);
+                    if ((_nextAinmInfo is not null) && (i == 0))
+                    {
+                        if (_animationLoader.Installed)
+                        {
+                            ctrl.ALMovement = movement[(int)Sex.Female];
+                        }
+                    }
+                    ctrl.SetOriginalPosition();
                 }
             }
             if (IsNewPosition(_hprocInstance.flags.player.chaCtrl))
             {
-                GetController(_hprocInstance.flags.player.chaCtrl).SetOriginalPosition();
+                var ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
+                if (_nextAinmInfo is not null)
+                {
+                    if (_animationLoader.Installed)
+                    {
+                        ctrl.ALMovement = movement[(int)Sex.Male];
+                    }
+                }
+                ctrl.SetOriginalPosition();
             }
         }
 
