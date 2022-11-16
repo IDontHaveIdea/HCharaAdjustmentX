@@ -67,7 +67,9 @@ namespace IDHIPlugins
         {
             CharacterType chType;
             // HSceneProc instance will be used later
-            _hprocInstance = (HSceneProc)instance;  
+            _hprocInstance = (HSceneProc)instance;
+            _hprocObject = instance;
+            _hprocTraverse = new HSceneProcTraverse(instance);
 
             // set various flags
             Utils.SetMode(_hprocInstance.flags.mode);
