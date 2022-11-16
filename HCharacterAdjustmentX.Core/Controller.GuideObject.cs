@@ -19,41 +19,6 @@ namespace IDHIPlugins
             public HSceneGuideObject GuideObject { get; set; } = null;
 
             /// <summary>
-            /// Create a copy of the H scene guide object for each character
-            /// </summary>
-            internal void CreateGuideObject(HSceneProc hSceneProc, CharacterType characterType)
-            {
-                ChaType = characterType;
-                //var female = hSceneProc.lstFemale[0];
-                if (GuideObject == null)
-                {
-                    GuideObject = Instantiate(hSceneProc.guideObject);
-                    
-                    //GuideObject = _hprocInstance.guideObject;
-                    //GuideObject = Instantiate(hSceneProc.guideObject,
-                    //    female.transform.position,
-                    //    female.transform.rotation,
-                    //    female.transform);
-                    //GuideObject.transform
-                    //    .SetPositionAndRotation(female.transform.position, female.transform.rotation);
-#if KKSWish
-                    var rot = ChaControl.transform.rotation;
-                    Vector3 pos = ChaControl.transform.position;
-                    Vector3 transPos = ChaControl.transform.TransformVector(pos);
-                    _guideObject.amountOffset.position = transPos;
-                    _guideObject.amountOffset.rotation = rot.eulerAngles;
-                    _guideObject.amountTotal.position = _guideObject.amount.position
-                        + _guideObject.amountOffset.position;
-                    _guideObject.amountTotal.rotation = _guideObject.amount.rotation
-                        + _guideObject.amountOffset.rotation;
-#endif
-#if DEBUG
-                    _Log.Info($"HCAX0033: Creating character guide object for {characterType}");
-#endif
-                }
-            }
-
-            /// <summary>
             /// Show the guide object associated with this character
             /// </summary>
             public void ShowGuideObject()
@@ -66,7 +31,7 @@ namespace IDHIPlugins
                 {
                     SetOriginalPosition();
                 }
-                GuideObject.gameObject.SetActive(true);
+                //GuideObject.gameObject.SetActive(true);
 #if KKSWish
                 var rot = ChaControl.transform.rotation;
                 Vector3 pos = ChaControl.transform.position;
@@ -89,7 +54,7 @@ namespace IDHIPlugins
                 { 
                     return; 
                 }
-                GuideObject.gameObject.SetActive(false);
+                //GuideObject.gameObject.SetActive(false);
             }
 
             /// <summary>
@@ -108,6 +73,41 @@ namespace IDHIPlugins
                 else
                 {
                     ShowGuideObject();
+                }
+            }
+
+            /// <summary>
+            /// Create a copy of the H scene guide object for each character
+            /// </summary>
+            internal void CreateGuideObject(HSceneProc hSceneProc, CharacterType characterType)
+            {
+                ChaType = characterType;
+                //var female = hSceneProc.lstFemale[0];
+                if (GuideObject == null)
+                {
+                    GuideObject = Instantiate(hSceneProc.guideObject);
+
+                    //GuideObject = _hprocInstance.guideObject;
+                    //GuideObject = Instantiate(hSceneProc.guideObject,
+                    //    female.transform.position,
+                    //    female.transform.rotation,
+                    //    female.transform);
+                    //GuideObject.transform
+                    //    .SetPositionAndRotation(female.transform.position, female.transform.rotation);
+#if KKSWish
+                    var rot = ChaControl.transform.rotation;
+                    Vector3 pos = ChaControl.transform.position;
+                    Vector3 transPos = ChaControl.transform.TransformVector(pos);
+                    _guideObject.amountOffset.position = transPos;
+                    _guideObject.amountOffset.rotation = rot.eulerAngles;
+                    _guideObject.amountTotal.position = _guideObject.amount.position
+                        + _guideObject.amountOffset.position;
+                    _guideObject.amountTotal.rotation = _guideObject.amount.rotation
+                        + _guideObject.amountOffset.rotation;
+#endif
+#if DEBUG
+                    _Log.Info($"HCAX0033: Creating character guide object for {characterType}");
+#endif
                 }
             }
         }
