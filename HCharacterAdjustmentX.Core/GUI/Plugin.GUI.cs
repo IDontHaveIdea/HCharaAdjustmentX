@@ -133,6 +133,7 @@ namespace IDHIPlugins
         /// </summary>
         public static void ToggleGroupGuideObject(bool state)
         {
+            _Log.Warning($"[ToggleGroupGuideObject] Group Guide set to={state}");
             _hprocInstance.sprite.axis.tglDraw.isOn = state;
             _hprocInstance.sprite.MoveAxisDraw(_hprocInstance.sprite.axis.tglDraw.isOn);
             _hprocInstance.guideObject.gameObject.SetActive(state);
