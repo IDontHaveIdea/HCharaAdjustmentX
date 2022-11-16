@@ -19,7 +19,7 @@ namespace IDHIPlugins
         internal class CharMovement
         {
             #region private fields
-            internal static HSceneGuideObject _guideObject;
+            //internal static GameObject _guideObject;
             internal static ChaControl _chaControl;
             internal static HCharaAdjusmentXController _controller;
             internal static HCharaAdjusmentXController _controllerPlayer;
@@ -63,7 +63,7 @@ namespace IDHIPlugins
                 }
 
                 _controller = GetControllerByType(chaType);
-                _guideObject = _controller.GuideObject;
+                //_guideObject = _controller.GuideObject;
                 _animationID = _hprocInstance.flags.nowAnimationInfo.id;
                 _animationGUID = _hprocInstance.flags.nowAnimationInfo.nameAnimation;
                 _pathFemaleBase = _hprocInstance.flags.nowAnimationInfo
@@ -72,6 +72,19 @@ namespace IDHIPlugins
                 // Normal button press
                 var originalPosition = _controller.OriginalPosition;
                 var movement = _controller.Movement;
+                var fullMovement = _controller.Movement;
+                if (!_controller.Moved)
+                {
+                    if ((_controller.Movement == Vector3.zero)
+                        && (_controller.ALMovement != Vector3.zero))
+                    {
+                        fullMovement = _controller.ALMovement;
+                        movement = _controller.ALMovement;
+                    }
+                }
+#if DEBUG
+                _Log.Warning($"START wit Moved={_controller.Moved} for KEY={_animationKey} MOVEMENT={movement.ToString("F7")} ALMove={_controller.ALMovement.ToString("F7")} Movement={_controller.Movement.ToString("F7")}");
+#endif
                 Vector3 newPosition = new(0, 0, 0);
                 switch (moveType)
                 {
@@ -81,11 +94,13 @@ namespace IDHIPlugins
 
                     case MoveType.UP:
                         movement.y += _fAdjustStep;
+                        fullMovement += (Vector3.up * _fAdjustStep);
                         _doShortcutMove = true;
                         break;
 
                     case MoveType.DOWN:
                         movement.y -= _fAdjustStep;
+                        fullMovement += (Vector3.down * _fAdjustStep);
                         _doShortcutMove = true;
                         break;
 
@@ -98,6 +113,7 @@ namespace IDHIPlugins
                         {
                             movement.x += _fAdjustStep;
                         }
+                        fullMovement += (Vector3.right * _fAdjustStep);
                         _doShortcutMove = true;
                         break;
 
@@ -109,11 +125,13 @@ namespace IDHIPlugins
                         else
                         {
                             movement.x -= _fAdjustStep;
+                            
                         }
+                        fullMovement += (Vector3.left * _fAdjustStep);
                         _doShortcutMove = true;
                         break;
 
-                    case MoveType.CLOSER:
+                    case MoveType.FORWARD:
                         if (chaType == CharacterType.Player)
                         {
                             movement.z -= _fAdjustStep;
@@ -122,10 +140,11 @@ namespace IDHIPlugins
                         {
                             movement.z += _fAdjustStep;
                         }
+                        fullMovement += (Vector3.forward * _fAdjustStep);
                         _doShortcutMove = true;
                         break;
 
-                    case MoveType.APART:
+                    case MoveType.BACK:
                         if (chaType == CharacterType.Player)
                         {
                             movement.z += _fAdjustStep;
@@ -134,6 +153,7 @@ namespace IDHIPlugins
                         {
                             movement.z -= _fAdjustStep;
                         }
+                        fullMovement += (Vector3.back * _fAdjustStep);
                         _doShortcutMove = true;
                         break;
                     case MoveType.SAVE:
@@ -212,19 +232,19 @@ namespace IDHIPlugins
                     {
                         _controller.Moved = true;
                     }
+                    //newPosition = originalPosition + fullMovement;
                     newPosition = RecalcPosition(
-                        _chaControl, originalPosition, movement);
+                        _chaControl, originalPosition, movement, fullMovement);
 #if DEBUG
-                    _Log.Info($"HCAX0046: Move {chaType}\n" +
+                    _Log.Info($"HCAX0046: Move {chaType} by {movement.ToString("F7")}\n" +
                         $"from position {tmp.ToString("F7")} " +
-                        $" to position {newPosition.ToString("F7")}\n" +
-                        $" for movement {movement.ToString("F7")} " +
-                        $" to recalc {newPosition.ToString("F7")}");
+                        $"to position {newPosition.ToString("F7")}");
 #endif
                     _doShortcutMove = false;
                     _chaControl.transform.position = newPosition;
-                    _guideObject.amount.position = _chaControl.transform.position;
-                    _controller.Movement = movement;
+                    //_guideObject.transform.position = _chaControl.transform.position;
+                    //_controller.Movement = movement;
+                    _controller.Movement = fullMovement;
                     _controller.LastMovePosition = newPosition;
                 }
                 return _doShortcutMove;
@@ -233,7 +253,8 @@ namespace IDHIPlugins
             internal static Vector3 RecalcPosition(
                 ChaControl chaControl,
                 Vector3 original,
-                Vector3 move)
+                Vector3 move,
+                Vector3 fullMove)
             {
                 try
                 {
@@ -242,6 +263,7 @@ namespace IDHIPlugins
                     var forwardZAxis = chaControl.transform.forward * move.z;
 
                     var newPosition = original;
+                    var fullNewPosition = original + fullMove;
 
                     newPosition += rightXAxis;
                     newPosition += upYAxis;
@@ -250,10 +272,12 @@ namespace IDHIPlugins
                     _Log.Info($"[RecalcPosition] Move {chaControl.name}\n" +
                         $"original position {original.ToString("F7")}\n" +
                         $"      move vector {move.ToString("F7")}\n" +
+                        $" full move vector {fullMove.ToString("F7")}\n" +
                         $"          right x {rightXAxis.ToString("F7")}\n" +
                         $"             up y {upYAxis.ToString("F7")}\n" +
                         $"        forward z {forwardZAxis.ToString("F7")}\n" +
-                        $"       to re-calc {newPosition.ToString("F7")}");
+                        $"       to re-calc {newPosition.ToString("F7")}\n" +
+                        $"       to fullNew {fullNewPosition.ToString("F7")}");
 #endif
                     return newPosition;
                 }
