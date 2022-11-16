@@ -15,8 +15,8 @@ namespace IDHIPlugins
                 "Down",
                 "Left",
                 "Right",
-                "Apart",
-                "Closer",
+                "Forward",
+                "Back",
                 "Save",
                 "Load",
 #if DEBUG
@@ -36,8 +36,8 @@ namespace IDHIPlugins
             DOWN,
             LEFT,
             RIGHT,
-            APART,
-            CLOSER,
+            FORWARD,
+            BACK,
             SAVE,
             LOAD,
 #if DEBUG
@@ -55,8 +55,8 @@ namespace IDHIPlugins
                 { buttonLabels[1], MoveType.DOWN },
                 { buttonLabels[2], MoveType.LEFT },
                 { buttonLabels[3], MoveType.RIGHT },
-                { buttonLabels[4], MoveType.APART },
-                { buttonLabels[5], MoveType.CLOSER },
+                { buttonLabels[4], MoveType.FORWARD },
+                { buttonLabels[5], MoveType.BACK },
                 { buttonLabels[6], MoveType.SAVE },
                 { buttonLabels[7], MoveType.LOAD },
 #if DEBUG
