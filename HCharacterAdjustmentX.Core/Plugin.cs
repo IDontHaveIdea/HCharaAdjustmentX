@@ -53,6 +53,7 @@ namespace IDHIPlugins
         internal static bool IsSonyu { get; set; } = false;
         internal static bool IsSupportedScene { get; set; } = false;
 
+        #region Unity Methods
         private void Awake()
         {
             _Log.LogSource = base.Logger;
@@ -107,7 +108,9 @@ namespace IDHIPlugins
             // Start in disabled mode
             enabled = false;
         }
+        #endregion
 
+        #region public classes
         /// <summary>
         /// Get controller for characters
         /// </summary>
@@ -140,5 +143,6 @@ namespace IDHIPlugins
             return ((chaControl == null) || (chaControl.gameObject == null))
                 ? null : chaControl.GetComponent<HCharaAdjusmentXController>();
         }
+        #endregion
     }
 }
