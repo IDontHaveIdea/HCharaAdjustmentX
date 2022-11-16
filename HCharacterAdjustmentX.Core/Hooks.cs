@@ -3,6 +3,8 @@
 //
 using System;
 
+using UnityEngine;
+
 using H;
 
 using BepInEx.Logging;
@@ -19,8 +21,10 @@ namespace IDHIPlugins
         // Hooks
         internal static Harmony _hookInstance;
         internal static HSceneProc _hprocInstance;
+        internal static object _hprocObject;
         internal static HFlag.EMode _mode;
         internal static string _animationKey = "";
+        internal static HSceneProcTraverse _hprocTraverse;
 
         internal partial class Hooks
         {
@@ -46,7 +50,7 @@ namespace IDHIPlugins
                 // Get calling method name
                 var callingMethod = Utilities.CallingMethod();
                 _Log.Warning($"[{callingMethod}] ChangeCategoryPostfix");
-                Utils.SetOriginalPositionAll("from [ChangeCategory]");
+                Utils.SetOriginalPositionAll();
                 Utils.RecalcAdjustmentAll("from [ChangeCategory]");
             }
 
@@ -59,21 +63,19 @@ namespace IDHIPlugins
                 {
                     return;
                 }
+
                 _animationKey = "";
                 try
                 {
-                    _animationKey = _animationLoader
-                        .GetAnimationKey(_nextAinmInfo);
-                    _Log.Warning($"ANIMATION KEY={_animationKey}");
-                    //Utils.SetMode(_nextAinmInfo.mode);
+                    _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
+#if DEBUG
+                    _Log.Warning($"[ChangeAnimatorPrefix] PRE ANIMATION KEY={_animationKey}");
+#endif
                     Utils.ResetPositionAll();
-                    //Utils.RecalcAdjustmentAll();
-                    //Utils.SetOriginalPositionAll();
-                    //Utils.InitialPosition();
                 }
                 catch (Exception e)
                 {
-                    _Log.Level(LogLevel.Error, $"HCAX0024: Error - {e.Message}");
+                    _Log.Level(LogLevel.Error, $"HCAX0024A: Error - {e.Message}");
                 }
             }
 
@@ -93,18 +95,18 @@ namespace IDHIPlugins
                 _animationKey = "";
                 try
                 {
-                    //_animationKey = _animationLoader
-                    //    .GetAnimationKey(_nextAinmInfo);
-                    //_Log.Warning($"ANIMATION KEY={_animationKey}");
+                    _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
+#if DEBUG
+                    _Log.Warning($"[ChangeAnimatorPrefix] POST ANIMATION KEY={_animationKey}");
+#endif
                     Utils.SetMode(_nextAinmInfo.mode);
-                    //Utils.ResetPositionAll();
+                    Utils.SetOriginalPositionAll(_nextAinmInfo);
                     Utils.RecalcAdjustmentAll();
-                    Utils.SetOriginalPositionAll();
                     Utils.InitialPosition();
                 }
                 catch (Exception e)
                 {
-                    _Log.Level(LogLevel.Error, $"HCAX0024: Error - {e.Message}");
+                    _Log.Level(LogLevel.Error, $"HCAX0024B: Error - {e.Message}");
                 }
             }
         }
