@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -7,107 +8,87 @@ using KKAPI.Chara;
 
 using IDHIUtils;
 using System.Text;
+using KKAPI.MainGame;
+using static HandCtrl;
 
 namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
     {
         // Controller
+        #region  Fields
+        internal const string MoveDataID = "MoveData";
+
         internal static Vector3 _forwardZAxisAdjustUnit = Vector3.zero;
         internal static Vector3 _rightXAxisAdjustUnit = Vector3.zero;
         internal static Vector3 _upYAxisAdjustUnit = Vector3.zero;
         internal static float _fAdjustStep = 0.01f;
-        internal const string MoveDataID = "MoveData";
+        #endregion
+
+        #region enums
         public enum CharacterType { Heroine, Heroine3P, Player, Janitor, Group, Unknown }
+        #endregion
 
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
-            #region private fields
+            #region Fields
             internal MoveData MoveData;
             internal List<MoveActionButton> buttons;
             #endregion
 
-            #region properties
+            #region Properties
             public bool DoRecalc { get; set; } = true;
             public bool Moved { get; set; } = false;
             public Vector3 OriginalPosition { get; set; } = new(0, 0, 0);
             public Vector3 LastMovePosition { get; set; } = new(0, 0, 0);
+            public Vector3 FoundPosition { get; set; } = new(0, 0, 0);
             public Vector3 Movement { get; set; } = new(0, 0, 0);
+            public Vector3 ALMovement { get; set; } = new(0, 0, 0);
             internal CharacterType ChaType { get; set; } = CharacterType.Unknown;
             #endregion
 
-            #region private methods
-            internal void Init(HSceneProc hSceneProc, CharacterType characterType)
-            {
-#if DEBUG
-                _Log.Info($"HCAX0025: Initialization for {characterType}");
-#endif
-                ChaType = characterType;
-                MoveData ??= new(ChaControl);
-                CreateGuideObject(hSceneProc, characterType);
-                SetOriginalPosition();
-                if (characterType == CharacterType.Heroine)
-                {
-                    buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
-                        width: 57f, height: 25f, xOffset: (-124f)).Buttons;
-                }
-                else if (characterType == CharacterType.Player)
-                {
-                    buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
-                        width: 57f, height: 25f, xOffset: (-240f)).Buttons;
-                }
-                // Start disabled
-                enabled = false;
-            }
-
-            /// <summary>
-            /// Save original position
-            /// </summary>
-            internal void SetOriginalPosition()
-            {
-                var lines = new StringBuilder();
-                // Get calling method name
-                var callingMethod = Utilities.CallingMethod();
-
-                lines.AppendLine($"Original Position={OriginalPosition} Set={ChaControl.transform.position}");
-                lines.AppendLine($"Last Move Position={LastMovePosition} Set={ChaControl.transform.position}");
-                lines.AppendLine($"Movement={Movement} Moved={Moved}");
-
-                OriginalPosition = ChaControl.transform.position;
-                LastMovePosition = Vector3.zero;
-                Movement = Vector3.zero;
-                Moved = false;
-                _Log.Warning($"[{callingMethod}] ChaType={ChaType}\n{lines}");
-            }
-            #endregion
-
-            #region public methods
+            #region public Methods
             /// <summary>
             /// Restore original position
             /// </summary>
             public void ResetPosition()
             {
-                var Original = OriginalPosition;
+                var original = ChaControl.transform.position;
                 // Get calling method name
                 var callingMethod = Utilities.CallingMethod();
                 _Log.Warning($"[{callingMethod}] ResetPosition");
 
                 if (OriginalPosition != Vector3.zero)
                 {
-                    if (GuideObject.gameObject.activeInHierarchy)
+#if DEBUG
+                    /*if (GuideObject.gameObject.activeInHierarchy)
                     {
-                        GuideObject.amount.position = OriginalPosition;
+                        original = GuideObject.transform.position;
+                        GuideObject.transform.position = OriginalPosition;
                     }
                     else
                     {
+
                         ChaControl.transform.position = OriginalPosition;
-                    }
+                    }*/
+                    ChaControl.transform.position = OriginalPosition;
+#else
+                    ChaControl.transform.position = OriginalPosition;
+
+#endif
                     Movement = Vector3.zero;
-                    LastMovePosition= Vector3.zero;
+                    LastMovePosition = Vector3.zero;
                     Moved = false;
+                    // Move in case ALMovement is not zero
+                    if (ALMovement != Vector3.zero)
+                    {
+                        InvokeOnMoveRequest(null,
+                            new MoveRequestEventArgs(
+                                ChaType, MoveEvent.MoveType.MOVE));
+                    }
 #if DEBUG
                     _Log.Info($"HCAX0026: Reset position for {ChaType} " +
-                        $"from Original={Original} to=[{OriginalPosition}]");
+                        $"from Original={original} to=[{OriginalPosition}]");
 #endif
                 }
             }
@@ -149,6 +130,8 @@ namespace IDHIPlugins
                     if (MoveData.Count == 0)
                     {
 #if DEBUG
+                        var name = ChaControl.chaFile.parameter.fullname.Trim()
+                            ?? string.Empty;
                         _Log.Warning($"[SaveData] [{name}] MoveData total is 0 setting " +
                             $"ExtendedData to null(Not Really!).");
 #endif
@@ -161,16 +144,16 @@ namespace IDHIPlugins
                 }
                 else
                 {
+#if DEBUG
                     var name = ChaControl.chaFile?.parameter.fullname.Trim()
                         ?? string.Empty;
-#if DEBUG
                     _Log.Warning($"[SaveData] [{name}] MoveData is null.");
 #endif
                 }
             }
             #endregion
 
-            #region unity methods
+            #region protected override Methods
             /// <summary>
             /// TODO: Verify if data is saved to the card in Maker when called from room.
             /// Need to identify 3P and Darkness scene. For now it won't be supported.
@@ -207,11 +190,11 @@ namespace IDHIPlugins
                     {
                         if (GuideObject.gameObject.activeInHierarchy)
                         {
-                            ChaControl.transform.position = GuideObject.amount.position;
+                            ChaControl.transform.position = GuideObject.transform.position;
                         }
                         else
                         {
-                            GuideObject.amount.position = ChaControl.transform.position;
+                            GuideObject.transform.position = ChaControl.transform.position;
                         }
                     }
                     if (DoRecalc)
@@ -245,6 +228,62 @@ namespace IDHIPlugins
                     }
                 }
                 base.Update();
+            }
+            #endregion
+
+            #region private Methods
+            internal void Init(HSceneProc hSceneProc, CharacterType characterType)
+            {
+#if DEBUG
+                _Log.Info($"HCAX0025: Initialization for {characterType}");
+#endif
+                ChaType = characterType;
+                MoveData ??= new(ChaControl);
+                // CreateGuideObject(hSceneProc, characterType);
+                SetOriginalPosition();
+                if (characterType == CharacterType.Heroine)
+                {
+                    buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
+                        width: 57f, height: 25f, xOffset: (-124f)).Buttons;
+                }
+                else if (characterType == CharacterType.Player)
+                {
+                    buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
+                        width: 57f, height: 25f, xOffset: (-240f)).Buttons;
+                }
+                // Start disabled
+                enabled = false;
+            }
+
+            /// <summary>
+            /// Save original position
+            /// </summary>
+            internal void SetOriginalPosition()
+            {
+                var nowHPointDataPos = _hprocTraverse.nowHpointDataPos;
+#if DEBUG
+                var original = OriginalPosition;
+#endif
+                OriginalPosition = nowHPointDataPos;
+                FoundPosition = ChaControl.transform.position;
+                LastMovePosition = Vector3.zero;
+                Movement = Vector3.zero;
+                Moved = false;
+#if DEBUG
+                var lines = new StringBuilder();
+                // Get calling method name
+                var callingMethod = Utilities.CallingMethod();
+
+                // Real original position AnimationLoader can change them when we get
+                // here
+                lines.AppendLine($"Original={original} Set={nowHPointDataPos}");
+                lines.AppendLine($"Last Move={LastMovePosition} Set={Vector3.zero}");
+                lines.AppendLine($"Current Position={FoundPosition.ToString("F7")} " +
+                    $"ALMove={ALMovement.ToString("F7")} Moved={Moved} " +
+                    $"POS={nowHPointDataPos.ToString("F7")}");
+                _Log.Warning($"[{callingMethod}] [SetOriginalPosition] " +
+                    $"ChaType={ChaType}\n{lines}");
+#endif
             }
             #endregion
         }
