@@ -118,8 +118,8 @@ namespace IDHIPlugins
 #if DEBUG
                         var name = ChaControl.chaFile.parameter.fullname.Trim()
                             ?? string.Empty;
-                        _Log.Warning($"[SaveData] [{name}] MoveData total is 0 setting " +
-                            $"ExtendedData to null(Not Really!).");
+                        _Log.Warning($"[SaveData] [{name}] MoveData total is 0 setting "
+                            + $"ExtendedData to null(Not Really!).");
 #endif
                         //SetExtendedData(null);
                     }

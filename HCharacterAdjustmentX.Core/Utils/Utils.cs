@@ -23,7 +23,8 @@ namespace IDHIPlugins
         /// <param name="names"></param>
         /// <param name="quotes"></param>
         /// <returns></returns>
-        internal static string CategoryList(List<HSceneProc.Category> categories, bool names = false, bool quotes = true)
+        internal static string CategoryList(
+            List<HSceneProc.Category> categories, bool names = false, bool quotes = true)
         {
             var tmp = "";
             var first = true;
@@ -64,7 +65,8 @@ namespace IDHIPlugins
         /// <param name="names"></param>
         /// <param name="quotes"></param>
         /// <returns></returns>
-        internal static string CategoryList(List<int> categories, bool names = false, bool quotes = true)
+        internal static string CategoryList(
+            List<int> categories, bool names = false, bool quotes = true)
         {
             var tmp = "";
             var first = true;
@@ -179,12 +181,10 @@ namespace IDHIPlugins
                 {
                     ctrl.MoveData.Data.TryGetValue(_animationKey,
                         out var position);
-                    _Log.Warning($"POSITION FOR KEY={_animationKey} null={position == null}");
                     if (position != null)
                     {
                         // Use TryGetValue
                         position.TryGetValue(ctrl.ChaType, out var data);
-                        _Log.Warning($"DATA FOR {ctrl.ChaType} null={data == null}");
                         if (data != null)
                         {
                             var movement = data.Position;
@@ -251,7 +251,6 @@ namespace IDHIPlugins
                 {
                     movement = _animationLoader
                         .GetAnimationMovement(_nextAinmInfo);
-                    _Log.Error($"RECEIVED {movement[0].ToString("F3")} {movement[1].ToString("F3")}");
                 }
             }
 

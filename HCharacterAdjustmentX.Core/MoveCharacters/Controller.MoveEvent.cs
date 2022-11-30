@@ -51,8 +51,8 @@ namespace IDHIPlugins
                 OnMoveRequest += (_sender, _args) => 
                 {
 #if DEBUG
-                    _Log.Info($"HCAX0049: [RegisterMovementEvents] Call to action {_args.Move} " +
-                        $"- {_args.ChaType}");
+                    _Log.Info($"HCAX0049: [RegisterMovementEvents] Call to action " +
+                        $"{_args.Move} - {_args.ChaType}");
 #endif
                     CharMovement.Move(_args.ChaType, _args.Move);
                 };

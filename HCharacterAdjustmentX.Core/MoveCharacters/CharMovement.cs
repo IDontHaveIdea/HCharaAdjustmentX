@@ -159,10 +159,13 @@ namespace IDHIPlugins
                     case MoveType.SAVE:
                         if (!_animationKey.IsNullOrEmpty())
                         {
-                            _controllerPlayer = GetControllerByType(CharacterType.Player);
-                            _controllerHeroine = GetControllerByType(CharacterType.Heroine);
+                            _controllerPlayer =
+                                GetControllerByType(CharacterType.Player);
+                            _controllerHeroine =
+                                GetControllerByType(CharacterType.Heroine);
 
-                            var positions = new Dictionary<CharacterType, PositionData> {
+                            var positions = new Dictionary<CharacterType, PositionData>
+                            {
                                 [chaType] = new(_controllerHeroine.Movement,
                                     Vector3.zero)
                             };
@@ -243,9 +246,9 @@ namespace IDHIPlugins
                     newPosition = RecalcPosition(
                         _chaControl, originalPosition, movement, fullMovement);
 #if DEBUG
-                    _Log.Info($"HCAX0046: Move {chaType} by {movement.ToString("F7")}\n" +
-                        $"from position {tmp.ToString("F7")} " +
-                        $"to position {newPosition.ToString("F7")}");
+                    _Log.Info($"HCAX0046: Move {chaType} by {movement.ToString("F7")}\n"
+                        + $"from position {tmp.ToString("F7")} "
+                        + $"to position {newPosition.ToString("F7")}");
 #endif
                     _doShortcutMove = false;
                     _chaControl.transform.position = newPosition;

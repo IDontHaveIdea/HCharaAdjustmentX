@@ -37,7 +37,8 @@ namespace IDHIPlugins
             }
 
             /// <summary>
-            /// Set the new original position when changing positions via the H point picker scene
+            /// Set the new original position when changing positions via the
+            /// H point picker scene
             /// </summary>
             [HarmonyPostfix]
             [HarmonyPatch(typeof(HSceneProc), nameof(HSceneProc.ChangeCategory))]
@@ -68,9 +69,6 @@ namespace IDHIPlugins
                 try
                 {
                     _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
-#if DEBUG
-                    _Log.Warning($"[ChangeAnimatorPrefix] PRE ANIMATION KEY={_animationKey}");
-#endif
                     Utils.ResetPositionAll();
                 }
                 catch (Exception e)
@@ -97,9 +95,6 @@ namespace IDHIPlugins
                 try
                 {
                     _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
-#if DEBUG
-                    _Log.Warning($"[ChangeAnimatorPrefix] POST ANIMATION KEY={_animationKey}");
-#endif
                     Utils.SetMode(_nextAinmInfo.mode);
                     Utils.SetOriginalPositionAll(_nextAinmInfo);
                     Utils.RecalcAdjustmentAll();
