@@ -37,7 +37,8 @@ namespace IDHIPlugins
     /// </remarks>
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
     [BepInDependency(IDHIUtils.Info.GUID, IDHIUtils.Info.Version)]
-    [BepInDependency("essuhauled.animationloader", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency(
+        "essuhauled.animationloader", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(GUID, PluginDisplayName, Version)]
     [BepInProcess(KoikatuAPI.GameProcessName)]
     public partial class HCharaAdjustmentX : BaseUnityPlugin
@@ -84,23 +85,14 @@ namespace IDHIPlugins
         }
 #endif
 
-        /// <summary>
-        /// Check for KKS_HCharaAdjustment loaded and adjust the configuration file accordingly
-        /// Initialized CharHScene
-        /// </summary>
         private void Start()
         {
 #if DEBUG
             _Log.Info("HCAX1315: Start Called.");
 #endif
 
-            // Configuration entries
-            // TODO: Check for KKS_HCharaAdjustment
-#if DEBUG
-            ConfigEntries(false);
-#else
-            ConfigEntries(true);
-#endif
+            ConfigEntries();
+
             // Hook to HProcMonitor
             HProcMonitor.OnHSceneStartLoading += OnHStart;
             CTRL.RegisterMovementEvents();
@@ -127,7 +119,8 @@ namespace IDHIPlugins
         /// </summary>
         /// <param name="chaType"></param>
         /// <returns></returns>
-        public static HCharaAdjusmentXController GetControllerByType(CharacterType chaType)
+        public static HCharaAdjusmentXController GetControllerByType(
+            CharacterType chaType)
         {
             ChaControl chaControl = null;
 
