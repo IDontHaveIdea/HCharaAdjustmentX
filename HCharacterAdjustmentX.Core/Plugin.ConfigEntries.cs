@@ -23,12 +23,20 @@ namespace IDHIPlugins
         internal static ConfigEntry<KeyboardShortcut> GroupGuide { get; set; }
         internal static ConfigEntry<float> cfgAdjustmentStep;
         
-        internal void ConfigEntries(bool bHCAInstalled, bool bheroine3P = false)
+        internal void ConfigEntries(bool bheroine3P = false)
         {
             // Definition of configuration items
             var sectionKeys = "Keyboard Shortcuts for Guide";
 #if DEBUG
             _Log.Info($"HCAX0016: Creating Shortcuts for Characters");
+            GroupGuide = Config.Bind(
+                section: sectionKeys,
+                key: "Show Group Guide",
+                defaultValue: new KeyboardShortcut(KeyCode.I),
+                configDescription: new ConfigDescription(
+                    description: "Show the guide object for adjusting the group position",
+                    acceptableValues: null,
+                    tags: new ConfigurationManagerAttributes { Order = 29 }));
 #endif
             #region Heroine
             KeyHeroine.Menu = Config.Bind(
@@ -87,7 +95,8 @@ namespace IDHIPlugins
                 {
                     _fAdjustStep = cfgAdjustmentStep.Value;
 #if DEBUG
-                    _Log.Info($"HCAX0018: Movement step read in configuration - {cfgAdjustmentStep.Value}");
+                    _Log.Info($"HCAX0018: Movement step read in configuration - " +
+                        $"{cfgAdjustmentStep.Value}");
 #endif
                 }
             };
