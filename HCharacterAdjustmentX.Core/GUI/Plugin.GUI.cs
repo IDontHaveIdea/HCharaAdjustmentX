@@ -97,6 +97,7 @@ namespace IDHIPlugins
             }
         }
 
+#if DEBUG
         private void Update()
         {
             if (GroupGuide.Value.IsDown())
@@ -104,6 +105,7 @@ namespace IDHIPlugins
                 ShowGroupGuide = !ShowGroupGuide;
             }
         }
+#endif
         #endregion
 
         #region private methods
