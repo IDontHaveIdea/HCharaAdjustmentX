@@ -66,15 +66,8 @@ namespace IDHIPlugins
                 }
 
                 _animationKey = "";
-                try
-                {
-                    _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
-                    Utils.ResetPositionAll();
-                }
-                catch (Exception e)
-                {
-                    _Log.Level(LogLevel.Error, $"HCAX0024A: Error - {e.Message}");
-                }
+                _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
+                Utils.ResetPositionAll();
             }
 
             /// <summary>
@@ -91,19 +84,11 @@ namespace IDHIPlugins
                 {
                     return;
                 }
-                _animationKey = "";
-                try
-                {
-                    _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
-                    Utils.SetMode(_nextAinmInfo.mode);
-                    Utils.SetOriginalPositionAll(_nextAinmInfo);
-                    Utils.RecalcAdjustmentAll();
-                    Utils.InitialPosition();
-                }
-                catch (Exception e)
-                {
-                    _Log.Level(LogLevel.Error, $"HCAX0024B: Error - {e.Message}");
-                }
+                _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
+                Utils.SetMode(_nextAinmInfo.mode);
+                Utils.SetOriginalPositionAll(_nextAinmInfo);
+                Utils.RecalcAdjustmentAll();
+                Utils.InitialPosition();
             }
         }
     }

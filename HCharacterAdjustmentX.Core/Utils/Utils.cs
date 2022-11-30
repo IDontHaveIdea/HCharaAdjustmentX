@@ -1,9 +1,12 @@
 ﻿//
 // Utils.cs
 //
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
+
+using BepInEx.Logging;
 
 using IDHIUtils;
 
@@ -100,6 +103,29 @@ namespace IDHIPlugins
             return quotes ? "\" { " + tmp + " }\"" : "{ " + tmp + " }";
         }
 
+        internal static void CheckAnimationLoader()
+        {
+            if (_animationLoader.Installed)
+            {
+                if (_animationLoader.VersionAtLeast("1.1.2.2"))
+                {
+                    _animationKeyOk = true;
+                }
+                else
+                {
+                    _animationKeyOk = false;
+                }
+                if (_animationLoader.VersionAtLeast("1.1.3.0"))
+                {
+                    _animationMovementOk = true;
+                }
+                else
+                {
+                    _animationMovementOk = false;
+                }
+            }
+        }
+
         /// <summary>
         /// Get animation key
         /// </summary>
@@ -107,12 +133,48 @@ namespace IDHIPlugins
         /// <returns></returns>
         internal static string GetAnimationKey(HSceneProc.AnimationListInfo animation)
         {
-            if (_animationLoader.Installed)
+            var result = "";
+            if (_animationKeyOk)
             {
-                return _animationLoader
-                        .GetAnimationKey(animation);
+                try
+                {
+                    result = _animationLoader
+                            .GetAnimationKey(animation);
+                }
+                catch (Exception e)
+                {
+                    _animationKeyOk = false;
+                    _Log.Level(LogLevel.Error, $"HCAX0024A: Error - {e.Message}");
+                }
             }
-            return "";
+            return result;
+        }
+
+
+        internal static List<Vector3> GetAnimationMovement(
+            HSceneProc.AnimationListInfo animation)
+        {
+            List<Vector3> result = new() {
+                new Vector3(0, 0, 0), new Vector3(0, 0, 0) };
+
+            if (animation != null)
+            {
+                if (_animationMovementOk)
+                {
+                    try
+                    {
+                        result = _animationLoader
+                            .GetAnimationMovement(animation);
+                    }
+                    catch(Exception e)
+                    {
+                        _animationMovementOk = false;
+                        _Log.Level(LogLevel.Error, $"HCAX0024B: Error - {e.Message}");
+                    }
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -247,9 +309,9 @@ namespace IDHIPlugins
 
             if (_nextAinmInfo != null)
             {
-                if (_animationLoader.Installed)
+                if (_animationMovementOk)
                 {
-                    movement = _animationLoader
+                    movement = Utils
                         .GetAnimationMovement(_nextAinmInfo);
                 }
             }
@@ -262,7 +324,7 @@ namespace IDHIPlugins
                     var ctrl = GetController(heroines[i].chaCtrl);
                     if ((_nextAinmInfo is not null) && (i == 0))
                     {
-                        if (_animationLoader.Installed)
+                        if (_animationMovementOk)
                         {
                             ctrl.ALMovement = movement[(int)Sex.Female];
                         }
@@ -275,7 +337,7 @@ namespace IDHIPlugins
                 var ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
                 if (_nextAinmInfo is not null)
                 {
-                    if (_animationLoader.Installed)
+                    if (_animationMovementOk)
                     {
                         ctrl.ALMovement = movement[(int)Sex.Male];
                     }
@@ -318,7 +380,7 @@ namespace IDHIPlugins
             IsAibu = (emode == HFlag.EMode.aibu);
             IsHoushi = (emode == HFlag.EMode.houshi);
             IsSonyu = (emode == HFlag.EMode.sonyu);
-            IsSupportedScene = (IsAibu || IsHoushi || IsSonyu);
+            IsSupportedScene = (IsHoushi || IsSonyu);
         }
 
         /// <summary>

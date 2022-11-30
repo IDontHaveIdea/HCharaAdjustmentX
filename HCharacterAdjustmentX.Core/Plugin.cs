@@ -48,7 +48,8 @@ namespace IDHIPlugins
         internal static Logg _Log = new();
         internal static SvgColor _SvgColor = new();
         internal static IDHIUtils.AnimationLoader _animationLoader = new();
-
+        internal static bool _animationKeyOk = true;
+        internal static bool _animationMovementOk = true;
         internal static bool IsAibu { get; set; } = false;
         internal static bool IsHoushi { get; set; } = false;
         internal static bool IsSonyu { get; set; } = false;
@@ -69,6 +70,12 @@ namespace IDHIPlugins
             {
                 _Log.Message("HCAX0003: Cannot locate AnimationLoader saving movement " +
                     "is disabled.");
+                _animationKeyOk = false;
+                _animationMovementOk = false;
+            }
+            else
+            {
+                Utils.CheckAnimationLoader();
             }
             CharacterApi.RegisterExtraBehaviour<CTRL>(GUID);
         }
