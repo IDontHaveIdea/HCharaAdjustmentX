@@ -32,6 +32,6 @@ namespace IDHIPlugins
         public const string PluginDisplayName = "HScene Character AdjustmentX";
 #endif
         public const string PluginName = "HCharaAdjustmentX";
-        public const string Version = "0.4.0.0";
+        public const string Version = "0.5.0.0";
     }
 }
