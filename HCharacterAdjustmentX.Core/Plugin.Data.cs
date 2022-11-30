@@ -86,6 +86,23 @@ namespace IDHIPlugins
             }
         }
 
+        public class CharacterTypeData
+        {
+            private Dictionary<CharacterType, PositionData> _data;
+
+            public CharacterTypeData()
+            {
+                _data = new();
+                _data.Clear();
+            }
+
+            internal PositionData this[CharacterType key]
+            {
+                get { return _data[key]; }
+                set { _data[key] = value; }
+            }
+        }
+
         public sealed class MoveData
         {
             private Dictionary<string,
@@ -116,7 +133,8 @@ namespace IDHIPlugins
 
             internal void Load(PluginData data)
             {
-                var name = _chaControl.chaFile?.parameter.fullname.Trim() ?? "CHACONTROL FAIL";
+                var name = _chaControl.chaFile?.parameter.fullname.Trim()
+                    ?? "CHACONTROL FAIL";
                 if (data != null)
                 {
                     Dictionary<string, PositionDataPair> dataDeserialized;
@@ -219,8 +237,6 @@ namespace IDHIPlugins
                         item.Value.HeroinePosition,
                         item.Value.HeroineRotation);
 
-                    _Log.Warning($"POSITION={item.Value.HeroinePosition.ToString("F7")}");
-
                     // Add Player if any vector is non zero.
                     if ((item.Value.PlayerPosition != Vector3.zero)
                         || (item.Value.PlayerRotation != Vector3.zero))
@@ -237,9 +253,9 @@ namespace IDHIPlugins
             }
         }
 
-        internal static void PrintData(Dictionary<string,
-                Dictionary<CharacterType, PositionData>> MoveData,
-                string name = "")
+        internal static void PrintData(
+            Dictionary<string, Dictionary<CharacterType, PositionData>> MoveData,
+            string name = "")
         {
             var lines = new StringBuilder();
 #if DEBUG
@@ -266,7 +282,8 @@ namespace IDHIPlugins
         }
 
         internal static void PrintData(
-            Dictionary<string, PositionDataPair> MoveData, string name = "")
+            Dictionary<string, PositionDataPair> MoveData,
+            string name = "")
         {
             var lines = new StringBuilder();
 

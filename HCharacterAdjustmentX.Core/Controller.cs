@@ -1,5 +1,9 @@
-﻿using System;
+﻿//
+// Character Controller
+//
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 using UnityEngine;
 
@@ -7,9 +11,6 @@ using KKAPI;
 using KKAPI.Chara;
 
 using IDHIUtils;
-using System.Text;
-using KKAPI.MainGame;
-using static HandCtrl;
 
 namespace IDHIPlugins
 {
@@ -169,11 +170,16 @@ namespace IDHIPlugins
                 SaveData();
             }
 
-            protected override void OnReload(GameMode currentGameMode, bool maintainState)
+            protected override void OnReload(
+                GameMode currentGameMode, bool maintainState)
             {
                 if (currentGameMode == GameMode.Maker)
                 {
-                    //return;
+                    if (MakerInfo.InRoomMaker)
+                    {
+                        _Log.Message($"[{PluginName}] If you load a card with Card " +
+                            $"Info selected you may lose move information.");
+                    }
                 }
                 if (maintainState)
                 {
@@ -184,34 +190,42 @@ namespace IDHIPlugins
 
             protected override void Update()
             {
-                if (HProcMonitor.Nakadashi && IsSupportedScene && (ChaType != CharacterType.Unknown))
+                if (HProcMonitor.Nakadashi && IsSupportedScene
+                    && (ChaType != CharacterType.Unknown))
                 {
+#if DEBUG
                     if (GuideObject)
                     {
                         if (GuideObject.gameObject.activeInHierarchy)
                         {
-                            ChaControl.transform.position = GuideObject.transform.position;
+                            ChaControl.transform.position =
+                                GuideObject.transform.position;
                         }
                         else
                         {
-                            GuideObject.transform.position = ChaControl.transform.position;
+                            GuideObject.transform.position =
+                                ChaControl.transform.position;
                         }
                     }
+#endif
                     if (DoRecalc)
                     {
                         _fAdjustStep = cfgAdjustmentStep.Value;
-                        _forwardZAxisAdjustUnit = ChaControl.transform.forward * _fAdjustStep;
-                        _rightXAxisAdjustUnit = ChaControl.transform.right * _fAdjustStep;
+                        _forwardZAxisAdjustUnit =
+                            ChaControl.transform.forward * _fAdjustStep;
+                        _rightXAxisAdjustUnit =
+                            ChaControl.transform.right * _fAdjustStep;
                         _upYAxisAdjustUnit = ChaControl.transform.up * _fAdjustStep;
                         DoRecalc = false;
                     }
                     if (ChaType == CharacterType.Heroine)
                     {
+#if DEBUG
                         if (KeyHeroine.GuideObject.Value.IsDown())
                         {
                             ToggleGuideObject();
                         }
-
+#endif
                         if (KeyHeroine.Menu.Value.IsDown())
                         {
                             _buttonsInterface[ChaType].ShowInterface =
@@ -229,9 +243,9 @@ namespace IDHIPlugins
                 }
                 base.Update();
             }
-            #endregion
+#endregion
 
-            #region private Methods
+#region private Methods
             internal void Init(HSceneProc hSceneProc, CharacterType characterType)
             {
 #if DEBUG
@@ -239,17 +253,19 @@ namespace IDHIPlugins
 #endif
                 ChaType = characterType;
                 MoveData ??= new(ChaControl);
+#if DEBUG
                 // CreateGuideObject(hSceneProc, characterType);
+#endif
                 SetOriginalPosition();
                 if (characterType == CharacterType.Heroine)
                 {
                     buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
-                        width: 57f, height: 25f, xOffset: (-124f)).Buttons;
+                        width: 62f, height: 25f, xOffset: (-126f)).Buttons;
                 }
                 else if (characterType == CharacterType.Player)
                 {
                     buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
-                        width: 57f, height: 25f, xOffset: (-240f)).Buttons;
+                        width: 62f, height: 25f, xOffset: (-248f)).Buttons;
                 }
                 // Start disabled
                 enabled = false;
@@ -285,7 +301,7 @@ namespace IDHIPlugins
                     $"ChaType={ChaType}\n{lines}");
 #endif
             }
-            #endregion
+#endregion
         }
     }
 }

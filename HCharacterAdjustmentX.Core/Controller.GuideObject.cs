@@ -12,6 +12,7 @@ using IDHIUtils;
 
 namespace IDHIPlugins
 {
+#if DEBUG
     public partial class HCharaAdjustmentX
     {
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
@@ -105,12 +106,11 @@ namespace IDHIPlugins
                     _guideObject.amountTotal.rotation = _guideObject.amount.rotation
                         + _guideObject.amountOffset.rotation;
 #endif
-#if DEBUG
                     _Log.Info($"HCAX0033: Creating character guide object for {characterType}");
-#endif
                 }
             }
         }
     }
+#endif
 }
 

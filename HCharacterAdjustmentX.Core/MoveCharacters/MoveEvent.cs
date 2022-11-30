@@ -27,9 +27,15 @@ namespace IDHIPlugins
             };
         public static readonly List<string> doubleWidthLabels =
             new()
+#if DEBUG
             {
                 buttonLabels[10]
             };
+#else
+            {
+                buttonLabels[8]
+            };
+#endif
         public enum MoveType
         {
             UP,

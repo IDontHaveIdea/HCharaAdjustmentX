@@ -1,8 +1,13 @@
-﻿using System;
+﻿//
+// Extensions
+//
+using System;
 
 using HarmonyLib;
 
 using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
+
+
 namespace IDHIPlugins
 {
     internal static class Extensions

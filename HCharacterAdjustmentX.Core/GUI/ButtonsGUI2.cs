@@ -16,8 +16,6 @@ namespace IDHIPlugins
         {
             // The position of the scrolling view-port
             #region private fields
-            //private const float height = 25f;
-            //private const float width = 57f;
             private readonly float _width;
             private readonly float _heigth;
             private List<MoveActionButton> _buttons = new();

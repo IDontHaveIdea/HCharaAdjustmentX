@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using HSceneUtility;
 using KKAPI.Utilities;
 
 using UnityEngine;
@@ -19,7 +18,9 @@ namespace IDHIPlugins
         internal class CharMovement
         {
             #region private fields
+#if DEBUG
             //internal static GameObject _guideObject;
+#endif
             internal static ChaControl _chaControl;
             internal static HCharaAdjusmentXController _controller;
             internal static HCharaAdjusmentXController _controllerPlayer;
@@ -29,7 +30,7 @@ namespace IDHIPlugins
             internal static string _animationGUID = "";
             internal static int _animationID = 0;
             internal static string _pathFemaleBase = "";
-            #endregion
+#endregion
 
             /// <summary>
             /// Check for configured key shortcuts and execute the type of movement
@@ -63,7 +64,9 @@ namespace IDHIPlugins
                 }
 
                 _controller = GetControllerByType(chaType);
+#if DEBUG
                 //_guideObject = _controller.GuideObject;
+#endif
                 _animationID = _hprocInstance.flags.nowAnimationInfo.id;
                 _animationGUID = _hprocInstance.flags.nowAnimationInfo.nameAnimation;
                 _pathFemaleBase = _hprocInstance.flags.nowAnimationInfo
@@ -172,13 +175,6 @@ namespace IDHIPlugins
                             positions[CharacterType.Heroine] =
                                 new(_controllerHeroine.Movement, Vector3.zero);
                             _controller.MoveData[_animationKey] = positions;
-                            /*var Position =
-                                new Dictionary<CharacterType, PositionData> {
-                                    [chaType] = new(_controller.Movement,
-                                    Vector3.zero)
-                                };
-                             _controller.MoveData[_animationKey] = Position;
-                             */
                         }
                         _doShortcutMove = false;
                         _controller.SaveData();
@@ -186,9 +182,6 @@ namespace IDHIPlugins
                     case MoveType.LOAD:
                         if (!_animationKey.IsNullOrEmpty())
                         {
-                            //_controllerPlayer = GetControllerByType(CharacterType.Player);
-                            //_controllerHeroine = GetControllerByType(CharacterType.Heroine);
-
                             _controller.MoveData.Data.TryGetValue(_animationKey,
                                 out var position);
                             if (position != null)
@@ -213,7 +206,24 @@ namespace IDHIPlugins
                         _doShortcutMove = false;
                         break;
                     case MoveType.TEST2:
-                        ShowGroupGuide = !ShowGroupGuide;
+                        //ShowGroupGuide = !ShowGroupGuide;
+#region Camera
+                        cameraObject = Camera.main.gameObject;
+                        camCtrl = cameraObject?.GetComponent<CameraControl_Ver2>();
+                        if (camCtrl != null)
+                        {
+                            _Log.Warning($"\n[CAMERA]\n" +
+                                $" Position: {camCtrl.TargetPos}\n" +
+                                $"    Angle: {camCtrl.CameraAngle}\n" +
+                                $"Direction: {camCtrl.CameraDir}\n" +
+                                $"      FOV: {camCtrl.CameraFov}");
+                        }
+                        cameraObject = GameObject.Find("HProc/CamBase/Camera");
+                        if (cameraObject != null)
+                        {
+                            _Log.Warning("HPROC HAS A CAMERA");
+                        }
+#endregion
                         break;
 #endif
                     // Execute a move event with current parameters used
@@ -232,7 +242,6 @@ namespace IDHIPlugins
                     {
                         _controller.Moved = true;
                     }
-                    //newPosition = originalPosition + fullMovement;
                     newPosition = RecalcPosition(
                         _chaControl, originalPosition, movement, fullMovement);
 #if DEBUG
@@ -242,7 +251,9 @@ namespace IDHIPlugins
 #endif
                     _doShortcutMove = false;
                     _chaControl.transform.position = newPosition;
+#if DEBUG
                     //_guideObject.transform.position = _chaControl.transform.position;
+#endif
                     //_controller.Movement = movement;
                     _controller.Movement = fullMovement;
                     _controller.LastMovePosition = newPosition;

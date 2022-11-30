@@ -4,6 +4,7 @@
 using UnityEngine;
 
 using BepInEx.Configuration;
+using BepInEx.Logging;
 
 using KKAPI.Utilities;
 
@@ -32,7 +33,6 @@ namespace IDHIPlugins
                 #region HCharaAdjustment Functionality
 #if DEBUG
                 _Log.Info($"HCAX0014: Creating Shortcuts for Guide");
-#endif
                 KeyHeroine.GuideObject = Config.Bind(
                     section: sectionKeys,
                     key: "Show Female 1 Guide Object",
@@ -93,6 +93,7 @@ namespace IDHIPlugins
                         description: "Show the guide object for adjusting the group position",
                         acceptableValues: null,
                         tags: new ConfigurationManagerAttributes { Order = 29 }));
+#endif
                 #endregion HCharaAdjustment Functionality
             }
             else
@@ -149,9 +150,7 @@ namespace IDHIPlugins
                     new ConfigDefinition(
                         sectionKeys,
                         "Reset Player Position"));
-#if DEBUG
-                _Log.Info($"HCAX0015: Removing Shortcuts for Guide");
-#endif
+                _Log.Level(LogLevel.Debug, $"HCAX0015: Removing Shortcuts for Guide");
                 #endregion
             }
 #if DEBUG
@@ -172,7 +171,8 @@ namespace IDHIPlugins
             KeyPlayer.Menu = Config.Bind(
                 section: sectionKeys,
                 key: "Toggle button interface for Player.",
-                defaultValue: new KeyboardShortcut(KeyCode.L, KeyCode.RightAlt, KeyCode.AltGr),
+                defaultValue: new KeyboardShortcut(
+                    KeyCode.L, KeyCode.RightAlt, KeyCode.AltGr),
                 configDescription: new ConfigDescription(
                     description: "Show movement buttons",
                     acceptableValues: null,

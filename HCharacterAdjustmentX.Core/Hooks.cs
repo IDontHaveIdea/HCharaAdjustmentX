@@ -80,7 +80,8 @@ namespace IDHIPlugins
             }
 
             /// <summary>
-            /// Set the new original position when changing positions not using the H point picker
+            /// Set the new original position when changing positions not using
+            /// the H point picker
             /// </summary>
             /// <param name="_nextAinmInfo"></param>
             [HarmonyPostfix]

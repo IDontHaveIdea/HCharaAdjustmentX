@@ -50,7 +50,8 @@ namespace IDHIPlugins
             HProcMonitor.OnHSceneExiting -= OnHProcExit;
         }
 
-        private void OnHProcFinishedLoading(object s, HProcMonitor.HSceneFinishedLoadingEventArgs e)
+        private void OnHProcFinishedLoading(
+            object s, HProcMonitor.HSceneFinishedLoadingEventArgs e)
         {
 #if DEBUG
             _Log.Info($"HCAX0007: Enabling HCAX.");
@@ -117,7 +118,8 @@ namespace IDHIPlugins
                     catch (Exception e)
                     {
                         _Log.Level(LogLevel.Warning, $"HCAX0010: Error trying to " +
-                            $"{setEnabled(setState)} the Controller for {(CharacterType)i} - {e}");
+                            $"{setEnabled(setState)} the Controller for " +
+                            $"{(CharacterType)i} - {e}");
                     }
                 }
 
