@@ -94,6 +94,7 @@ namespace IDHIPlugins
 
             GetController(_hprocInstance.flags.player.chaCtrl).Init(
                 _hprocInstance, CharacterType.Player);
+            // Group move guide off
             _hprocInstance.sprite.axis.tglDraw.isOn = false;
             _hprocInstance.guideObject.gameObject.SetActive(false);
         }

@@ -18,9 +18,6 @@ namespace IDHIPlugins
         internal class CharMovement
         {
             #region private fields
-#if DEBUG
-            //internal static GameObject _guideObject;
-#endif
             internal static ChaControl _chaControl;
             internal static HCharaAdjusmentXController _controller;
             internal static HCharaAdjusmentXController _controllerPlayer;
@@ -64,9 +61,6 @@ namespace IDHIPlugins
                 }
 
                 _controller = GetControllerByType(chaType);
-#if DEBUG
-                //_guideObject = _controller.GuideObject;
-#endif
                 _animationID = _hprocInstance.flags.nowAnimationInfo.id;
                 _animationGUID = _hprocInstance.flags.nowAnimationInfo.nameAnimation;
                 _pathFemaleBase = _hprocInstance.flags.nowAnimationInfo
@@ -86,7 +80,10 @@ namespace IDHIPlugins
                     }
                 }
 #if DEBUG
-                _Log.Warning($"START wit Moved={_controller.Moved} for KEY={_animationKey} MOVEMENT={movement.ToString("F7")} ALMove={_controller.ALMovement.ToString("F7")} Movement={_controller.Movement.ToString("F7")}");
+                _Log.Warning($"START wit Moved={_controller.Moved} for " +
+                    $"KEY={_animationKey} MOVEMENT={movement.ToString("F7")} " +
+                    $"ALMove={_controller.ALMovement.ToString("F7")} " +
+                    $"Movement={_controller.Movement.ToString("F7")}");
 #endif
                 Vector3 newPosition = new(0, 0, 0);
                 switch (moveType)
@@ -208,8 +205,9 @@ namespace IDHIPlugins
                     case MoveType.TEST2:
                         //ShowGroupGuide = !ShowGroupGuide;
 #region Camera
-                        cameraObject = Camera.main.gameObject;
-                        camCtrl = cameraObject?.GetComponent<CameraControl_Ver2>();
+                        var cameraObject = Camera.main.gameObject;
+                        var camCtrl = cameraObject?.GetComponent<CameraControl_Ver2>();
+                        if (camCtrl != null)
                         if (camCtrl != null)
                         {
                             _Log.Warning($"\n[CAMERA]\n" +
@@ -251,10 +249,6 @@ namespace IDHIPlugins
 #endif
                     _doShortcutMove = false;
                     _chaControl.transform.position = newPosition;
-#if DEBUG
-                    //_guideObject.transform.position = _chaControl.transform.position;
-#endif
-                    //_controller.Movement = movement;
                     _controller.Movement = fullMovement;
                     _controller.LastMovePosition = newPosition;
                 }

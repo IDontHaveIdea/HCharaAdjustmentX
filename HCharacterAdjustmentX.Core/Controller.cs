@@ -61,22 +61,7 @@ namespace IDHIPlugins
 
                 if (OriginalPosition != Vector3.zero)
                 {
-#if DEBUG
-                    /*if (GuideObject.gameObject.activeInHierarchy)
-                    {
-                        original = GuideObject.transform.position;
-                        GuideObject.transform.position = OriginalPosition;
-                    }
-                    else
-                    {
-
-                        ChaControl.transform.position = OriginalPosition;
-                    }*/
                     ChaControl.transform.position = OriginalPosition;
-#else
-                    ChaControl.transform.position = OriginalPosition;
-
-#endif
                     Movement = Vector3.zero;
                     LastMovePosition = Vector3.zero;
                     Moved = false;
@@ -193,21 +178,6 @@ namespace IDHIPlugins
                 if (HProcMonitor.Nakadashi && IsSupportedScene
                     && (ChaType != CharacterType.Unknown))
                 {
-#if DEBUG
-                    if (GuideObject)
-                    {
-                        if (GuideObject.gameObject.activeInHierarchy)
-                        {
-                            ChaControl.transform.position =
-                                GuideObject.transform.position;
-                        }
-                        else
-                        {
-                            GuideObject.transform.position =
-                                ChaControl.transform.position;
-                        }
-                    }
-#endif
                     if (DoRecalc)
                     {
                         _fAdjustStep = cfgAdjustmentStep.Value;
@@ -220,12 +190,6 @@ namespace IDHIPlugins
                     }
                     if (ChaType == CharacterType.Heroine)
                     {
-#if DEBUG
-                        if (KeyHeroine.GuideObject.Value.IsDown())
-                        {
-                            ToggleGuideObject();
-                        }
-#endif
                         if (KeyHeroine.Menu.Value.IsDown())
                         {
                             _buttonsInterface[ChaType].ShowInterface =
@@ -253,9 +217,6 @@ namespace IDHIPlugins
 #endif
                 ChaType = characterType;
                 MoveData ??= new(ChaControl);
-#if DEBUG
-                // CreateGuideObject(hSceneProc, characterType);
-#endif
                 SetOriginalPosition();
                 if (characterType == CharacterType.Heroine)
                 {
