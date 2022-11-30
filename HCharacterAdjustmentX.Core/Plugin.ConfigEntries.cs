@@ -4,6 +4,7 @@
 using UnityEngine;
 
 using BepInEx.Configuration;
+using BepInEx.Logging;
 
 using KKAPI.Utilities;
 
@@ -17,143 +18,25 @@ namespace IDHIPlugins
         internal static KeyShortcuts KeyHeroine = new();
         internal static KeyShortcuts KeyHeroine3P = new();
         internal static KeyShortcuts KeyPlayer = new();
+
+        internal static ConfigEntry<bool> DebugInfo;
         internal static ConfigEntry<KeyboardShortcut> GroupGuide { get; set; }
         internal static ConfigEntry<float> cfgAdjustmentStep;
         
-        internal void ConfigEntries(bool bHCAInstalled, bool bheroine3P = false)
+        internal void ConfigEntries(bool bheroine3P = false)
         {
             // Definition of configuration items
             var sectionKeys = "Keyboard Shortcuts for Guide";
-
-            if (!bHCAInstalled)
-            {
-                #region HCharaAdjustment Functionality
 #if DEBUG
-                _Log.Info($"SHCA0036: Creating Shortcuts for Guide");
-#endif
-                KeyHeroine.GuideObject = Config.Bind(
-                    section: sectionKeys,
-                    key: "Show Female 1 Guide Object",
-                    defaultValue: new KeyboardShortcut(KeyCode.O),
-                    configDescription: new ConfigDescription(
-                        description: "Show the guide object for adjusting girl 1 position",
-                        acceptableValues: null,
-                        tags: new ConfigurationManagerAttributes { Order = 35 }));
-                KeyHeroine.GuideObjectReset = Config.Bind(
-                    section: sectionKeys,
-                    key: "Reset Female 1 Position",
-                    defaultValue: new KeyboardShortcut(KeyCode.O, KeyCode.RightControl),
-                    configDescription: new ConfigDescription(
-                        description: "Reset adjustments for girl 1 position",
-                        acceptableValues: null,
-                        tags: new ConfigurationManagerAttributes { Order = 34 }));
-                if (bheroine3P)
-                {
-                    KeyHeroine3P.GuideObject = Config.Bind(
-                        section: sectionKeys,
-                        key: "Show Female 2 Guide Object",
-                        defaultValue: new KeyboardShortcut(KeyCode.P),
-                        configDescription: new ConfigDescription(
-                            description: "Show the guide object for adjusting girl 2 position",
-                            acceptableValues: null,
-                            tags: new ConfigurationManagerAttributes { Order = 33 }));
-                    KeyHeroine3P.GuideObjectReset = Config.Bind(
-                        section: sectionKeys,
-                        key: "Reset Female 2 Position",
-                        defaultValue: new KeyboardShortcut(KeyCode.P, KeyCode.RightControl),
-                        configDescription: new ConfigDescription(
-                            description: "Reset adjustments for girl 2 position",
-                            acceptableValues: null,
-                            tags: new ConfigurationManagerAttributes { Order = 32, Browsable = false }));
-                }
-                KeyPlayer.GuideObject = Config.Bind(
-                    section: sectionKeys,
-                    key: "Show Player Guide Object",
-                    defaultValue: new KeyboardShortcut(KeyCode.G),
-                    configDescription: new ConfigDescription(
-                        description: "Show the guide object for adjusting the boy's position",
-                        acceptableValues: null,
-                        tags: new ConfigurationManagerAttributes { Order = 31 }));
-                KeyPlayer.GuideObjectReset = Config.Bind(
-                    section: sectionKeys,
-                    key: "Reset Player Position",
-                    defaultValue: new KeyboardShortcut(KeyCode.I, KeyCode.RightControl),
-                    configDescription: new ConfigDescription(
-                        description: "Reset adjustments for girl 2 position",
-                        acceptableValues: null,
-                        tags: new ConfigurationManagerAttributes { Order = 30 }));
-
-                GroupGuide = Config.Bind(
-                    section: sectionKeys,
-                    key: "Show Group Guide",
-                    defaultValue: new KeyboardShortcut(KeyCode.I),
-                    configDescription: new ConfigDescription(
-                        description: "Show the guide object for adjusting the group position",
-                        acceptableValues: null,
-                        tags: new ConfigurationManagerAttributes { Order = 29 }));
-                #endregion HCharaAdjustment Functionality
-            }
-            else
-            {
-                #region HCharaAdjustment Functionality Off
-                // if HCharaAdjustment is detected eliminate conflicting shortcuts from configuration file
-                KeyHeroine.GuideObject = Config.Bind(
-                    sectionKeys,
-                    "Show Female 1 Guide Object",
-                    new KeyboardShortcut());
-                KeyHeroine.GuideObject.ConfigFile.Remove(
-                    new ConfigDefinition(sectionKeys,
-                    "Show Female 1 Guide Object"));
-                KeyHeroine.GuideObjectReset = Config.Bind(
-                    sectionKeys,
-                    "Reset Female 1 Position",
-                    new KeyboardShortcut());
-                KeyHeroine.GuideObjectReset.ConfigFile.Remove(
-                    new ConfigDefinition(
-                        sectionKeys,
-                        "Reset Female 1 Position"));
-
-                KeyHeroine3P.GuideObjectReset = Config.Bind(
-                    sectionKeys,
-                    "Reset Female 2 Position",
-                    new KeyboardShortcut());
-                KeyHeroine3P.GuideObjectReset.ConfigFile.Remove(
-                    new ConfigDefinition(
-                        sectionKeys,
-                        "Reset Female 2 Position"));
-                KeyHeroine3P.GuideObject = Config.Bind(
-                    sectionKeys,
-                    "Show Female 2 Guide Object",
-                    new KeyboardShortcut());
-                KeyHeroine3P.GuideObject.ConfigFile.Remove(
-                    new ConfigDefinition(
-                        sectionKeys,
-                        "Show Female 2 Guide Object"));
-
-                KeyPlayer.GuideObject = Config.Bind(
-                    sectionKeys,
-                    "Show Player Guide Object",
-                    new KeyboardShortcut());
-                KeyPlayer.GuideObject.ConfigFile.Remove(
-                    new ConfigDefinition(
-                        sectionKeys,
-                        "Show Player Guide Object"));
-                KeyPlayer.GuideObjectReset = Config.Bind(
-                    sectionKeys,
-                    "Reset Player Position",
-                    new KeyboardShortcut());
-                KeyPlayer.GuideObjectReset.ConfigFile.Remove(
-                    new ConfigDefinition(
-                        sectionKeys,
-                        "Reset Player Position"));
-#if DEBUG
-                _Log.Info($"SHCA0037: Removing Shortcuts for Guide");
-#endif
-                #endregion
-            }
-
-#if DEBUG
-            _Log.Info($"SHCA0038: Creating Shortcuts for Characters");
+            _Log.Info($"HCAX0016: Creating Shortcuts for Characters");
+            GroupGuide = Config.Bind(
+                section: sectionKeys,
+                key: "Show Group Guide",
+                defaultValue: new KeyboardShortcut(KeyCode.I),
+                configDescription: new ConfigDescription(
+                    description: "Show the guide object for adjusting the group position",
+                    acceptableValues: null,
+                    tags: new ConfigurationManagerAttributes { Order = 29 }));
 #endif
             #region Heroine
             KeyHeroine.Menu = Config.Bind(
@@ -170,7 +53,8 @@ namespace IDHIPlugins
             KeyPlayer.Menu = Config.Bind(
                 section: sectionKeys,
                 key: "Toggle button interface for Player.",
-                defaultValue: new KeyboardShortcut(KeyCode.L, KeyCode.RightAlt, KeyCode.AltGr),
+                defaultValue: new KeyboardShortcut(
+                    KeyCode.L, KeyCode.RightAlt, KeyCode.AltGr),
                 configDescription: new ConfigDescription(
                     description: "Show movement buttons",
                     acceptableValues: null,
@@ -193,7 +77,7 @@ namespace IDHIPlugins
 
             #region Steps
 #if DEBUG
-            _Log.Info($"SHCA0039: Creating Shortcuts for Steps");
+            _Log.Info($"HCAX0017: Creating Shortcuts for Steps");
 #endif
 
             sectionKeys = "Movement Step";
@@ -211,11 +95,33 @@ namespace IDHIPlugins
                 {
                     _fAdjustStep = cfgAdjustmentStep.Value;
 #if DEBUG
-                    _Log.Info($"SHCA0040: Movement step read in configuration - {cfgAdjustmentStep.Value}");
+                    _Log.Info($"HCAX0018: Movement step read in configuration - " +
+                        $"{cfgAdjustmentStep.Value}");
 #endif
                 }
             };
             #endregion Steps
+        }
+
+        internal void ConfigDebugEnntry()
+        {
+            DebugInfo = Config.Bind(
+                section: "Debug",
+                key: "Debug Information",
+                defaultValue: false,
+                configDescription: new ConfigDescription(
+                    description: "Show debug information in Console",
+                    acceptableValues: null,
+                    tags: new ConfigurationManagerAttributes {
+                        Order = 1,
+                        IsAdvanced = true }));
+            DebugInfo.SettingChanged += (_sender, _args) =>
+            {
+                _Log.Enabled = DebugInfo.Value;
+#if DEBUG
+                _Log.Info($"HCAX0019: Log.Enabled set to {_Log.Enabled}");
+#endif
+            };
         }
     }
 }

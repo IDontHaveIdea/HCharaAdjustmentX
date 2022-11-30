@@ -3,10 +3,15 @@
 //
 using System;
 
+using UnityEngine;
+
 using H;
 
 using BepInEx.Logging;
 using HarmonyLib;
+
+
+using IDHIUtils;
 
 
 namespace IDHIPlugins
@@ -16,7 +21,10 @@ namespace IDHIPlugins
         // Hooks
         internal static Harmony _hookInstance;
         internal static HSceneProc _hprocInstance;
+        internal static object _hprocObject;
         internal static HFlag.EMode _mode;
+        internal static string _animationKey = "";
+        internal static HSceneProcTraverse _hprocTraverse;
 
         internal partial class Hooks
         {
@@ -29,7 +37,8 @@ namespace IDHIPlugins
             }
 
             /// <summary>
-            /// Set the new original position when changing positions via the H point picker scene
+            /// Set the new original position when changing positions via the
+            /// H point picker scene
             /// </summary>
             [HarmonyPostfix]
             [HarmonyPatch(typeof(HSceneProc), nameof(HSceneProc.ChangeCategory))]
@@ -39,14 +48,13 @@ namespace IDHIPlugins
                 {
                     return;
                 }
-                Utils.SetOriginalPositionAll("from [ChangeCategory]");
+                // Get calling method name
+                var callingMethod = Utilities.CallingMethod();
+                _Log.Warning($"[{callingMethod}] ChangeCategoryPostfix");
+                Utils.SetOriginalPositionAll();
                 Utils.RecalcAdjustmentAll("from [ChangeCategory]");
             }
 
-            /// <summary>
-            /// Set the new original position when changing positions not using the H point picker
-            /// </summary>
-            /// <param name="_nextAinmInfo"></param>
             [HarmonyPrefix]
             [HarmonyPatch(typeof(HSceneProc), nameof(HSceneProc.ChangeAnimator))]
             private static void ChangeAnimatorPrefix(
@@ -57,15 +65,44 @@ namespace IDHIPlugins
                     return;
                 }
 
+                _animationKey = "";
                 try
                 {
-                    Utils.SetMode(_nextAinmInfo.mode);
-                    Utils.RecalcAdjustmentAll(" from [ChangeAnimator]");
-                    Utils.SetOriginalPositionAll(" from [ChangeAnimator]");
+                    _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
+                    Utils.ResetPositionAll();
                 }
                 catch (Exception e)
                 {
-                    _Log.Level(LogLevel.Error, $"SHCA0023: Error - {e.Message}");
+                    _Log.Level(LogLevel.Error, $"HCAX0024A: Error - {e.Message}");
+                }
+            }
+
+            /// <summary>
+            /// Set the new original position when changing positions not using
+            /// the H point picker
+            /// </summary>
+            /// <param name="_nextAinmInfo"></param>
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(HSceneProc), nameof(HSceneProc.ChangeAnimator))]
+            private static void ChangeAnimatorPostfix(
+                HSceneProc.AnimationListInfo _nextAinmInfo)
+            {
+                if (_nextAinmInfo == null)
+                {
+                    return;
+                }
+                _animationKey = "";
+                try
+                {
+                    _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
+                    Utils.SetMode(_nextAinmInfo.mode);
+                    Utils.SetOriginalPositionAll(_nextAinmInfo);
+                    Utils.RecalcAdjustmentAll();
+                    Utils.InitialPosition();
+                }
+                catch (Exception e)
+                {
+                    _Log.Level(LogLevel.Error, $"HCAX0024B: Error - {e.Message}");
                 }
             }
         }

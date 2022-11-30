@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
+using static IDHIPlugins.HCharaAdjustmentX;
 
 
 namespace IDHIPlugins
@@ -16,21 +16,19 @@ namespace IDHIPlugins
         {
             // The position of the scrolling view-port
             #region private fields
-            //private const float height = 25f;
-            //private const float width = 57f;
             private readonly float _width;
             private readonly float _heigth;
             private List<MoveActionButton> _buttons = new();
             #endregion
 
             #region public properties
-            public List<MoveActionButton> Buttons => _buttons;
+            internal List<MoveActionButton> Buttons => _buttons;
 
-            public float Height => _heigth;
+            internal float Height => _heigth;
 
-            public float Width => _width;
+            internal float Width => _width;
 
-            public static CharacterType CharType
+            internal static CharacterType CharType
             {
                 get; private set;
             } = CharacterType.Unknown;

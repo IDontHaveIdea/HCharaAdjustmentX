@@ -4,8 +4,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using CTRLR = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
-
+using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
+using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
@@ -15,18 +15,14 @@ namespace IDHIPlugins
         {
             // The position of the scrolling view-port
             #region private fields
-            //private const float height = 25f;
-            //private const float width = 57f;
             private readonly float _width;
             private readonly float _heigth;
             private List<MoveActionButton> _buttons = new();
             #endregion
 
             #region public properties
-            public List<MoveActionButton> Buttons => _buttons;
-
+            internal List<MoveActionButton> Buttons => _buttons;
             public float Height => _heigth;
-
             public float Width => _width;
             #endregion
 
@@ -42,7 +38,7 @@ namespace IDHIPlugins
             /// <param name="height"></param>
             /// <param name="xOffset"></param>
             /// <param name="yOffset"></param>
-            public ButtonsGUI(CTRLR.CharacterType chaType, float xMargin, float yMargin,
+            internal ButtonsGUI(CharacterType chaType, float xMargin, float yMargin,
                 float width, float height,
                 float xOffset = 0f, float yOffset = 0f)
             {
@@ -63,6 +59,11 @@ namespace IDHIPlugins
 
                 foreach (var label in MoveEvent.EventLabel.Keys)
                 {
+                    if (_animationKey.IsNullOrEmpty()
+                        && ((label == "Save") || (label == "Load")))
+                    {
+                        continue;
+                    }
                     if (MoveEvent.doubleWidthLabels.Contains(label))
                     {
                         windowRect.width *= 2;

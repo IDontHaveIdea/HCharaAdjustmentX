@@ -1,118 +1,21 @@
-﻿using System;
+﻿//
+// Utils.cs
+//
 using System.Collections.Generic;
 
-using BepInEx;
-using BepInEx.Configuration;
-using BepInEx.Logging;
-
-using KKAPI;
-using KKAPI.Chara;
-using KKAPI.Maker;
-using KKAPI.Maker.UI.Sidebar;
-using KKAPI.Utilities;
-
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using IDHIUtils;
 
+using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 using static IDHIPlugins.HCharaAdjustmentX;
+using static HandCtrl;
+
 
 namespace IDHIPlugins
 {
     public class Utils
     {
-        /// <summary>
-        /// Show some information for Heroine 1
-        /// </summary>
-        /// <param name="instance"></param>
-        internal static void InitialPositionInfo(HSceneProc instance)
-        {
-            if (!HProcScene.Nakadashi || (instance == null))
-            {
-                return;
-            }
-            var tmp = instance.flags.lstHeroine[0].chaCtrl.transform;
-            _Log.Info($"SHCA0016: Scene -  {_sceneName} Female transform position ("
-                + $"{tmp.position.x}, {tmp.position.y}, {tmp.position.z})");
-        }
-
-        /// <summary>
-        /// Save H _mode flag
-        /// </summary>
-        /// <param name="emode"></param>
-        internal static void SetMode(HFlag.EMode emode)
-        {
-            // set various flags
-            _mode = emode;
-            IsAibu = (emode == HFlag.EMode.aibu);
-            IsHoushi = (emode == HFlag.EMode.houshi);
-            IsSonyu = (emode == HFlag.EMode.sonyu);
-            IsSupportedScene = (IsAibu || IsHoushi || IsSonyu);
-        }
-
-        /// <summary>
-        /// Move characters to saved original position
-        /// </summary>
-        /// <param name="message"></param>
-        internal static void ResetPositionAll(string message = null)
-        {
-            if (_hprocInstance == null)
-            {
-                return;
-            }
-#if DEBUG
-            if (message != null)
-            {
-                _Log.Info($"SHCA0018: [ResetPositionAll]  - {message}");
-            }
-#endif
-            var heroines = _hprocInstance.flags.lstHeroine;
-            for (var i = 0; i < heroines.Count; i++)
-            {
-                GetController(heroines[i].chaCtrl).ResetPosition();
-            }
-            GetController(_hprocInstance.flags.player.chaCtrl).ResetPosition();
-        }
-
-        /// <summary>
-        /// Set new original position for characters if there is a move 
-        /// from original position saved
-        /// </summary>
-        /// <param name="message"></param>
-        internal static void SetOriginalPositionAll(string message = null)
-        {
-            if (_hprocInstance == null)
-            {
-                return;
-            }
-#if DEBUG
-            if (message != null)
-            {
-                _Log.Info($"SHCA0019: [SetOrigianalPositionAll]  - {message}");
-            }
-#endif
-            var heroines = _hprocInstance.flags.lstHeroine;
-            for (var i = 0; i < heroines.Count; i++)
-            {
-                if (IsNewPosition(heroines[i].chaCtrl))
-                {
-                    GetController(heroines[i].chaCtrl).SetOriginalPosition();
-#if DEBUG
-                    if (i == 0)
-                    {
-                        Utils.InitialPositionInfo(_hprocInstance);
-                    }
-#endif
-                }
-            }
-            if (IsNewPosition(_hprocInstance.flags.player.chaCtrl))
-            {
-                GetController(_hprocInstance.flags.player.chaCtrl).SetOriginalPosition();
-            }
-        }
-
-
         /// <summary>
         /// Return categories in the string form "{ cat 1, cat 2, ,,,}"
         /// </summary>
@@ -120,7 +23,8 @@ namespace IDHIPlugins
         /// <param name="names"></param>
         /// <param name="quotes"></param>
         /// <returns></returns>
-        internal static string CategoryList(List<HSceneProc.Category> categories, bool names = false, bool quotes = true)
+        internal static string CategoryList(
+            List<HSceneProc.Category> categories, bool names = false, bool quotes = true)
         {
             var tmp = "";
             var first = true;
@@ -161,7 +65,8 @@ namespace IDHIPlugins
         /// <param name="names"></param>
         /// <param name="quotes"></param>
         /// <returns></returns>
-        internal static string CategoryList(List<int> categories, bool names = false, bool quotes = true)
+        internal static string CategoryList(
+            List<int> categories, bool names = false, bool quotes = true)
         {
             var tmp = "";
             var first = true;
@@ -195,23 +100,225 @@ namespace IDHIPlugins
             return quotes ? "\" { " + tmp + " }\"" : "{ " + tmp + " }";
         }
 
-        public enum PositionCategory
+        /// <summary>
+        /// Get animation key
+        /// </summary>
+        /// <param name="animation"></param>
+        /// <returns></returns>
+        internal static string GetAnimationKey(HSceneProc.AnimationListInfo animation)
         {
-            LieDown = 0,
-            Stand = 1,
-            SitChair = 2,
-            Stool = 3,
-            SofaBench = 4,
-            BacklessBench = 5,
-            SchoolDesk = 6,
-            Desk = 7,
-            Wall = 8,
-            StandPool = 9,
-            SitDesk = 10,
-            SquadDesk = 11,
-            Pool = 1004,
-            Ground3P = 1100,
-            AquariumCrowded = 1304,
+            if (_animationLoader.Installed)
+            {
+                return _animationLoader
+                        .GetAnimationKey(animation);
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// Determine if there is a change in original position
+        /// </summary>
+        /// <param name="chaControl"></param>
+        /// <returns></returns>
+        internal static bool IsNewPosition(ChaControl chaControl)
+        {
+            var controller = GetController(chaControl);
+            var currentPosition = _hprocTraverse.nowHpointDataPos;
+            var originalPosition = controller.OriginalPosition;
+            if (currentPosition != originalPosition)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Determine if there is a change in original position
+        /// </summary>
+        /// <param name="chaControl"></param>
+        /// <returns></returns>
+        internal static bool IsSamePosition(ChaControl chaControl)
+        {
+            return !IsNewPosition(chaControl);
+        }
+
+        /// <summary>
+        /// Show some information for Heroine 1
+        /// </summary>
+        /// <param name="instance"></param>
+        internal static void InitialPositionInfo(HSceneProc instance)
+        {
+            //if (!HProcScene.Nakadashi || (instance == null))
+            if (!HProcMonitor.Nakadashi || (instance == null))
+            {
+                return;
+            }
+            var tmp = instance.flags.lstHeroine[0].chaCtrl.transform;
+        }
+
+        /// <summary>
+        /// Show some information for Heroine 1
+        /// </summary>
+        /// <param name="instance"></param>
+        internal static void InitialPosition()
+        {
+            if (_hprocInstance == null)
+            {
+                return;
+            }
+            if (_animationKey.IsNullOrEmpty())
+            {
+                return;
+            }
+
+            var heroines = _hprocInstance.flags.lstHeroine;
+            CTRL ctrl;
+
+            for (var i = 0; i < heroines.Count; i++)
+            {
+                ctrl = GetController(heroines[i].chaCtrl);
+                if (ctrl.MoveData.Data.Count > 0)
+                {
+                    ctrl.MoveData.Data.TryGetValue(_animationKey,
+                        out var position);
+                    if (position != null)
+                    {
+                        // Use TryGetValue
+                        position.TryGetValue(ctrl.ChaType, out var data);
+                        if (data != null)
+                        {
+                            var movement = data.Position;
+                            ctrl.Movement = movement;
+                            CTRL.InvokeOnMoveRequest(null,
+                                new CTRL.MoveRequestEventArgs(
+                                    ctrl.ChaType, MoveEvent.MoveType.MOVE));
+                        }
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Move characters to saved original position
+        /// </summary>
+        /// <param name="message"></param>
+        internal static void ResetPositionAll()
+        {
+            if (_hprocInstance == null)
+            {
+                return;
+            }
+            // Get calling method name
+            var callingMethod = Utilities.CallingMethod();
+            _Log.Warning($"[{callingMethod}] ResetAllPositions");
+            var heroines = _hprocInstance.flags.lstHeroine;
+            CTRL ctrl;
+            for (var i = 0; i < heroines.Count; i++)
+            {
+                ctrl = GetController(heroines[i].chaCtrl);
+                if (IsSamePosition(heroines[i].chaCtrl))
+                {
+                    ctrl.ResetPosition();
+                }
+            }
+            ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
+            if (IsSamePosition(_hprocInstance.flags.player.chaCtrl))
+            {
+                ctrl.ResetPosition();
+            }
+        }
+
+        /// <summary>
+        /// Set new original position for characters if there is a move 
+        /// from original position saved
+        /// </summary>
+        /// <param name="message"></param>
+        internal static void SetOriginalPositionAll(
+            HSceneProc.AnimationListInfo _nextAinmInfo = null)
+        {
+            if (_hprocInstance == null)
+            {
+                return;
+            }
+
+            List<Vector3> movement = new() {
+                new Vector3(0, 0, 0), new Vector3(0, 0, 0) };
+
+            if (_nextAinmInfo != null)
+            {
+                if (_animationLoader.Installed)
+                {
+                    movement = _animationLoader
+                        .GetAnimationMovement(_nextAinmInfo);
+                }
+            }
+
+            var heroines = _hprocInstance.flags.lstHeroine;
+            for (var i = 0; i < heroines.Count; i++)
+            {
+                if (IsNewPosition(heroines[i].chaCtrl))
+                {
+                    var ctrl = GetController(heroines[i].chaCtrl);
+                    if ((_nextAinmInfo is not null) && (i == 0))
+                    {
+                        if (_animationLoader.Installed)
+                        {
+                            ctrl.ALMovement = movement[(int)Sex.Female];
+                        }
+                    }
+                    ctrl.SetOriginalPosition();
+                }
+            }
+            if (IsNewPosition(_hprocInstance.flags.player.chaCtrl))
+            {
+                var ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
+                if (_nextAinmInfo is not null)
+                {
+                    if (_animationLoader.Installed)
+                    {
+                        ctrl.ALMovement = movement[(int)Sex.Male];
+                    }
+                }
+                ctrl.SetOriginalPosition();
+            }
+        }
+
+        /// <summary>
+        /// Set new original position for characters if there is a move 
+        /// from original position saved
+        /// </summary>
+        /// <param name="message"></param>
+        internal static void SetOriginalPositionAllBad(string message = null)
+        {
+            if (_hprocInstance == null)
+            {
+                return;
+            }
+            var heroines = _hprocInstance.flags.lstHeroine;
+            for (var i = 0; i < heroines.Count; i++)
+            {
+                GetController(heroines[i].chaCtrl).SetOriginalPosition();
+                if (i == 0)
+                {
+                    Utils.InitialPositionInfo(_hprocInstance);
+                }                
+            }
+            GetController(_hprocInstance.flags.player.chaCtrl).SetOriginalPosition();
+        }
+
+        /// <summary>
+        /// Save H _mode flag
+        /// </summary>
+        /// <param name="emode"></param>
+        internal static void SetMode(HFlag.EMode emode)
+        {
+            // set various flags
+            _mode = emode;
+            IsAibu = (emode == HFlag.EMode.aibu);
+            IsHoushi = (emode == HFlag.EMode.houshi);
+            IsSonyu = (emode == HFlag.EMode.sonyu);
+            IsSupportedScene = (IsAibu || IsHoushi || IsSonyu);
         }
 
         /// <summary>
@@ -224,12 +331,6 @@ namespace IDHIPlugins
             {
                 return;
             }
-#if DEBUG
-            if (message != null)
-            {
-                _Log.Info($"SHCA0020: [RecalcAdjustmentAll]  - {message}");
-            }
-#endif
             var heroines = _hprocInstance.flags.lstHeroine;
             for (var i = 0; i < heroines.Count; i++)
             {
@@ -237,35 +338,5 @@ namespace IDHIPlugins
             }
             GetController(_hprocInstance.flags.player.chaCtrl).DoRecalc = true;
         }
-
-        /// <summary>
-        /// Determine if there is a change in original position
-        /// </summary>
-        /// <param name="chaControl"></param>
-        /// <returns></returns>
-        internal static bool IsNewPosition(ChaControl chaControl)
-        {
-            var controller = GetController(chaControl);
-            var newPosition = chaControl.transform.position;
-            var originalPosition = controller._originalPosition;
-            var lastMovePosition = controller._lastMovePosition;
-            if (newPosition != originalPosition && newPosition != lastMovePosition)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        #region public methods
-        /// <summary>
-        /// Save active scene on scene change
-        /// </summary>
-        /// <param name="currentScene"></param>
-        /// <param name="newScene"></param>
-        public static void SceneChanged(Scene previousScene, Scene newScene)
-        {
-            _activeScene = newScene.name;
-        }
-        #endregion
     }
 }
