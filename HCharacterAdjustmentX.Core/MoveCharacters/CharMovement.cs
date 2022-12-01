@@ -276,17 +276,18 @@ namespace IDHIPlugins
                     newPosition += rightXAxis;
                     newPosition += upYAxis;
                     newPosition += forwardZAxis;
-#if DEBUG
-                    _Log.Info($"[RecalcPosition] Move {chaControl.name}\n" +
-                        $"original position {original.ToString("F7")}\n" +
-                        $"      move vector {move.ToString("F7")}\n" +
-                        $" full move vector {fullMove.ToString("F7")}\n" +
-                        $"          right x {rightXAxis.ToString("F7")}\n" +
-                        $"             up y {upYAxis.ToString("F7")}\n" +
-                        $"        forward z {forwardZAxis.ToString("F7")}\n" +
-                        $"       to re-calc {newPosition.ToString("F7")}\n" +
-                        $"       to fullNew {fullNewPosition.ToString("F7")}");
-#endif
+                    if (DebugInfo.Value)
+                    {
+                        _Log.Debug($"[RecalcPosition] Move {chaControl.name}\n" +
+                            $"original position {original.ToString("F7")}\n" +
+                            $"      move vector {move.ToString("F7")}\n" +
+                            $" full move vector {fullMove.ToString("F7")}\n" +
+                            $"          right x {rightXAxis.ToString("F7")}\n" +
+                            $"             up y {upYAxis.ToString("F7")}\n" +
+                            $"        forward z {forwardZAxis.ToString("F7")}\n" +
+                            $"       to re-calc {newPosition.ToString("F7")}\n" +
+                            $"       to fullNew {fullNewPosition.ToString("F7")}");
+                    }
                     return newPosition;
                 }
                 catch (Exception e)
