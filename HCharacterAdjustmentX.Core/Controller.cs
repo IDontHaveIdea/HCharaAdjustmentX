@@ -7,6 +7,7 @@ using System.Text;
 
 using UnityEngine;
 
+using ExtensibleSaveFormat;
 using KKAPI;
 using KKAPI.Chara;
 
@@ -90,6 +91,13 @@ namespace IDHIPlugins
                 MoveData ??= new(ChaControl);
 
                 var data = GetExtendedData();
+                var data2 = ExtendedSave
+                    .GetExtendedDataById(ChaControl.chaFile, GUID);
+
+                if (data2 != null)
+                {
+                    _Log.Warning($"[ReadData] [{name}] Data2 is not null.");
+                }
                 if (data != null)
                 {
                     MoveData.Load(data);
