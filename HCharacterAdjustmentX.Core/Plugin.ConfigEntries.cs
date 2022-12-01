@@ -20,6 +20,7 @@ namespace IDHIPlugins
         internal static KeyShortcuts KeyPlayer = new();
 
         internal static ConfigEntry<bool> DebugInfo;
+        internal static ConfigEntry<bool> DebugToConsole;
         internal static ConfigEntry<KeyboardShortcut> GroupGuide { get; set; }
         internal static ConfigEntry<float> cfgAdjustmentStep;
         
@@ -110,7 +111,7 @@ namespace IDHIPlugins
                 key: "Debug Information",
                 defaultValue: false,
                 configDescription: new ConfigDescription(
-                    description: "Show debug information in Console",
+                    description: "Log debug information",
                     acceptableValues: null,
                     tags: new ConfigurationManagerAttributes {
                         Order = 1,
@@ -119,9 +120,29 @@ namespace IDHIPlugins
             {
                 _Log.Enabled = DebugInfo.Value;
 #if DEBUG
-                _Log.Info($"HCAX0019: Log.Enabled set to {_Log.Enabled}");
+                _Log.Info($"HCAX0019A: Log.Enabled set to {_Log.Enabled}");
 #endif
             };
+
+            DebugToConsole = Config.Bind(
+                section: "Debug",
+                key: "Debug information to Console",
+                defaultValue: false,
+                configDescription: new ConfigDescription(
+                    description: "Show debug information in Console",
+                    acceptableValues: null,
+                    tags: new ConfigurationManagerAttributes {
+                        Order = 1,
+                        IsAdvanced = true
+                    }));
+            DebugToConsole.SettingChanged += (_sender, _args) =>
+            {
+                _Log.DebugToConsole = DebugToConsole.Value;
+#if DEBUG
+                _Log.Info($"HCAX0019B: Log.DebugToConsole set to {_Log.DebugToConsole}");
+#endif
+            };
+
         }
     }
 }

@@ -62,8 +62,10 @@ namespace IDHIPlugins
 
             ConfigDebugEnntry();
             _Log.Enabled = DebugInfo.Value;
+            _Log.DebugToConsole = DebugToConsole.Value;
 #if DEBUG
-            _Log.Info($"HCAX0001: Log.Enabled set to {_Log.Enabled}");
+            _Log.Info($"HCAX0001A: Log.Enabled set to {_Log.Enabled}");
+            _Log.Info($"HCAX0001B: Log.DebugToConsole set to {_Log.DebugToConsole}");
 #endif
             _Log.Info($"HCAX0002: HCharaAdjustmentX Loaded.");
             if (!_animationLoader.Installed)
