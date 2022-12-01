@@ -208,8 +208,8 @@ namespace IDHIPlugins
                     case MoveType.TEST2:
                         //ShowGroupGuide = !ShowGroupGuide;
 #region Camera
-                        cameraObject = Camera.main.gameObject;
-                        camCtrl = cameraObject?.GetComponent<CameraControl_Ver2>();
+                        var cameraObject = Camera.main.gameObject;
+                        var camCtrl = cameraObject?.GetComponent<CameraControl_Ver2>();
                         if (camCtrl != null)
                         {
                             _Log.Warning($"\n[CAMERA]\n" +
