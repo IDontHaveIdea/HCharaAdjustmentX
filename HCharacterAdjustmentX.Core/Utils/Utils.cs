@@ -107,6 +107,8 @@ namespace IDHIPlugins
         {
             if (_animationLoader.Installed)
             {
+                _Log.Debug($"[CheckAnimationLoader] AnimationLoader " +
+                    $"version={_animationLoader.Version}");
                 if (_animationLoader.VersionAtLeast("1.1.2.2"))
                 {
                     _animationKeyOk = true;
@@ -380,7 +382,7 @@ namespace IDHIPlugins
             IsAibu = (emode == HFlag.EMode.aibu);
             IsHoushi = (emode == HFlag.EMode.houshi);
             IsSonyu = (emode == HFlag.EMode.sonyu);
-            IsSupportedScene = (IsHoushi || IsSonyu);
+            IsSupportedScene = (IsAibu || IsHoushi || IsSonyu);
         }
 
         /// <summary>
