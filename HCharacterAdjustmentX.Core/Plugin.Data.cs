@@ -149,9 +149,11 @@ namespace IDHIPlugins
                         if (dataDeserialized != null)
                         {
                             Data = RestoreMoveData(dataDeserialized);
-#if DEBUG
-                            PrintData(Data, name);
-#endif
+                            if (DebugInfo.Value)
+                            {
+                                PrintData(Data, name);
+                            }
+
                         }
                         else
                         {
@@ -177,10 +179,11 @@ namespace IDHIPlugins
                 var MoveDataSerialize = PrepareSerialize();
                 plugData.data.Add(MoveDataID,
                         MessagePackSerializer.Serialize(MoveDataSerialize));
-#if DEBUG
-                var Moving = RestoreMoveData(MoveDataSerialize);
-                PrintData(Moving, name);
-#endif
+                if (DebugInfo.Value)
+                {
+                    var Moving = RestoreMoveData(MoveDataSerialize);
+                    PrintData(Moving, name);
+                }
                 return plugData.data.Count > 0 ? plugData : null;
             }
 
@@ -277,7 +280,7 @@ namespace IDHIPlugins
 
             if (lines.Length > 0)
             {
-                _Log.Warning($"HCAX0022: [PrintData] [{name}]\n\n{lines.ToString()}");
+                _Log.Debug($"HCAX0022: [PrintData] [{name}]\n\n{lines.ToString()}");
             }
         }
 
