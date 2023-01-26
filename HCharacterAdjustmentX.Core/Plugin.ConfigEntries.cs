@@ -120,7 +120,7 @@ namespace IDHIPlugins
             {
                 _Log.Enabled = DebugInfo.Value;
 #if DEBUG
-                _Log.Info($"HCAX0019A: Log.Enabled set to {_Log.Enabled}");
+                _Log.Level(LogLevel.Info, $"HCAX0019A: Log.Enabled set to {_Log.Enabled}");
 #endif
             };
 
@@ -139,7 +139,7 @@ namespace IDHIPlugins
             {
                 _Log.DebugToConsole = DebugToConsole.Value;
 #if DEBUG
-                _Log.Info($"HCAX0019B: Log.DebugToConsole set to {_Log.DebugToConsole}");
+                _Log.Level(LogLevel.Info, $"HCAX0019B: Log.DebugToConsole set to {_Log.DebugToConsole}");
 #endif
             };
 
