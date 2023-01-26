@@ -78,7 +78,7 @@ namespace IDHIPlugins
             // verify if is a scene we support
             if (!IsSupportedScene)
             {
-                _Log.Warning($"HCAX0008: The _mode {_mode}" +
+                _Log.Debug($"HCAX0008: The _mode {_mode}" +
                     $" is not supported.");
                 return;
             }
@@ -118,7 +118,7 @@ namespace IDHIPlugins
                     }
                     catch (Exception e)
                     {
-                        _Log.Level(LogLevel.Warning, $"HCAX0010: Error trying to " +
+                        _Log.Level(LogLevel.Error, $"HCAX0010: Error trying to " +
                             $"{setEnabled(setState)} the Controller for " +
                             $"{(CharacterType)i} - {e}");
                     }
@@ -133,7 +133,7 @@ namespace IDHIPlugins
                 }
                 catch (Exception e)
                 {
-                    _Log.Level(LogLevel.Warning, $"HCAX0012: Error trying to " +
+                    _Log.Level(LogLevel.Error, $"HCAX0012: Error trying to " +
                         $"{setEnabled(setState)} the Controller for Player - \n{e}");
                 }
             }
