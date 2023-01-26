@@ -7,11 +7,12 @@ using UnityEngine;
 
 using H;
 
-using BepInEx.Logging;
 using HarmonyLib;
 
+using KKAPI.MainGame;
 
 using IDHIUtils;
+
 
 
 namespace IDHIPlugins
@@ -36,6 +37,71 @@ namespace IDHIPlugins
                 _hookInstance = Harmony.CreateAndPatchAll(typeof(Hooks));
             }
 
+            #region AnalStuff
+            [HarmonyPrefix]
+            [HarmonyPatch(typeof(HSprite), nameof(HSprite.OnInsertAnalClick), new Type[] { })]
+            private static void OnInsertAnalClickPre(HSprite __instance)
+            {
+                _Log.Warning($"Movement Entering Hook.");
+
+                /*var heroine = Heroines[0].GetHeroine();
+
+                if (heroine == null)
+                {
+                    _Log.Warning($"Heroine null.");
+                    return;
+                }
+
+                if (!__instance.flags.isAnalInsertOK)
+                {
+                    if (__instance.flags.count.sonyuOrg >= 2)
+                    {
+                        var b = (int)(heroine.hAreaExps[3] + heroine.countAnalH);
+                        b = Mathf.Min(100, b);
+                        var ratioRand = new GlobalMethod.RatioRand();
+                        ratioRand.Add(0, b);
+                        if (100 - b != 0)
+                        {
+                            ratioRand.Add(1, 100 - b);
+                        }
+                        _hprocInstance.flags.isAnalInsertOK = ratioRand.Random() == 0;
+                        _Log.Warning($"Anal OK={_hprocInstance.flags.isAnalInsertOK}.");
+                    }
+                }*/
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(HSprite), nameof(HSprite.OnInsertAnalClick), new Type[] { })]
+            private static void OnInsertAnalNoVoiceClickPost(HSprite __instance, bool __state)
+            {
+                _Log.Warning($"Movement Postfix");
+            }
+
+            /*[HarmonyPrefix]
+            [HarmonyPatch(typeof(HSprite), nameof(HSprite.OnInsertAnalNoVoiceClick), new Type[] { })]
+            private static void OnInsertAnalNoVoiceClickPre(HSprite __instance, out bool __state)
+            {
+                __state = __instance.flags.isAnalInsertOK;
+
+                // Check if player can circumvent the anal deny
+                if (__instance.flags.count.sonyuAnalOrg >= 1)
+                {
+                    __instance.flags.isAnalInsertOK = true;
+                    __instance.flags.isDenialvoiceWait = false;
+                }
+            }
+
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(HSprite), nameof(HSprite.OnInsertAnalClick), new Type[] { })]
+            [HarmonyPatch(typeof(HSprite), nameof(HSprite.OnInsertAnalNoVoiceClick), new Type[] { })]
+            private static void OnInsertAnalNoVoiceClickPost(HSprite __instance, bool __state)
+            {
+                __instance.flags.isAnalInsertOK = __state;
+            }*/
+            #endregion
+
+
+
             /// <summary>
             /// Set the new original position when changing positions via the
             /// H point picker scene
@@ -48,9 +114,11 @@ namespace IDHIPlugins
                 {
                     return;
                 }
+#if DEBUG
                 // Get calling method name
                 var callingMethod = Utilities.CallingMethod();
-                _Log.Warning($"[{callingMethod}] ChangeCategoryPostfix");
+                _Log.Warning($"[{callingMethod}] Calling ChangeCategoryPostfix");
+#endif
                 Utils.SetOriginalPositionAll();
                 Utils.RecalcAdjustmentAll("from [ChangeCategory]");
             }
@@ -64,7 +132,11 @@ namespace IDHIPlugins
                 {
                     return;
                 }
-
+#if DEBUG
+                // Get calling method name
+                var callingMethod = Utilities.CallingMethod();
+                _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPrefix");
+#endif
                 _animationKey = "";
                 _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
                 Utils.ResetPositionAll();
@@ -84,6 +156,11 @@ namespace IDHIPlugins
                 {
                     return;
                 }
+#if DEBUG
+                // Get calling method name
+                var callingMethod = Utilities.CallingMethod();
+                _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPostfix");
+#endif
                 _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
                 Utils.SetMode(_nextAinmInfo.mode);
                 Utils.SetOriginalPositionAll(_nextAinmInfo);
