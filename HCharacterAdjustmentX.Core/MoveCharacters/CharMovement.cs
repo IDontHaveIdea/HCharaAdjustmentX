@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using BepInEx.Logging;
+
+using KKAPI.MainGame;
 using KKAPI.Utilities;
 
 using UnityEngine;
@@ -201,30 +204,14 @@ namespace IDHIPlugins
 
                         var strTmp = $"{chaType} position={tmp.ToString("F7")} " +
                             $"rotation={rot.ToString("F7")}\n";
-                                              
+
                         _Log.Info($"[Move.TEST1]\n\n{strTmp}\n");
                         _doShortcutMove = false;
                         break;
                     case MoveType.TEST2:
                         //ShowGroupGuide = !ShowGroupGuide;
-#region Camera
-                        var cameraObject = Camera.main.gameObject;
-                        var camCtrl = cameraObject?.GetComponent<CameraControl_Ver2>();
-                        if (camCtrl != null)
-                        if (camCtrl != null)
-                        {
-                            _Log.Warning($"\n[CAMERA]\n" +
-                                $" Position: {camCtrl.TargetPos}\n" +
-                                $"    Angle: {camCtrl.CameraAngle}\n" +
-                                $"Direction: {camCtrl.CameraDir}\n" +
-                                $"      FOV: {camCtrl.CameraFov}");
-                        }
-                        cameraObject = GameObject.Find("HProc/CamBase/Camera");
-                        if (cameraObject != null)
-                        {
-                            _Log.Warning("HPROC HAS A CAMERA");
-                        }
-#endregion
+                        //_hprocInstance.flags.isAnalInsertOK = true;
+                        var heroine = HCharaAdjustmentX.Heroines[0].GetHeroine();
                         break;
 #endif
                     // Execute a move event with current parameters used
@@ -292,8 +279,8 @@ namespace IDHIPlugins
                 }
                 catch (Exception e)
                 {
-                    _Log.Error($"HCAX0048: Cannot adjust position {chaControl.name} " +
-                        $"- {e}.");
+                    _Log.Level(LogLevel.Error, $"HCAX0048: Cannot adjust position " +
+                        $"{chaControl.name} - {e}.");
                 }
                 return Vector3.zero;
             }
