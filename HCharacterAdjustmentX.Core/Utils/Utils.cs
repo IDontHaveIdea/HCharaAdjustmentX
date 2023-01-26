@@ -149,6 +149,8 @@ namespace IDHIPlugins
                     _Log.Level(LogLevel.Error, $"HCAX0024A: Error - {e.Message}");
                 }
             }
+            _Log.Debug($"[GetAnimationKey] Animation key={result} " +
+                $"({Utilities.Translate(animation.nameAnimation)}).");
             return result;
         }
 
@@ -175,7 +177,6 @@ namespace IDHIPlugins
                     }
                 }
             }
-
             return result;
         }
 
@@ -274,8 +275,9 @@ namespace IDHIPlugins
                 return;
             }
             // Get calling method name
-            var callingMethod = Utilities.CallingMethod();
-            _Log.Warning($"[{callingMethod}] ResetAllPositions");
+            //var callingMethod = Utilities.CallingMethod();
+            //_Log.Warning($"[{callingMethod}] ResetAllPositions");
+
             var heroines = _hprocInstance.flags.lstHeroine;
             CTRL ctrl;
             for (var i = 0; i < heroines.Count; i++)
