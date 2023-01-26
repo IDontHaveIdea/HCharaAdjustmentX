@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using MessagePack;
 
+using BepInEx.Logging;
+
 using ExtensibleSaveFormat;
 
 using IDHIUtils;
@@ -157,7 +159,8 @@ namespace IDHIPlugins
                         }
                         else
                         {
-                            _Log.Error($"HCAX0020: [Load] [{name}] Can't unpack data.");
+                            _Log.Level(LogLevel.Error ,$"HCAX0020: [Load] [{name}] " +
+                                $"Can't unpack data.");
                         }
                     }
                 }
@@ -292,14 +295,14 @@ namespace IDHIPlugins
 
             foreach (var item in MoveData)
             {
-                lines.AppendLine($"Position={item.Key} Heroine" +
+                lines.AppendLine($"Position={item.Key} Heroine " +
                     $"Position={item.Value.HeroinePosition.ToString("F7")} " +
                     $"Rotation={item.Value.HeroineRotation.ToString("F7")}");
             }
 
             if (lines.Length > 0)
             {
-                _Log.Warning($"HCAX0023: [PrintData]\n\n{lines.ToString()}\n");
+                _Log.Debug($"HCAX0023: [PrintData]\n\n{lines.ToString()}\n");
             }
         }
     }
