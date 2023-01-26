@@ -58,7 +58,6 @@ namespace IDHIPlugins
                 var original = ChaControl.transform.position;
                 // Get calling method name
                 var callingMethod = Utilities.CallingMethod();
-                _Log.Warning($"[{callingMethod}] ResetPosition");
 
                 if (OriginalPosition != Vector3.zero)
                 {
@@ -94,10 +93,10 @@ namespace IDHIPlugins
                 var data2 = ExtendedSave
                     .GetExtendedDataById(ChaControl.chaFile, GUID);
 
-                if (data2 != null)
-                {
-                    _Log.Warning($"[ReadData] [{name}] Data2 is not null.");
-                }
+                //if (data2 != null)
+                //{
+                //    _Log.Warning($"[ReadData] [{name}] Data2 is not null.");
+                //}
                 if (data != null)
                 {
                     MoveData.Load(data);
@@ -107,7 +106,7 @@ namespace IDHIPlugins
                     var name = ChaControl.chaFile.parameter.fullname.Trim()
                             ?? string.Empty;
 #if DEBUG
-                    _Log.Warning($"[ReadData] [{name}] Data is null.");
+                    _Log.Info($"[ReadData] [{name}] Data is null.");
 #endif
                 }
             }
@@ -124,9 +123,9 @@ namespace IDHIPlugins
                     if (MoveData.Count == 0)
                     {
 #if DEBUG
-                        var name = ChaControl.chaFile.parameter.fullname.Trim()
+                        var name = ChaControl.chaFile?.parameter.fullname.Trim()
                             ?? string.Empty;
-                        _Log.Warning($"[SaveData] [{name}] MoveData total is 0 setting "
+                        _Log.Info($"[SaveData] [{name}] MoveData total is 0 setting "
                             + $"ExtendedData to null(Not Really!).");
 #endif
                         //SetExtendedData(null);
@@ -141,7 +140,7 @@ namespace IDHIPlugins
 #if DEBUG
                     var name = ChaControl.chaFile?.parameter.fullname.Trim()
                         ?? string.Empty;
-                    _Log.Warning($"[SaveData] [{name}] MoveData is null.");
+                    _Log.Info($"[SaveData] [{name}] MoveData is null.");
 #endif
                 }
             }
@@ -171,7 +170,7 @@ namespace IDHIPlugins
                     if (MakerInfo.InRoomMaker)
                     {
                         _Log.Message($"[{PluginName}] If you load a card with Card " +
-                            $"Info selected you may lose move information.");
+                            $"with Info selected you may lose move information.");
                     }
                 }
                 if (maintainState)
@@ -217,7 +216,7 @@ namespace IDHIPlugins
             }
 #endregion
 
-#region private Methods
+            #region private Methods
             internal void Init(HSceneProc hSceneProc, CharacterType characterType)
             {
 #if DEBUG
@@ -261,12 +260,13 @@ namespace IDHIPlugins
 
                 // Real original position AnimationLoader can change them when we get
                 // here
-                lines.AppendLine($"Original={original} Set={nowHPointDataPos}");
+                lines.AppendLine($"[SetOriginalPositin] Original={original} " +
+                    $"Set={nowHPointDataPos}");
                 lines.AppendLine($"Last Move={LastMovePosition} Set={Vector3.zero}");
                 lines.AppendLine($"Current Position={FoundPosition.ToString("F7")} " +
                     $"ALMove={ALMovement.ToString("F7")} Moved={Moved} " +
                     $"POS={nowHPointDataPos.ToString("F7")}");
-                _Log.Warning($"[{callingMethod}] [SetOriginalPosition] " +
+                _Log.Info($"[{callingMethod}] [SetOriginalPosition] " +
                     $"ChaType={ChaType}\n{lines}");
 #endif
             }
