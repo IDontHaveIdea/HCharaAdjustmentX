@@ -70,6 +70,7 @@ namespace IDHIPlugins
             // HSceneProc instance will be used later
             _hprocInstance = (HSceneProc)instance;
             _hprocObject = instance;
+            _hprocTraverse = null;
             _hprocTraverse = new HSceneProcTraverse(instance);
 
             // set various flags
