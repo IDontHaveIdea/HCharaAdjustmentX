@@ -26,6 +26,7 @@ namespace IDHIPlugins
         internal static HFlag.EMode _mode;
         internal static string _animationKey = "";
         internal static HSceneProcTraverse _hprocTraverse;
+        internal static bool _MovePerformed = false;
 
         internal partial class Hooks
         {
@@ -36,71 +37,6 @@ namespace IDHIPlugins
             {
                 _hookInstance = Harmony.CreateAndPatchAll(typeof(Hooks));
             }
-
-            #region AnalStuff
-            [HarmonyPrefix]
-            [HarmonyPatch(typeof(HSprite), nameof(HSprite.OnInsertAnalClick), new Type[] { })]
-            private static void OnInsertAnalClickPre(HSprite __instance)
-            {
-                _Log.Warning($"Movement Entering Hook.");
-
-                /*var heroine = Heroines[0].GetHeroine();
-
-                if (heroine == null)
-                {
-                    _Log.Warning($"Heroine null.");
-                    return;
-                }
-
-                if (!__instance.flags.isAnalInsertOK)
-                {
-                    if (__instance.flags.count.sonyuOrg >= 2)
-                    {
-                        var b = (int)(heroine.hAreaExps[3] + heroine.countAnalH);
-                        b = Mathf.Min(100, b);
-                        var ratioRand = new GlobalMethod.RatioRand();
-                        ratioRand.Add(0, b);
-                        if (100 - b != 0)
-                        {
-                            ratioRand.Add(1, 100 - b);
-                        }
-                        _hprocInstance.flags.isAnalInsertOK = ratioRand.Random() == 0;
-                        _Log.Warning($"Anal OK={_hprocInstance.flags.isAnalInsertOK}.");
-                    }
-                }*/
-            }
-
-            [HarmonyPostfix]
-            [HarmonyPatch(typeof(HSprite), nameof(HSprite.OnInsertAnalClick), new Type[] { })]
-            private static void OnInsertAnalNoVoiceClickPost(HSprite __instance, bool __state)
-            {
-                _Log.Warning($"Movement Postfix");
-            }
-
-            /*[HarmonyPrefix]
-            [HarmonyPatch(typeof(HSprite), nameof(HSprite.OnInsertAnalNoVoiceClick), new Type[] { })]
-            private static void OnInsertAnalNoVoiceClickPre(HSprite __instance, out bool __state)
-            {
-                __state = __instance.flags.isAnalInsertOK;
-
-                // Check if player can circumvent the anal deny
-                if (__instance.flags.count.sonyuAnalOrg >= 1)
-                {
-                    __instance.flags.isAnalInsertOK = true;
-                    __instance.flags.isDenialvoiceWait = false;
-                }
-            }
-
-            [HarmonyPostfix]
-            [HarmonyPatch(typeof(HSprite), nameof(HSprite.OnInsertAnalClick), new Type[] { })]
-            [HarmonyPatch(typeof(HSprite), nameof(HSprite.OnInsertAnalNoVoiceClick), new Type[] { })]
-            private static void OnInsertAnalNoVoiceClickPost(HSprite __instance, bool __state)
-            {
-                __instance.flags.isAnalInsertOK = __state;
-            }*/
-            #endregion
-
-
 
             /// <summary>
             /// Set the new original position when changing positions via the
@@ -126,6 +62,7 @@ namespace IDHIPlugins
             [HarmonyPrefix]
             [HarmonyPatch(typeof(HSceneProc), nameof(HSceneProc.ChangeAnimator))]
             private static void ChangeAnimatorPrefix(
+                object __instance,
                 HSceneProc.AnimationListInfo _nextAinmInfo)
             {
                 if (_nextAinmInfo == null)
@@ -133,9 +70,23 @@ namespace IDHIPlugins
                     return;
                 }
 #if DEBUG
+                // This hook is executed before HProcMonitor HSceneProc finish loading event
+                _hprocTraverse ??= new(__instance);
+
                 // Get calling method name
-                var callingMethod = Utilities.CallingMethod();
-                _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPrefix");
+                try
+                {
+                    var nowHPointDataPos = _hprocTraverse.nowHpointDataPos;
+                    var nowHPointData = _hprocTraverse.nowHpointData;
+                    var callingMethod = Utilities.CallingMethod();
+                    _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPrefix Position " +
+                        $"Name={nowHPointData} Position Point={nowHPointDataPos}");
+                }
+                catch
+                {
+                    var callingMethod = Utilities.CallingMethod();
+                    _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPrefix");
+                }
 #endif
                 _animationKey = "";
                 _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
@@ -157,9 +108,35 @@ namespace IDHIPlugins
                     return;
                 }
 #if DEBUG
-                // Get calling method name
-                var callingMethod = Utilities.CallingMethod();
-                _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPostfix");
+                try
+                {
+                    var nowHPointDataPos = _hprocTraverse.nowHpointDataPos;
+                    var nowHPointData = _hprocTraverse.nowHpointData;
+                    nowHPointData ??= "null";
+                    if (nowHPointDataPos == null)
+                    {
+                        nowHPointDataPos = new Vector3(-1, -1, -1);
+                    }
+
+                    var callingMethod = Utilities.CallingMethod();
+                    _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPostfix Position " +
+                        $"Name={nowHPointData} Position Point={nowHPointDataPos}");
+                }
+                catch
+                {
+#if KKS
+                    var nowHPointDataPos = HPointInfo.InitialPositon;
+                    var nowHPointData = HPointInfo.InitialPositionName;
+                    // Get calling method name
+                    var callingMethod = Utilities.CallingMethod();
+                    _Log.Warning($"[{callingMethod}] Error: Calling ChangeAnimatorPostfix Position " +
+                        $"Name={nowHPointData} Position Point={nowHPointDataPos}");
+#else
+                    var callingMethod = Utilities.CallingMethod();
+                    _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPrefix");
+
+#endif
+                }
 #endif
                 _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
                 Utils.SetMode(_nextAinmInfo.mode);

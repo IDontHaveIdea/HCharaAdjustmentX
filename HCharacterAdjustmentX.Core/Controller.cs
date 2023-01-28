@@ -245,6 +245,7 @@ namespace IDHIPlugins
             internal void SetOriginalPosition()
             {
                 var nowHPointDataPos = _hprocTraverse.nowHpointDataPos;
+                var nowHPointData = _hprocTraverse.nowHpointData;
 #if DEBUG
                 var original = OriginalPosition;
 #endif
@@ -260,7 +261,7 @@ namespace IDHIPlugins
 
                 // Real original position AnimationLoader can change them when we get
                 // here
-                lines.AppendLine($"[SetOriginalPositin] Original={original} " +
+                lines.AppendLine($"[SetOriginalPositin] Name={nowHPointData} Original={original} " +
                     $"Set={nowHPointDataPos}");
                 lines.AppendLine($"Last Move={LastMovePosition} Set={Vector3.zero}");
                 lines.AppendLine($"Current Position={FoundPosition.ToString("F7")} " +
