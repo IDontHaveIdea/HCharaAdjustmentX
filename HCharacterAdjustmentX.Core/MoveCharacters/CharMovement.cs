@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using UnityEngine;
+
 using BepInEx.Logging;
 
 using KKAPI.MainGame;
 using KKAPI.Utilities;
 
-using UnityEngine;
-
+using IDHIUtils;
 using MoveType = IDHIPlugins.MoveEvent.MoveType;
 
 
@@ -83,10 +84,13 @@ namespace IDHIPlugins
                     }
                 }
 #if DEBUG
-                _Log.Warning($"START wit Moved={_controller.Moved} for " +
-                    $"KEY={_animationKey} MOVEMENT={movement.ToString("F7")} " +
-                    $"ALMove={_controller.ALMovement.ToString("F7")} " +
-                    $"Movement={_controller.Movement.ToString("F7")}");
+                var callingMethod = Utilities.CallingMethod();
+                _Log.Warning($"[CharMovement.Move] Calling [{callingMethod}] START with " +
+                    $"Moved={_controller.Moved} for KEY={_animationKey}\n" +
+                    $"        Move Step={_fAdjustStep}" +
+                    $"   Saved Movement={_controller.Movement.FormatVector()}\n" +
+                    $"           ALMove={_controller.ALMovement.FormatVector()} " +
+                    $"Adjusted Movement={movement.FormatVector()}");
 #endif
                 Vector3 newPosition = new(0, 0, 0);
                 switch (moveType)
@@ -202,7 +206,7 @@ namespace IDHIPlugins
                         var tmp = _chaControl.transform.position;
                         var rot = _chaControl.transform.rotation;
 
-                        var strTmp = $"{chaType} position={tmp.ToString("F7")} " +
+                        var strTmp = $"{chaType} position={tmp.FormatVector()} " +
                             $"rotation={rot.ToString("F7")}\n";
 
                         _Log.Info($"[Move.TEST1]\n\n{strTmp}\n");
@@ -233,9 +237,9 @@ namespace IDHIPlugins
                     newPosition = RecalcPosition(
                         _chaControl, originalPosition, movement, fullMovement);
 #if DEBUG
-                    _Log.Info($"HCAX0046: Move {chaType} by {movement.ToString("F7")}\n"
-                        + $"from position {tmp.ToString("F7")} "
-                        + $"to position {newPosition.ToString("F7")}");
+                    _Log.Info($"HCAX0046: Move {chaType} by {movement.FormatVector()}\n"
+                        + $"from position {tmp.FormatVector()} "
+                        + $"to position {newPosition.FormatVector()}");
 #endif
                     _doShortcutMove = false;
                     _chaControl.transform.position = newPosition;
@@ -257,23 +261,26 @@ namespace IDHIPlugins
                     var upYAxis = chaControl.transform.up * move.y;
                     var forwardZAxis = chaControl.transform.forward * move.z;
 
+                    var currentPosition = chaControl.transform.position;
+
                     var newPosition = original;
                     var fullNewPosition = original + fullMove;
-
+                    
                     newPosition += rightXAxis;
                     newPosition += upYAxis;
                     newPosition += forwardZAxis;
                     if (DebugInfo.Value)
                     {
                         _Log.Debug($"[RecalcPosition] Move {chaControl.name}\n" +
-                            $"original position {original.ToString("F7")}\n" +
-                            $"      move vector {move.ToString("F7")}\n" +
-                            $" full move vector {fullMove.ToString("F7")}\n" +
-                            $"          right x {rightXAxis.ToString("F7")}\n" +
-                            $"             up y {upYAxis.ToString("F7")}\n" +
-                            $"        forward z {forwardZAxis.ToString("F7")}\n" +
-                            $"       to re-calc {newPosition.ToString("F7")}\n" +
-                            $"       to fullNew {fullNewPosition.ToString("F7")}");
+                            $" original position {original.FormatVector()}\n" +
+                            $"  current position {currentPosition.FormatVector()}\n" +
+                            $"      move by axis {move.FormatVector()}\n" +
+                            $"    move by vector {fullMove.FormatVector()}\n" +
+                            $"           right x {rightXAxis.FormatVector()}\n" +
+                            $"              up y {upYAxis.FormatVector()}\n" +
+                            $"         forward z {forwardZAxis.FormatVector()}\n" +
+                            $"  position by axis {newPosition.FormatVector()}\n" +
+                            $"position by vector {fullNewPosition.FormatVector()}");
                     }
                     return newPosition;
                 }

@@ -27,6 +27,8 @@ namespace IDHIPlugins
         internal static string _animationKey = "";
         internal static HSceneProcTraverse _hprocTraverse;
         internal static bool _MovePerformed = false;
+        internal static string _hPointName = string.Empty;
+        internal static Vector3 _hPointPos = Vector3.zero;
 
         internal partial class Hooks
         {
@@ -70,7 +72,9 @@ namespace IDHIPlugins
                     return;
                 }
 #if DEBUG
-                // This hook is executed before HProcMonitor HSceneProc finish loading event
+                // This hook is executed before HProcMonitor runs the first time
+                // HSceneProcMonin finish loading event to get nowHpointData the
+                // field needs to be initialized when null
                 _hprocTraverse ??= new(__instance);
 
                 // Get calling method name
@@ -78,14 +82,18 @@ namespace IDHIPlugins
                 {
                     var nowHPointDataPos = _hprocTraverse.nowHpointDataPos;
                     var nowHPointData = _hprocTraverse.nowHpointData;
+                    _hPointName = nowHPointData;
+                    _hPointPos = nowHPointDataPos;
                     var callingMethod = Utilities.CallingMethod();
-                    _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPrefix Position " +
-                        $"Name={nowHPointData} Position Point={nowHPointDataPos}");
+                    _Log.Info($"[ChangeAnimatorPrefix] Calling [{callingMethod}] " +
+                        $"Position Name={nowHPointData} Position " +
+                        $"Point={nowHPointDataPos}");
                 }
                 catch
                 {
                     var callingMethod = Utilities.CallingMethod();
-                    _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPrefix");
+                    _Log.Error($"[ChangeAnimatorPrefix] Calling [{callingMethod}] " +
+                        $"ChangeAnimatorPrefix");
                 }
 #endif
                 _animationKey = "";
@@ -119,8 +127,9 @@ namespace IDHIPlugins
                     }
 
                     var callingMethod = Utilities.CallingMethod();
-                    _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPostfix Position " +
-                        $"Name={nowHPointData} Position Point={nowHPointDataPos}");
+                    _Log.Info($"[ChangeAnimatorPostfix] Calling [{callingMethod}] " +
+                        $"Position Name={nowHPointData} Position " +
+                        $"Point={nowHPointDataPos}");
                 }
                 catch
                 {
@@ -129,8 +138,9 @@ namespace IDHIPlugins
                     var nowHPointData = HPointInfo.InitialPositionName;
                     // Get calling method name
                     var callingMethod = Utilities.CallingMethod();
-                    _Log.Warning($"[{callingMethod}] Error: Calling ChangeAnimatorPostfix Position " +
-                        $"Name={nowHPointData} Position Point={nowHPointDataPos}");
+                    _Log.Error($"[ChangeAnimatorPostfix] Calling [{callingMethod}] " +
+                        $"Error: Position Name={nowHPointData} Position " +
+                        $"Point={nowHPointDataPos}");
 #else
                     var callingMethod = Utilities.CallingMethod();
                     _Log.Warning($"[{callingMethod}] Calling ChangeAnimatorPrefix");

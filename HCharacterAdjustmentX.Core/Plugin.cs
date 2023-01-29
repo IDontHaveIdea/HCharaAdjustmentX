@@ -36,7 +36,7 @@ namespace IDHIPlugins
     ///
     /// </remarks>
     [BepInDependency(KoikatuAPI.GUID, KoikatuAPI.VersionConst)]
-    [BepInDependency(IDHIUtils.Info.GUID, IDHIUtils.Info.Version)]
+    [BepInDependency(IDHIUtils.Utilities.GUID, IDHIUtils.Utilities.Version)]
     [BepInDependency(
         "essuhauled.animationloader", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(GUID, PluginDisplayName, Version)]

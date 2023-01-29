@@ -275,9 +275,9 @@ namespace IDHIPlugins
                     lines.AppendLine($"Position={item.Key} " +
                         $"Character={character.Key} " +
                         $"Position=" +
-                        $"{character.Value.Position.ToString("F7")} " +
+                        $"{character.Value.Position.FormatVector()} " +
                         $"Rotation=" +
-                        $"{character.Value.Rotation.ToString("F7")}");
+                        $"{character.Value.Rotation.FormatVector()}");
                 }
             }
 
@@ -296,8 +296,8 @@ namespace IDHIPlugins
             foreach (var item in MoveData)
             {
                 lines.AppendLine($"Position={item.Key} Heroine " +
-                    $"Position={item.Value.HeroinePosition.ToString("F7")} " +
-                    $"Rotation={item.Value.HeroineRotation.ToString("F7")}");
+                    $"Position={item.Value.HeroinePosition.FormatVector()} " +
+                    $"Rotation={item.Value.HeroineRotation.FormatVector()}");
             }
 
             if (lines.Length > 0)

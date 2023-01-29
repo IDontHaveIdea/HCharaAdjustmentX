@@ -50,35 +50,6 @@ namespace IDHIPlugins
             #endregion
 
             #region public Methods
-            /// <summary>
-            /// Restore original position
-            /// </summary>
-            public void ResetPosition()
-            {
-                var original = ChaControl.transform.position;
-                // Get calling method name
-                var callingMethod = Utilities.CallingMethod();
-
-                if (OriginalPosition != Vector3.zero)
-                {
-                    ChaControl.transform.position = OriginalPosition;
-                    Movement = Vector3.zero;
-                    LastMovePosition = Vector3.zero;
-                    Moved = false;
-                    // Move in case ALMovement is not zero
-                    if (ALMovement != Vector3.zero)
-                    {
-                        InvokeOnMoveRequest(null,
-                            new MoveRequestEventArgs(
-                                ChaType, MoveEvent.MoveType.MOVE));
-                    }
-#if DEBUG
-                    _Log.Info($"HCAX0026: Reset position for {ChaType} " +
-                        $"from Original={original} to=[{OriginalPosition}]");
-#endif
-                }
-            }
-
             public void ReadData()
             {
                 // Information for Player is save in Heroine card
@@ -261,17 +232,57 @@ namespace IDHIPlugins
 
                 // Real original position AnimationLoader can change them when we get
                 // here
-                lines.AppendLine($"[SetOriginalPositin] Name={nowHPointData} Original={original} " +
-                    $"Set={nowHPointDataPos}");
-                lines.AppendLine($"Last Move={LastMovePosition} Set={Vector3.zero}");
-                lines.AppendLine($"Current Position={FoundPosition.ToString("F7")} " +
-                    $"ALMove={ALMovement.ToString("F7")} Moved={Moved} " +
-                    $"POS={nowHPointDataPos.ToString("F7")}");
-                _Log.Info($"[{callingMethod}] [SetOriginalPosition] " +
-                    $"ChaType={ChaType}\n{lines}");
+                lines.Append($"Name={nowHPointData} Original={original} " +
+                    $"Set={nowHPointDataPos} ");
+                lines.Append($"Last Move={LastMovePosition} Set={Vector3.zero}\n");
+                lines.Append(
+                    $"Current Position={FoundPosition.FormatVector()}\n" +
+                    $"          ALMove={ALMovement.FormatVector()} Moved={Moved}\n" +
+                    $"nowHpointDataPos={nowHPointDataPos.FormatVector()}");
+                _Log.Info($"[SetOriginalPosition] Calling [{callingMethod}] " +
+                    $"ChaType={ChaType} {lines}");
 #endif
             }
-#endregion
+
+            /// <summary>
+            /// Restore original position
+            /// </summary>
+            internal void ResetPosition()
+            {
+                var currentPosition = ChaControl.transform.position;
+                // Get calling method name
+                var callingMethod = Utilities.CallingMethod();
+                var movement = Movement;
+                var moved = Moved;
+
+                if (OriginalPosition != Vector3.zero)
+                {
+                    ChaControl.transform.position = OriginalPosition;
+                    Movement = Vector3.zero;
+                    LastMovePosition = Vector3.zero;
+                    Moved = false;
+                    // Move in case ALMovement is not zero
+                    if (ALMovement != Vector3.zero)
+                    {
+                        InvokeOnMoveRequest(null,
+                            new MoveRequestEventArgs(
+                                ChaType, MoveEvent.MoveType.MOVE));
+                    }
+#if DEBUG
+                    var finalPosition = ChaControl.transform.position;
+                    _Log.Info($"[ResetPosition] Calling [{callingMethod}] " +
+                        $"Reset position for {ChaType}\n" +
+                        $"    from current={currentPosition.FormatVector()}\n" +
+                        $"              to={OriginalPosition.FormatVector()}\n" +
+                        $"        Movement={movement.FormatVector()}\n" +
+                        $"nowHpointDataPos={_hPointPos.FormatVector()}\n" +
+                        $"      ALMovement={ALMovement.FormatVector()} Moved={moved}\n" +
+                        $"   finalPosiiton={finalPosition}");
+#endif
+                }
+            }
+
+            #endregion
         }
     }
 }
