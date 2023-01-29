@@ -119,11 +119,11 @@ namespace IDHIPlugins
                 }
                 if (_animationLoader.VersionAtLeast("1.1.3.0"))
                 {
-                    _animationMovementOk = true;
+                    _animationLoaderMovementOk = true;
                 }
                 else
                 {
-                    _animationMovementOk = false;
+                    _animationLoaderMovementOk = false;
                 }
             }
         }
@@ -163,16 +163,16 @@ namespace IDHIPlugins
 
             if (animation != null)
             {
-                if (_animationMovementOk)
+                if (_animationLoaderMovementOk)
                 {
                     try
                     {
                         result = _animationLoader
                             .GetAnimationMovement(animation);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
-                        _animationMovementOk = false;
+                        _animationLoaderMovementOk = false;
                         _Log.Level(LogLevel.Error, $"HCAX0024B: Error - {e.Message}");
                     }
                 }
@@ -274,9 +274,6 @@ namespace IDHIPlugins
             {
                 return;
             }
-            // Get calling method name
-            //var callingMethod = Utilities.CallingMethod();
-            //_Log.Warning($"[{callingMethod}] ResetAllPositions");
 
             var heroines = _hprocInstance.flags.lstHeroine;
             CTRL ctrl;
@@ -308,72 +305,50 @@ namespace IDHIPlugins
                 return;
             }
 
-            List<Vector3> movement = new() {
-                new Vector3(0, 0, 0), new Vector3(0, 0, 0) };
-
-            if (_nextAinmInfo != null)
-            {
-                if (_animationMovementOk)
-                {
-                    movement = Utils
-                        .GetAnimationMovement(_nextAinmInfo);
-                }
-            }
-
             var heroines = _hprocInstance.flags.lstHeroine;
+            CTRL ctrl;
             for (var i = 0; i < heroines.Count; i++)
             {
-                if (IsNewPosition(heroines[i].chaCtrl))
-                {
-                    var ctrl = GetController(heroines[i].chaCtrl);
-                    if ((_nextAinmInfo is not null) && (i == 0))
-                    {
-                        if (_animationMovementOk)
-                        {
-                            ctrl.ALMovement = movement[(int)Sex.Female];
-                        }
-                    }
-                    ctrl.SetOriginalPosition();
-                }
-            }
-            if (IsNewPosition(_hprocInstance.flags.player.chaCtrl))
-            {
-                var ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
-                if (_nextAinmInfo is not null)
-                {
-                    if (_animationMovementOk)
-                    {
-                        ctrl.ALMovement = movement[(int)Sex.Male];
-                    }
-                }
+                ctrl = GetController(heroines[i].chaCtrl);
                 ctrl.SetOriginalPosition();
             }
+
+            ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
+            ctrl.SetOriginalPosition();
         }
 
-        /// <summary>
-        /// Set new original position for characters if there is a move 
-        /// from original position saved
-        /// </summary>
-        /// <param name="message"></param>
-        internal static void SetOriginalPositionAllBad(string message = null)
+        internal static void SetALMove(
+            HSceneProc.AnimationListInfo _nextAinmInfo)
         {
             if (_hprocInstance == null)
             {
                 return;
             }
-            var heroines = _hprocInstance.flags.lstHeroine;
-            for (var i = 0; i < heroines.Count; i++)
+
+            if (_animationLoaderMovementOk)
             {
-                GetController(heroines[i].chaCtrl).SetOriginalPosition();
-                if (i == 0)
+                List<Vector3> movement = new() {
+                new Vector3(0, 0, 0), new Vector3(0, 0, 0) };
+
+                movement = Utils
+                    .GetAnimationMovement(_nextAinmInfo);
+
+                var heroines = _hprocInstance.flags.lstHeroine;
+                CTRL ctrl;
+                for (var i = 0; i < heroines.Count; i++)
                 {
-                    Utils.InitialPositionInfo(_hprocInstance);
-                }                
+                    ctrl = GetController(heroines[i].chaCtrl);
+                    if (i == 0)
+                    {
+                        ctrl.ALMovement = movement[(int)Sex.Female];
+                    }
+                }
+                ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
+                ctrl.ALMovement = movement[(int)Sex.Male];
             }
-            GetController(_hprocInstance.flags.player.chaCtrl).SetOriginalPosition();
         }
 
-        /// <summary>
+          /// <summary>
         /// Save H _mode flag
         /// </summary>
         /// <param name="emode"></param>
