@@ -98,6 +98,7 @@ namespace IDHIPlugins
 #endif
                 _animationKey = "";
                 _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
+                Utils.SetALMove(_nextAinmInfo);
                 Utils.ResetPositionAll();
             }
 
@@ -150,6 +151,7 @@ namespace IDHIPlugins
 #endif
                 _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
                 Utils.SetMode(_nextAinmInfo.mode);
+                Utils.SetALMove(_nextAinmInfo);
                 Utils.SetOriginalPositionAll(_nextAinmInfo);
                 Utils.RecalcAdjustmentAll();
                 Utils.InitialPosition();
