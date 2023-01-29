@@ -217,15 +217,14 @@ namespace IDHIPlugins
             {
                 var nowHPointDataPos = _hprocTraverse.nowHpointDataPos;
                 var nowHPointData = _hprocTraverse.nowHpointData;
-#if DEBUG
-                var original = OriginalPosition;
-#endif
+
                 OriginalPosition = nowHPointDataPos;
                 FoundPosition = ChaControl.transform.position;
                 LastMovePosition = Vector3.zero;
                 Movement = Vector3.zero;
                 Moved = false;
 #if DEBUG
+                var original = OriginalPosition;
                 var lines = new StringBuilder();
                 // Get calling method name
                 var callingMethod = Utilities.CallingMethod();
@@ -262,6 +261,7 @@ namespace IDHIPlugins
                     LastMovePosition = Vector3.zero;
                     Moved = false;
                     // Move in case ALMovement is not zero
+                    
                     if (ALMovement != Vector3.zero)
                     {
                         InvokeOnMoveRequest(null,
@@ -272,12 +272,12 @@ namespace IDHIPlugins
                     var finalPosition = ChaControl.transform.position;
                     _Log.Info($"[ResetPosition] Calling [{callingMethod}] " +
                         $"Reset position for {ChaType}\n" +
+                        $"      ALMovement={ALMovement.FormatVector()} Moved={moved}\n" +
+                        $"        Movement={movement.FormatVector()}\n" +
                         $"    from current={currentPosition.FormatVector()}\n" +
                         $"              to={OriginalPosition.FormatVector()}\n" +
-                        $"        Movement={movement.FormatVector()}\n" +
                         $"nowHpointDataPos={_hPointPos.FormatVector()}\n" +
-                        $"      ALMovement={ALMovement.FormatVector()} Moved={moved}\n" +
-                        $"   finalPosiiton={finalPosition}");
+                        $"   finalPosiiton={finalPosition.FormatVector()}");
 #endif
                 }
             }
