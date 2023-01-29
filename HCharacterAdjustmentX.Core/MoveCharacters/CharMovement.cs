@@ -209,7 +209,7 @@ namespace IDHIPlugins
                         var strTmp = $"{chaType} position={tmp.FormatVector()} " +
                             $"rotation={rot.ToString("F7")}\n";
 
-                        _Log.Info($"[Move.TEST1]\n\n{strTmp}\n");
+                        _Log.Level(LogLevel.Info, $"[Move.TEST1] {strTmp}");
                         _doShortcutMove = false;
                         break;
                     case MoveType.TEST2:
@@ -257,18 +257,20 @@ namespace IDHIPlugins
             {
                 try
                 {
-                    var rightXAxis = chaControl.transform.right * move.x;
-                    var upYAxis = chaControl.transform.up * move.y;
-                    var forwardZAxis = chaControl.transform.forward * move.z;
+                    var right = chaControl.transform.right * move.x;
+                    var up = chaControl.transform.up * move.y;
+                    var forward = chaControl.transform.forward * move.z;
 
                     var currentPosition = chaControl.transform.position;
 
                     var newPosition = original;
-                    var fullNewPosition = original + fullMove;
-                    
-                    newPosition += rightXAxis;
-                    newPosition += upYAxis;
-                    newPosition += forwardZAxis;
+                    var fullNewPosition = original + fullMove
+                        .MovementTransform(chaControl.transform);
+
+                    newPosition += up;
+                    newPosition += right;
+                    newPosition += forward;
+
                     if (DebugInfo.Value)
                     {
                         _Log.Debug($"[RecalcPosition] Move {chaControl.name}\n" +
@@ -276,9 +278,9 @@ namespace IDHIPlugins
                             $"  current position {currentPosition.FormatVector()}\n" +
                             $"      move by axis {move.FormatVector()}\n" +
                             $"    move by vector {fullMove.FormatVector()}\n" +
-                            $"           right x {rightXAxis.FormatVector()}\n" +
-                            $"              up y {upYAxis.FormatVector()}\n" +
-                            $"         forward z {forwardZAxis.FormatVector()}\n" +
+                            $"           right x {right.FormatVector()}\n" +
+                            $"              up y {up.FormatVector()}\n" +
+                            $"         forward z {forward.FormatVector()}\n" +
                             $"  position by axis {newPosition.FormatVector()}\n" +
                             $"position by vector {fullNewPosition.FormatVector()}");
                     }
