@@ -1,6 +1,7 @@
 ﻿//
 // Extensions
 //
+using System;
 using UnityEngine;
 
 using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
@@ -10,9 +11,17 @@ namespace IDHIPlugins
 {
     internal static class Extensions
     {
-        public static string FormatVector(this Vector3 self)
+        public static string FormatVector(
+            this Vector3 self,
+            string decimals = default,
+            int spaces = default)
         {
-            var formatString = $"( {self.x,12:F7} , {self.y,12:F7}, {self.z,12:F7} )";
+            string formatString;
+
+            formatString = $"( " +
+                $"{string.Format($"{{0,{spaces}:{decimals}}}", self.x)}, " +
+                $"{string.Format($"{{0,{spaces}:{decimals}}}", self.y)}, " +
+                $"{string.Format($"{{0,{spaces}:{decimals}}}", self.z)} )";
 
             return formatString;
         }
