@@ -103,7 +103,7 @@ namespace IDHIPlugins
             ConfigEntries();
 
             // Hook to HProcMonitor
-            HProcMonitor.OnHSceneStartLoading += OnHStart;
+            HProcMonitor.OnInit += OnHInit;
             CTRL.RegisterMovementEvents();
 
             // Start in disabled mode
@@ -131,7 +131,7 @@ namespace IDHIPlugins
         public static HCharaAdjusmentXController GetControllerByType(
             CharacterType chaType)
         {
-            ChaControl chaControl = null;
+            ChaControl chaControl;
 
             if (chaType == CharacterType.Player)
             {

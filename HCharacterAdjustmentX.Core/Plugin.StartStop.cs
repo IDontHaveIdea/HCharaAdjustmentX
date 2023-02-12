@@ -17,11 +17,11 @@ namespace IDHIPlugins
         public static List<ChaControl> Heroines { get; internal set; }
         public static ChaControl Player { get; internal set; }
 
-        private void OnHStart(object s, EventArgs e)
+        private void OnHInit(object s, EventArgs e)
         {
             Hooks.Init();
-            HProcMonitor.OnHSceneExiting += OnHProcExit;
-            HProcMonitor.OnHSceneFinishedLoading += OnHProcFinishedLoading;
+            HProcMonitor.OnExit += OnHProcExit;
+            HProcMonitor.OnFinishedLoading += OnHProcFinishedLoading;
 
         }
 
@@ -47,11 +47,11 @@ namespace IDHIPlugins
 #if DEBUG
             _Log.Info($"HCAX0006: Removing patches and disabling HCAX OK.");
 #endif
-            HProcMonitor.OnHSceneExiting -= OnHProcExit;
+            HProcMonitor.OnExit -= OnHProcExit;
         }
 
         private void OnHProcFinishedLoading(
-            object s, HProcMonitor.HSceneFinishedLoadingEventArgs e)
+            object s, HProcMonitor.HSceneLoadingEventArgs e)
         {
 #if DEBUG
             _Log.Info($"HCAX0007: Enabling HCAX.");
@@ -61,7 +61,7 @@ namespace IDHIPlugins
             Player = e.Male;
             enabled = true;
             SetControllerEnabled(true);
-            HProcMonitor.OnHSceneFinishedLoading -= OnHProcFinishedLoading;
+            HProcMonitor.OnFinishedLoading -= OnHProcFinishedLoading;
         }
 
         private static void SetupController(object instance)
