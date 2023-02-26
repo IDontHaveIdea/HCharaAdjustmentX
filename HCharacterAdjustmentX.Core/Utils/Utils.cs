@@ -256,7 +256,7 @@ namespace IDHIPlugins
                             ctrl.Movement = movement;
                             CTRL.InvokeOnMoveRequest(null,
                                 new CTRL.MoveRequestEventArgs(
-                                    ctrl.ChaType, MoveEvent.MoveType.MOVE));
+                                    ctrl.ChaType, Move.MoveType.MOVE));
                         }
                     }
                 }
