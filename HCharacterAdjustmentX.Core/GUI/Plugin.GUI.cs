@@ -73,7 +73,7 @@ namespace IDHIPlugins
                         GUI.backgroundColor.AlphaMultiplied(1f);
                         if (GUI.Button(moveButton.Position, moveButton.Text))
                         {
-                            moveButton.TriggerEvent();
+                            moveButton.Process();
                         }
                     }
                 }
@@ -90,7 +90,7 @@ namespace IDHIPlugins
                         GUI.backgroundColor.AlphaMultiplied(1f);
                         if (GUI.Button(moveButton.Position, moveButton.Text))
                         {
-                            moveButton.TriggerEvent();
+                            moveButton.Process();
                         }
                     }
                 }
