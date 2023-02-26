@@ -268,7 +268,7 @@ namespace IDHIPlugins
                     {
                         InvokeOnMoveRequest(null,
                             new MoveRequestEventArgs(
-                                ChaType, MoveEvent.MoveType.MOVE));
+                                ChaType, Move.MoveType.MOVE));
                     }
 #if DEBUG
                     var finalPosition = ChaControl.transform.position;
