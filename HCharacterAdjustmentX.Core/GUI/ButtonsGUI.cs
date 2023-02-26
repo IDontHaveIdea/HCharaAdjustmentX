@@ -54,6 +54,8 @@ namespace IDHIPlugins
                 var windowRect = new Rect(x, y, width, height);
                 var first = true;
 
+                _Log.Info($"[ButonsGUI] Param: chaType={chaType} xm={xMargin} ym={yMargin} xo={xOffset} yo={yOffset} x={x} y={y}");
+
                 _width = width * (MoveEvent.doubleWidthLabels.Count > 0 ? 2 : 1);
                 _heigth = MoveEvent.EventLabel.Keys.Count * height;
 
