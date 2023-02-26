@@ -198,6 +198,8 @@ namespace IDHIPlugins
                 SetOriginalPosition();
                 if (characterType == CharacterType.Heroine)
                 {
+                    //buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
+                    //    width: 62f, height: 25f, xOffset: (-126f)).Buttons;
                     buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
                         width: 62f, height: 25f, xOffset: (-126f)).Buttons;
                 }
@@ -235,9 +237,9 @@ namespace IDHIPlugins
                     $"Set={nowHPointDataPos} ");
                 lines.Append($"Last Move={LastMovePosition} Set={Vector3.zero}\n");
                 lines.Append(
-                    $"Current Position={FoundPosition.FormatVector()}\n" +
-                    $"          ALMove={ALMovement.FormatVector()} Moved={Moved}\n" +
-                    $"nowHpointDataPos={nowHPointDataPos.FormatVector()}");
+                    $"Current Position={FoundPosition.Format()}\n" +
+                    $"          ALMove={ALMovement.Format()} Moved={Moved}\n" +
+                    $"nowHpointDataPos={nowHPointDataPos.Format()}");
                 _Log.Info($"[SetOriginalPosition] Calling [{callingMethod}] " +
                     $"ChaType={ChaType} {lines}");
 #endif
@@ -272,12 +274,12 @@ namespace IDHIPlugins
                     var finalPosition = ChaControl.transform.position;
                     _Log.Info($"[ResetPosition] Calling [{callingMethod}] " +
                         $"Reset position for {ChaType}\n" +
-                        $"      ALMovement={ALMovement.FormatVector()} Moved={moved}\n" +
-                        $"        Movement={movement.FormatVector()}\n" +
-                        $"    from current={currentPosition.FormatVector()}\n" +
-                        $"              to={OriginalPosition.FormatVector()}\n" +
-                        $"nowHpointDataPos={_hPointPos.FormatVector()}\n" +
-                        $"   finalPosiiton={finalPosition.FormatVector()}");
+                        $"      ALMovement={ALMovement.Format()} Moved={moved}\n" +
+                        $"        Movement={movement.Format()}\n" +
+                        $"    from current={currentPosition.Format()}\n" +
+                        $"              to={OriginalPosition.Format()}\n" +
+                        $"nowHpointDataPos={_hPointPos.Format()}\n" +
+                        $"   finalPosiiton={finalPosition.Format()}");
 #endif
                 }
             }
