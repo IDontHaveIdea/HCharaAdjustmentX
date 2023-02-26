@@ -88,9 +88,9 @@ namespace IDHIPlugins
                 _Log.Warning($"[CharMovement.Move] Calling [{callingMethod}] START with " +
                     $"Moved={_controller.Moved} for KEY={_animationKey}\n" +
                     $"        Move Step={_fAdjustStep}" +
-                    $"   Saved Movement={_controller.Movement.FormatVector()}\n" +
-                    $"           ALMove={_controller.ALMovement.FormatVector()} " +
-                    $"Adjusted Movement={movement.FormatVector()}");
+                    $"   Saved Movement={_controller.Movement.Format()}\n" +
+                    $"           ALMove={_controller.ALMovement.Format()} " +
+                    $"Adjusted Movement={movement.Format()}");
 #endif
                 Vector3 newPosition = new(0, 0, 0);
                 switch (moveType)
@@ -200,24 +200,12 @@ namespace IDHIPlugins
                         }
                         _doShortcutMove = true;
                         break;
-#if DEBUG
-                    // Buttons for testing
-                    case MoveType.TEST1:
-                        var tmp = _chaControl.transform.position;
-                        var rot = _chaControl.transform.rotation;
-
-                        var strTmp = $"{chaType} position={tmp.FormatVector()} " +
-                            $"rotation={rot.ToString("F7")}\n";
-
-                        _Log.Level(LogLevel.Info, $"[Move.TEST1] {strTmp}");
+                    case MoveType.ROTP:
                         _doShortcutMove = false;
                         break;
-                    case MoveType.TEST2:
-                        //ShowGroupGuide = !ShowGroupGuide;
-                        //_hprocInstance.flags.isAnalInsertOK = true;
-                        var heroine = HCharaAdjustmentX.Heroines[0].GetHeroine();
+                    case MoveType.ROTN:
+                        _doShortcutMove = false;
                         break;
-#endif
                     // Execute a move event with current parameters used
                     // for automatic position adjustment
                     case MoveType.MOVE:
@@ -237,9 +225,9 @@ namespace IDHIPlugins
                     newPosition = RecalcPosition(
                         _chaControl, originalPosition, movement, fullMovement);
 #if DEBUG
-                    _Log.Info($"HCAX0046: Move {chaType} by {movement.FormatVector()}\n"
-                        + $"from position {tmp.FormatVector()} "
-                        + $"to position {newPosition.FormatVector()}");
+                    _Log.Info($"HCAX0046: Move {chaType} by {movement.Format()}\n"
+                        + $"from position {tmp.Format()} "
+                        + $"to position {newPosition.Format()}");
 #endif
                     _doShortcutMove = false;
                     _chaControl.transform.position = newPosition;
@@ -274,15 +262,15 @@ namespace IDHIPlugins
                     if (DebugInfo.Value)
                     {
                         _Log.Debug($"[RecalcPosition] Move {chaControl.name}\n" +
-                            $" original position {original.FormatVector()}\n" +
-                            $"  current position {currentPosition.FormatVector()}\n" +
-                            $"      move by axis {move.FormatVector()}\n" +
-                            $"    move by vector {fullMove.FormatVector()}\n" +
-                            $"           right x {right.FormatVector()}\n" +
-                            $"              up y {up.FormatVector()}\n" +
-                            $"         forward z {forward.FormatVector()}\n" +
-                            $"  position by axis {newPosition.FormatVector()}\n" +
-                            $"position by vector {fullNewPosition.FormatVector()}");
+                            $" original position {original.Format()}\n" +
+                            $"  current position {currentPosition.Format()}\n" +
+                            $"      move by axis {move.Format()}\n" +
+                            $"    move by vector {fullMove.Format()}\n" +
+                            $"           right x {right.Format()}\n" +
+                            $"              up y {up.Format()}\n" +
+                            $"         forward z {forward.Format()}\n" +
+                            $"  position by axis {newPosition.Format()}\n" +
+                            $"position by vector {fullNewPosition.Format()}");
                     }
                     return newPosition;
                 }
