@@ -11,7 +11,7 @@ namespace IDHIPlugins
 {
     internal static class Extensions
     {
-        public static string FormatVector(
+        public static string FormatVectorToDelete(
             this Vector3 self,
             string decimals = default,
             int spaces = default)
