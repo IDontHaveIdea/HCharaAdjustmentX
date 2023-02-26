@@ -155,7 +155,6 @@ namespace IDHIPlugins
                             {
                                 PrintData(Data, name);
                             }
-
                         }
                         else
                         {
@@ -275,15 +274,15 @@ namespace IDHIPlugins
                     lines.AppendLine($"Position={item.Key} " +
                         $"Character={character.Key} " +
                         $"Position=" +
-                        $"{character.Value.Position.FormatVector()} " +
+                        $"{character.Value.Position.Format()} " +
                         $"Rotation=" +
-                        $"{character.Value.Rotation.FormatVector()}");
+                        $"{character.Value.Rotation.Format()}");
                 }
             }
 
             if (lines.Length > 0)
             {
-                _Log.Debug($"HCAX0022: [PrintData] [{name}]\n\n{lines.ToString()}");
+                _Log.Debug($"HCAX0022: [PrintData] [{name}]\n\n{lines}");
             }
         }
 
@@ -296,13 +295,13 @@ namespace IDHIPlugins
             foreach (var item in MoveData)
             {
                 lines.AppendLine($"Position={item.Key} Heroine " +
-                    $"Position={item.Value.HeroinePosition.FormatVector()} " +
-                    $"Rotation={item.Value.HeroineRotation.FormatVector()}");
+                    $"Position={item.Value.HeroinePosition.Format()} " +
+                    $"Rotation={item.Value.HeroineRotation.Format()}");
             }
 
             if (lines.Length > 0)
             {
-                _Log.Debug($"HCAX0023: [PrintData]\n\n{lines.ToString()}\n");
+                _Log.Debug($"HCAX0023: [PrintData]\n\n{lines}\n");
             }
         }
     }
