@@ -9,16 +9,18 @@
     <Import_RootNamespace>HCharacterAdjustmentX.Core</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)buttons\AxisButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controller.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GUI\ButtonsGUI.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GUI\ButtonsGUI2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Buttons\ActionButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GUI\Plugin.ButtonsInterface.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GUI\Plugin.GUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hooks.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\CharMovement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\Controller.MoveEvent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\MoveActionButton.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Buttons\MoveActionButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\MoveEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)move\MoveEvents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.ConfigEntries.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.Data.cs" />
@@ -28,5 +30,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\KeyShortcuts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Buttons\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Move\" />
   </ItemGroup>
 </Project>
