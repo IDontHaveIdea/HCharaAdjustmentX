@@ -6,12 +6,12 @@ using UnityEngine;
 using IDHIUtils;
 
 using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
-using static IDHIPlugins.MoveEvent;
+using static IDHIPlugins.Move;
 using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
-    public struct MoveActionButton : IColorButtonEventTrigger
+    public struct MoveActionButton : IColorActionStateButton
     {
         #region public properties
         public string Text { get; set;  }
@@ -42,12 +42,16 @@ namespace IDHIPlugins
         /// <summary>
         /// Trigger a move event
         /// </summary>
-        public void TriggerEvent()
+        public void Process()
         {
 #if DEBUG
             _Log.Info($"HCAX0050: {Text} Button pressed for {ChaType} ");
 #endif
             InvokeOnMoveRequest(null, new MoveRequestEventArgs(ChaType, Move));
+        }
+
+        public void SetState(byte state)
+        {
         }
         #endregion
     }

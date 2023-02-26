@@ -10,7 +10,7 @@ using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
-    public struct ActionButton : IColorButtonEventTrigger
+    public struct ActionButton : IColorActionStateButton
     {
         #region Properties
         public string Text { get; set; }
@@ -34,12 +34,16 @@ namespace IDHIPlugins
         /// <summary>
         /// Trigger a move event
         /// </summary>
-        public void TriggerEvent()
+        public void Process()
         {
 #if DEBUG
             _Log.Info($"[ActionButton]: {Text} Button pressed.");
 #endif
             //InvokeOnMoveRequest(null, new MoveRequestEventArgs(ChaType, Move));
+        }
+
+        public void SetState(byte state)
+        {
         }
         #endregion
         

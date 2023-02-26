@@ -19,7 +19,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\CharMovement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\Controller.MoveEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Buttons\MoveActionButton.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\MoveEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\Move.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)move\MoveEvents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.ConfigEntries.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.cs" />

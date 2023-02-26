@@ -12,27 +12,32 @@ using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
-    public enum Axis { UNKNOWN = -1, X = 0, Y = 1, Z = 2 }
-    public struct AxisButton : IColorStateToggleButton
+    public enum Axis
+    {
+        UNKNOWN = -1,
+        X = 0,
+        Y = 1,
+        Z = 2
+    }
+
+    public struct AxisButton : IColorActionStateButton
     {
         private Axis _currentAxis;
 
-        /*private static readonly Dictionary<byte, string> _axisStateNames = new()
-        {
-            {0, "X"},
-            {1, "Y"},
-            {2, "Z"}
-        };
-
-        public static readonly Dictionary<string, byte> _axisState = new()
-        {
-            {"X", 0},
-            {"Y", 1},
-            {"Z", 2}
-        };*/
-
         #region Properties
-        public Axis Axis => _currentAxis;
+        public Axis Axis
+        {
+            get
+            {
+                return _currentAxis;
+            }
+
+            private set
+            {
+                _currentAxis = value;
+                CharMovement.CurrentAxis = value;
+            }
+        }
         #endregion
 
         #region Interface Properties
@@ -67,11 +72,10 @@ namespace IDHIPlugins
             _currentAxis = axis;
         }
 
-        public void NextState()
+        public void Process()
         {
             _currentAxis = (Axis)(((int)_currentAxis + 1) % 3);
         }
         #endregion
-
     }
 }
