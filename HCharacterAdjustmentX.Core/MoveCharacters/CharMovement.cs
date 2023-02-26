@@ -9,7 +9,7 @@ using KKAPI.MainGame;
 using KKAPI.Utilities;
 
 using IDHIUtils;
-using MoveType = IDHIPlugins.MoveEvent.MoveType;
+using MoveType = IDHIPlugins.Move.MoveType;
 
 
 namespace IDHIPlugins
@@ -31,8 +31,11 @@ namespace IDHIPlugins
             internal static string _animationGUID = "";
             internal static int _animationID = 0;
             internal static string _pathFemaleBase = "";
-#endregion
+            #endregion
 
+            #region Properties
+            internal static Axis CurrentAxis { get; set; }
+            #endregion
             /// <summary>
             /// Check for configured key shortcuts and execute the type of movement
             /// desired
