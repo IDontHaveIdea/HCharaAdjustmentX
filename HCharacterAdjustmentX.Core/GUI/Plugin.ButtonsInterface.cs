@@ -55,7 +55,7 @@ namespace IDHIPlugins
 
             private bool CanShow()
             {
-                if (!HProcMonitor.Nakadashi || IsAibu)
+                if (!HProcMonitor.Nakadashi)
                 {
                     return false;
                 }
