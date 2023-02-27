@@ -13,7 +13,7 @@ namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
     {
-        public class ButtonsGUI
+        /*public class ButtonsGUI
         {
             // The position of the scrolling view-port
             #region private fields
@@ -105,9 +105,9 @@ namespace IDHIPlugins
                     }
                 }
             }
-        }
+        }*/
 
-        public class ButtonsGUI2
+        public class ButtonsGUI
         {
             // The position of the scrolling view-port
             #region private fields
@@ -142,7 +142,7 @@ namespace IDHIPlugins
             /// <param name="height">button height</param>
             /// <param name="xOffset">x margin offset</param>
             /// <param name="yOffset">y margin offset</param>
-            internal ButtonsGUI2(CharacterType chaType, float xMargin, float yMargin,
+            internal ButtonsGUI(CharacterType chaType, float xMargin, float yMargin,
                 float width, float height,
                 float xOffset = 0f, float yOffset = 0f)
             {
@@ -213,7 +213,9 @@ namespace IDHIPlugins
                 if (label == "Axis")
                 {
                     button = new AxisButton(
-                        windowRect);
+                        windowRect,
+                        chaType);
+                    _Log.Error($"[NewButton] Axis text={button.Text}");
                 }
                 else
                 {
