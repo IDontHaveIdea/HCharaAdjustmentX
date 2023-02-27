@@ -5,7 +5,6 @@ using UnityEngine;
 
 using IDHIUtils;
 
-//using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins

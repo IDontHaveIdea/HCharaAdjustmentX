@@ -41,9 +41,9 @@ namespace IDHIPlugins
                 set
                 {
                     _showInterface = value;
-                    if (_botones[_chaType] != null)
+                    if (_buttons[_chaType] != null)
                     {
-                        _botones[_chaType]?.Clear();
+                        _buttons[_chaType]?.Clear();
                     }
                     if (!value)
                     {

@@ -28,7 +28,7 @@ namespace IDHIPlugins
         private void OnHProcExit(object s, EventArgs e)
         {
 #if DEBUG
-            _Log.Info($"HCAX0004: Removing patches and disabling HCAX.");
+            _Log.Info($"[OnHProcExit] Removing patches and disabling HCAX.");
 #endif
             SetControllerEnabled(false);
             if (_hprocInstance != null)
@@ -45,7 +45,7 @@ namespace IDHIPlugins
                 _Log.Level(LogLevel.Error, $"HCAX0005: {ex}");
             }
 #if DEBUG
-            _Log.Info($"HCAX0006: Removing patches and disabling HCAX OK.");
+            _Log.Info($"[OnHProcExit] Removing patches and disabling HCAX OK.");
 #endif
             HProcMonitor.OnExit -= OnHProcExit;
         }
@@ -54,7 +54,7 @@ namespace IDHIPlugins
             object s, HProcMonitor.HSceneLoadingEventArgs e)
         {
 #if DEBUG
-            _Log.Info($"HCAX0007: Enabling HCAX.");
+            _Log.Info($"[OnHProcFinishedLoading] Enabling HCAX.");
 #endif
             SetupController(e.ObjectInstance);
             Heroines = e.Females;
@@ -79,7 +79,7 @@ namespace IDHIPlugins
             // verify if is a scene we support
             if (!IsSupportedScene)
             {
-                _Log.Debug($"HCAX0008: The _mode {_mode}" +
+                _Log.Debug($"[SetupController] The _mode {_mode}" +
                     $" is not supported.");
                 return;
             }

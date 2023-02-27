@@ -15,16 +15,6 @@ using IDHIUtils;
 
 namespace IDHIPlugins
 {
-    /*public enum CharType
-    {
-        Heroine,
-        Heroine3P,
-        Player,
-        Janitor,
-        Group,
-        Unknown
-    }*/
-
     public enum CharacterType
     {
         Heroine,
@@ -40,10 +30,6 @@ namespace IDHIPlugins
         // Controller
         #region  Fields
         internal const string MoveDataID = "MoveData";
-
-        internal static Vector3 _forwardZAxisAdjustUnit = Vector3.zero;
-        internal static Vector3 _rightXAxisAdjustUnit = Vector3.zero;
-        internal static Vector3 _upYAxisAdjustUnit = Vector3.zero;
         internal static float _fAdjustStep = 0.01f;
         internal static float _fRotationStep = 5f;
         #endregion
@@ -51,8 +37,7 @@ namespace IDHIPlugins
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
             #region Fields
-            internal MoveData MoveData;
-            // internal List<MoveActionButton> buttons;
+            internal MoveData SaveMoveData;
             internal List<IColorActionStateButton> buttons;
             #endregion
 
@@ -78,20 +63,15 @@ namespace IDHIPlugins
                 {
                     return;
                 }
+
                 // Initialize MoveData if null
-                MoveData ??= new(ChaControl);
+                SaveMoveData ??= new(ChaControl);
 
                 var data = GetExtendedData();
-                var data2 = ExtendedSave
-                    .GetExtendedDataById(ChaControl.chaFile, GUID);
 
-                //if (data2 != null)
-                //{
-                //    _Log.Warning($"[ReadData] [{name}] Data2 is not null.");
-                //}
                 if (data != null)
                 {
-                    MoveData.Load(data);
+                    SaveMoveData.Load(data);
                 }
                 else
                 {
@@ -110,9 +90,9 @@ namespace IDHIPlugins
                 {
                     return;
                 }
-                if (MoveData != null)
+                if (SaveMoveData != null)
                 {
-                    if (MoveData.Count == 0)
+                    if (SaveMoveData.Count == 0)
                     {
 #if DEBUG
                         var name = ChaControl.chaFile?.parameter.fullname.Trim()
@@ -124,7 +104,7 @@ namespace IDHIPlugins
                     }
                     else
                     {
-                        SetExtendedData(MoveData.Save());
+                        SetExtendedData(SaveMoveData.Save());
                     }
                 }
                 else
@@ -140,16 +120,18 @@ namespace IDHIPlugins
 
             #region protected override Methods
             /// <summary>
-            /// TODO: Verify if data is saved to the card in Maker when called from room.
-            /// Need to identify 3P and Darkness scene. For now it won't be supported.
-            /// Message to remember. This must be defined.
+            /// TODO: Need to identify 3P and Darkness scene. For now it won't be
+            /// supported. Message to remember. This must be defined.
             /// </summary>
-            /// <param name="currentGameMode"></param>
+            /// <param name="currentGameMode">MainGame, Maker, Studio</param>
             protected override void OnCardBeingSaved(GameMode currentGameMode)
             {
                 if (currentGameMode == GameMode.Maker)
                 {
-                    //return;
+                    if (MakerInfo.InMaker)
+                    {
+                        return;
+                    }
                 }
                 SaveData();
             }
@@ -161,7 +143,7 @@ namespace IDHIPlugins
                 {
                     if (MakerInfo.InRoomMaker)
                     {
-                        _Log.Message($"[{PluginName}] If you load a card with Card " +
+                        _Log.Message($"[{PluginName}] [OnReload] If you load a card " +
                             $"with Info selected you may lose move information.");
                     }
                 }
@@ -179,12 +161,7 @@ namespace IDHIPlugins
                 {
                     if (DoRecalc)
                     {
-                        _fAdjustStep = cfgAdjustmentStep.Value;
-                        _forwardZAxisAdjustUnit =
-                            ChaControl.transform.forward * _fAdjustStep;
-                        _rightXAxisAdjustUnit =
-                            ChaControl.transform.right * _fAdjustStep;
-                        _upYAxisAdjustUnit = ChaControl.transform.up * _fAdjustStep;
+                        _fAdjustStep = AdjustmentStep.Value;
                         DoRecalc = false;
                     }
                     if (ChaType == CharacterType.Heroine)
@@ -215,12 +192,10 @@ namespace IDHIPlugins
                 _Log.Info($"HCAX0025: Initialization for {characterType}");
 #endif
                 ChaType = characterType;
-                MoveData ??= new(ChaControl);
+                SaveMoveData ??= new(ChaControl);
                 SetOriginalPosition();
                 if (characterType == CharacterType.Heroine)
                 {
-                    //buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
-                    //    width: 62f, height: 25f, xOffset: (-126f)).Buttons;
                     buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
                         width: 62f, height: 25f, xOffset: (-126f)).Buttons;
                 }
@@ -285,8 +260,8 @@ namespace IDHIPlugins
                     Movement = Vector3.zero;
                     LastMovePosition = Vector3.zero;
                     Moved = false;
+
                     // Move in case ALMovement is not zero
-                    
                     if (ALMovement != Vector3.zero)
                     {
                         MoveEvent.InvokeOnPositionMoveEvent(null,

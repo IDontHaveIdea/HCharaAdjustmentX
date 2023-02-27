@@ -43,7 +43,7 @@ namespace IDHIPlugins
 
         #region public methods
         /// <summary>
-        /// Trigger a move event
+        /// Trigger a rotation event
         /// </summary>
         public void Process()
         {

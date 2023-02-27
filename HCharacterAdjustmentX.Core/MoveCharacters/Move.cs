@@ -41,8 +41,8 @@ namespace IDHIPlugins
             { buttonLabels[5], MoveType.BACK },
             { buttonLabels[6], MoveType.SAVE },
             { buttonLabels[7], MoveType.LOAD },
-            { buttonLabels[8], MoveType.ROTP },
-            { buttonLabels[9], MoveType.ROTN },
+            { buttonLabels[8], MoveType.POSITIVEROTATION },
+            { buttonLabels[9], MoveType.NEGATIVEROTATION },
             { buttonLabels[10], MoveType.AXIS },
             { buttonLabels[11], MoveType.RESETMOVE },
             { buttonLabels[12], MoveType.RESETROTATION }

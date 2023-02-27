@@ -22,14 +22,9 @@ namespace IDHIPlugins
             #region private fields
             internal static ChaControl _chaControl;
             internal static HCharaAdjusmentXController _controller;
-            internal static HCharaAdjusmentXController _controllerPlayer;
-            internal static HCharaAdjusmentXController _controllerHeroine;
             internal static bool _doShortcutMove;
             #endregion
 
-            #region Properties
-            internal static Axis CurrentAxis { get; set; }
-            #endregion
             /// <summary>
             /// Check for configured key shortcuts and execute the type of movement
             /// desired
@@ -53,9 +48,6 @@ namespace IDHIPlugins
                     throw new NullReferenceException($"HCAX0040: HProc instance " +
                         $"invalid cannot get ChaControl for {chaType}.");
                 }
-
-                //_pathFemaleBase = _hprocInstance.flags.nowAnimationInfo
-                //    .pathFemaleBase.assetpath;
 
                 // Normal button press
                 var originalPosition = _controller.OriginalPosition;
@@ -120,17 +112,19 @@ namespace IDHIPlugins
                                     new(controllerPlayer.Movement, Vector3.zero)
                             };
 
-                            controllerHeroine.MoveData[_animationKey] = positions;
+                            controllerHeroine.SaveMoveData[_animationKey] = positions;
+                            controllerHeroine.SaveData();
                         }
                         _doShortcutMove = false;
-                        _controller.SaveData();
                         break;
                     case MoveType.LOAD:
                         if (!_animationKey.IsNullOrEmpty())
                         {
                             var controllerHeroine =
                                 GetControllerByType(CharacterType.Heroine);
-                            if (controllerHeroine.MoveData.Data
+                            //if (controllerHeroine.SaveMoveData.Data
+                            //    .TryGetValue(_animationKey, out var positions))
+                            if (controllerHeroine.SaveMoveData
                                 .TryGetValue(_animationKey, out var positions))
                             {
                                 fullMovement = positions[chaType].Position;
@@ -138,10 +132,10 @@ namespace IDHIPlugins
                         }
                         _doShortcutMove = true;
                         break;
-                    case MoveType.ROTP:
+                    case MoveType.POSITIVEROTATION:
                         _doShortcutMove = false;
                         break;
-                    case MoveType.ROTN:
+                    case MoveType.NEGATIVEROTATION:
                         _doShortcutMove = false;
                         break;
                     // Execute a move event with current parameters used
@@ -193,15 +187,15 @@ namespace IDHIPlugins
                 }
                 catch (Exception e)
                 {
-                    _Log.Level(LogLevel.Error, $"HCAX0048: Cannot adjust position " +
-                        $"{chaControl.name} - {e}.");
+                    _Log.Level(LogLevel.Error, $"[RecalcPosition] Cannot adjust " +
+                        $"position {chaControl.name} - {e}.");
                 }
                 return Vector3.zero;
             }
         }
 
         #region Backup
-        internal class CharPositionMovementReference
+        /*internal class CharPositionMovementReference
         {
             #region private fields
             internal static ChaControl _chaControl;
@@ -349,7 +343,7 @@ namespace IDHIPlugins
                                 new(_controllerPlayer.Movement, Vector3.zero);
                             positions[CharacterType.Heroine] =
                                 new(_controllerHeroine.Movement, Vector3.zero);
-                            _controller.MoveData[_animationKey] = positions;
+                            _controller.SaveMoveData[_animationKey] = positions;
                         }
                         _doShortcutMove = false;
                         _controller.SaveData();
@@ -357,7 +351,7 @@ namespace IDHIPlugins
                     case MoveType.LOAD:
                         if (!_animationKey.IsNullOrEmpty())
                         {
-                            _controller.MoveData.Data.TryGetValue(_animationKey,
+                            _controller.SaveMoveData.Data.TryGetValue(_animationKey,
                                 out var position);
                             if (position != null)
                             {
@@ -468,7 +462,7 @@ namespace IDHIPlugins
                     tmp = trans - adjustment;
                     return tmp;
                 };
-        }
+        }*/
         #endregion
     }
 }

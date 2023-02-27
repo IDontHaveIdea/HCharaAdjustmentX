@@ -88,24 +88,6 @@ namespace IDHIPlugins
             }
         }
 
-        /*
-        public class CharacterTypeData
-        {
-            private Dictionary<CharacterType, PositionData> _data;
-
-            public CharacterTypeData()
-            {
-                _data = new();
-                _data.Clear();
-            }
-
-            internal PositionData this[CharacterType key]
-            {
-                get { return _data[key]; }
-                set { _data[key] = value; }
-            }
-        }*/
-
         public sealed class MoveData
         {
             private Dictionary<string,
@@ -134,6 +116,11 @@ namespace IDHIPlugins
                 set { _data[key] = value; }
             }
 
+            internal bool TryGetValue(string  key, out Dictionary<CharacterType, PositionData> positions)
+            {
+                return _data.TryGetValue(key, out positions);
+            }
+
             internal void Load(PluginData data)
             {
                 var name = _chaControl.chaFile?.parameter.fullname.Trim()
@@ -159,14 +146,14 @@ namespace IDHIPlugins
                         }
                         else
                         {
-                            _Log.Level(LogLevel.Error ,$"HCAX0020: [Load] [{name}] " +
+                            _Log.Level(LogLevel.Error ,$"[Load] [{name}] " +
                                 $"Can't unpack data.");
                         }
                     }
                 }
                 else
                 {
-                    _Log.Debug($"HCAX0021: [Load] [{name}] PluginData is null.");
+                    _Log.Debug($"[Load] [{name}] PluginData is null.");
                     Data.Clear();
                 }
             }
@@ -266,7 +253,7 @@ namespace IDHIPlugins
             var lines = new StringBuilder();
 #if DEBUG
             var calllingMethod = Utilities.CallingMethod();
-            lines.AppendLine($"HCAX0021: [PrintData] Calling Method {calllingMethod}.");
+            lines.AppendLine($"[PrintData] Calling Method {calllingMethod}.");
 #endif
             foreach (var item in MoveData)
             {
@@ -283,26 +270,7 @@ namespace IDHIPlugins
 
             if (lines.Length > 0)
             {
-                _Log.Debug($"HCAX0022: [PrintData] [{name}]\n\n{lines}");
-            }
-        }
-
-        internal static void PrintData(
-            Dictionary<string, PositionDataPair> MoveData,
-            string name = "")
-        {
-            var lines = new StringBuilder();
-
-            foreach (var item in MoveData)
-            {
-                lines.AppendLine($"Position={item.Key} Heroine " +
-                    $"Position={item.Value.HeroinePosition.Format()} " +
-                    $"Rotation={item.Value.HeroineRotation.Format()}");
-            }
-
-            if (lines.Length > 0)
-            {
-                _Log.Debug($"HCAX0023: [PrintData]\n\n{lines}\n");
+                _Log.Debug($"[PrintData] [{name}]\n\n{lines}");
             }
         }
     }

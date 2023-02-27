@@ -18,7 +18,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Hooks.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)movecharacters\CharRotationMovement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\CharPositonMovement.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\Controller.MoveEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Buttons\MoveActionButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\Move.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)move\Axis.cs" />

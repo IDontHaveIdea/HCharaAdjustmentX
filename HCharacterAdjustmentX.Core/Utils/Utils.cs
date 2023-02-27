@@ -12,7 +12,6 @@ using IDHIUtils;
 
 using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 using static IDHIPlugins.HCharaAdjustmentX;
-using static HandCtrl;
 
 
 namespace IDHIPlugins
@@ -107,8 +106,6 @@ namespace IDHIPlugins
         {
             if (_animationLoader.Installed)
             {
-                _Log.Debug($"[CheckAnimationLoader] AnimationLoader " +
-                    $"version={_animationLoader.Version}");
                 if (_animationLoader.VersionAtLeast("1.1.2.2"))
                 {
                     _animationKeyOk = true;
@@ -125,6 +122,10 @@ namespace IDHIPlugins
                 {
                     _animationLoaderMovementOk = false;
                 }
+                _Log.Debug($"[CheckAnimationLoader] AnimationLoader " +
+                    $"version={_animationLoader.Version} " +
+                    $"ok={_animationLoaderMovementOk}");
+
             }
         }
 
@@ -211,20 +212,6 @@ namespace IDHIPlugins
         /// Show some information for Heroine 1
         /// </summary>
         /// <param name="instance"></param>
-        //internal static void InitialPositionInfo(HSceneProc instance)
-        //{
-            //if (!HProcScene.Nakadashi || (instance == null))
-        //    if (!HProcMonitor.Nakadashi || (instance == null))
-        //    {
-        //        return;
-        //    }
-        //    var tmp = instance.flags.lstHeroine[0].chaCtrl.transform;
-        //}
-
-        /// <summary>
-        /// Show some information for Heroine 1
-        /// </summary>
-        /// <param name="instance"></param>
         internal static void InitialPosition()
         {
             if (_hprocInstance == null)
@@ -242,9 +229,9 @@ namespace IDHIPlugins
             for (var i = 0; i < heroines.Count; i++)
             {
                 ctrl = GetController(heroines[i].chaCtrl);
-                if (ctrl.MoveData.Data.Count > 0)
+                if (ctrl.SaveMoveData.Data.Count > 0)
                 {
-                    ctrl.MoveData.Data.TryGetValue(_animationKey,
+                    ctrl.SaveMoveData.Data.TryGetValue(_animationKey,
                         out var position);
                     if (position != null)
                     {
@@ -344,7 +331,7 @@ namespace IDHIPlugins
             }
         }
 
-          /// <summary>
+        /// <summary>
         /// Save H _mode flag
         /// </summary>
         /// <param name="emode"></param>

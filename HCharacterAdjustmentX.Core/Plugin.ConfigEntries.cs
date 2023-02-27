@@ -22,8 +22,8 @@ namespace IDHIPlugins
         internal static ConfigEntry<bool> DebugInfo;
         internal static ConfigEntry<bool> DebugToConsole;
         internal static ConfigEntry<KeyboardShortcut> GroupGuide { get; set; }
-        internal static ConfigEntry<float> cfgAdjustmentStep;
-        internal static ConfigEntry<float> cfgRotationStep;
+        internal static ConfigEntry<float> AdjustmentStep;
+        internal static ConfigEntry<float> RotationStep;
 
         internal void ConfigEntries(bool bheroine3P = false)
         {
@@ -83,7 +83,7 @@ namespace IDHIPlugins
 #endif
 
             sectionKeys = "Movement Step";
-            cfgAdjustmentStep = Config.Bind(
+            AdjustmentStep = Config.Bind(
                 section: sectionKeys,
                 key: "Move step amount",
                 defaultValue: 0.01f,
@@ -91,19 +91,19 @@ namespace IDHIPlugins
                     description: "Set the step by with to move",
                     acceptableValues: null,
                     tags: new ConfigurationManagerAttributes { Order = 14 }));
-            cfgAdjustmentStep.SettingChanged += (_sender, _args) =>
+            AdjustmentStep.SettingChanged += (_sender, _args) =>
             {
-                if (_fAdjustStep != cfgAdjustmentStep.Value)
+                if (_fAdjustStep != AdjustmentStep.Value)
                 {
-                    _fAdjustStep = cfgAdjustmentStep.Value;
+                    _fAdjustStep = AdjustmentStep.Value;
 #if DEBUG
                     _Log.Info($"HCAX0018: Movement step read in configuration - " +
-                        $"{cfgAdjustmentStep.Value}");
+                        $"{AdjustmentStep.Value}");
 #endif
                 }
             };
 
-            cfgRotationStep = Config.Bind(
+            RotationStep = Config.Bind(
                 section: sectionKeys,
                 key: "Rotation step amount",
                 defaultValue: 5f,
@@ -111,14 +111,14 @@ namespace IDHIPlugins
                     description: "Set the rotation step by with to move",
                     acceptableValues: null,
                     tags: new ConfigurationManagerAttributes { Order = 14 }));
-            cfgAdjustmentStep.SettingChanged += (_sender, _args) =>
+            RotationStep.SettingChanged += (_sender, _args) =>
             {
-                if (_fAdjustStep != cfgAdjustmentStep.Value)
+                if (_fRotationStep != RotationStep.Value)
                 {
-                    _fAdjustStep = cfgAdjustmentStep.Value;
+                    _fRotationStep = RotationStep.Value;
 #if DEBUG
                     _Log.Info($"HCAX0018: Movement step read in configuration - " +
-                        $"{cfgAdjustmentStep.Value}");
+                        $"{RotationStep.Value}");
 #endif
                 }
             };

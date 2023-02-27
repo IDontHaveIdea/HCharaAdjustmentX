@@ -25,8 +25,7 @@ namespace IDHIPlugins
                 { CharacterType.Player, new ButtonsInterface(CharacterType.Player) },
                 { CharacterType.Heroine3P, new ButtonsInterface(CharacterType.Heroine3P) }
             };
-        //internal static Dictionary<CharacterType, List<MoveActionButton>> _botones =
-        internal static Dictionary<CharacterType, List<IColorActionStateButton>> _botones =
+        internal static Dictionary<CharacterType, List<IColorActionStateButton>> _buttons =
             new()
             {
                 { CharacterType.Heroine, null },
@@ -65,9 +64,9 @@ namespace IDHIPlugins
             {
                 // Have _buttons to show
                 // TODO: check how not to execute every frame
-                if (_botones[CharacterType.Heroine].Count > 0)
+                if (_buttons[CharacterType.Heroine].Count > 0)
                 {
-                    foreach (var moveButton in _botones[CharacterType.Heroine])
+                    foreach (var moveButton in _buttons[CharacterType.Heroine])
                     {
                         GUI.contentColor = moveButton.ForegroundColor;
                         GUI.backgroundColor = _SvgColor.mediumorchid;
@@ -82,9 +81,9 @@ namespace IDHIPlugins
 
             if (_buttonsInterface[CharacterType.Player].ShowInterface)
             {
-                if (_botones[CharacterType.Player]?.Count > 0)
+                if (_buttons[CharacterType.Player]?.Count > 0)
                 {
-                    foreach (var moveButton in _botones[CharacterType.Player])
+                    foreach (var moveButton in _buttons[CharacterType.Player])
                     {
                         GUI.contentColor = moveButton.ForegroundColor;
                         GUI.backgroundColor = _SvgColor.blue;
@@ -122,13 +121,13 @@ namespace IDHIPlugins
 
             if (_chaControl != null)
             {
-                if (_botones[chaType]?.Count > 0)
+                if (_buttons[chaType]?.Count > 0)
                 {
                     return;
                 }
             }
 
-            _botones[chaType] = GetControllerByType(chaType).buttons.ToList();
+            _buttons[chaType] = GetControllerByType(chaType).buttons.ToList();
         }
 
         /// <summary>
@@ -151,10 +150,10 @@ namespace IDHIPlugins
         private static bool CanShow()
         {
             // character is not showing
-            //if (!Player.visibleAll)
-            //{
-            //    return false;
-            //}
+            if (!Player.visibleAll)
+            {
+                return false;
+            }
             // Some pop up dialog on
             if (SceneApi.GetIsOverlap())
             {

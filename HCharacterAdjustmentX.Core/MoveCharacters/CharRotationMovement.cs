@@ -25,9 +25,6 @@ namespace IDHIPlugins
             internal static HCharaAdjusmentXController _controller;
             internal static bool _doAngleMove;
             internal static bool _positiveMove;
-            internal static string _animationGUID = "";
-            internal static int _animationID = 0;
-            internal static string _pathFemaleBase = "";
             #endregion
 
             #region Properties
@@ -54,14 +51,6 @@ namespace IDHIPlugins
                 var rotationPosition = _controller.OriginalRotation;
                 var angleMovement = _controller.Rotation;
 
-#if DEBUG
-                var callingMethod = Utilities.CallingMethod();
-                _Log.Warning($"[CharMovement.Move] Calling [{callingMethod}] START with " +
-                    $"Rotation={_controller.OriginalRotation.Format()}\n" +
-                    $"Rotation Move Step={_fRotationStep}" +
-                    $"   Saved Movement={_controller.Movement.Format()}\n" +
-                    $"Adjusted Movement={_controller.Rotation.Format()}");
-#endif
                 Vector3 newRotation = new(0, 0, 0);
 
                 switch (moveType)
