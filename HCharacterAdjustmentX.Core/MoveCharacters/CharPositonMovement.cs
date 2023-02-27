@@ -5,11 +5,9 @@ using UnityEngine;
 
 using BepInEx.Logging;
 
-using KKAPI.MainGame;
 using KKAPI.Utilities;
 
 using IDHIUtils;
-using MoveType = IDHIPlugins.Move.MoveType;
 
 
 namespace IDHIPlugins
@@ -19,7 +17,7 @@ namespace IDHIPlugins
         /// <summary>
         /// Take care of movement requests
         /// </summary>
-        internal class CharMovement
+        internal class CharPositionMovement
         {
             #region private fields
             internal static ChaControl _chaControl;
@@ -91,6 +89,7 @@ namespace IDHIPlugins
                 _Log.Warning($"[CharMovement.Move] Calling [{callingMethod}] START with " +
                     $"Moved={_controller.Moved} for KEY={_animationKey}\n" +
                     $"        Move Step={_fAdjustStep}" +
+                    $"        Move Step={_fRotationStep}" +
                     $"   Saved Movement={_controller.Movement.Format()}\n" +
                     $"           ALMove={_controller.ALMovement.Format()} " +
                     $"Adjusted Movement={movement.Format()}");
@@ -98,7 +97,7 @@ namespace IDHIPlugins
                 Vector3 newPosition = new(0, 0, 0);
                 switch (moveType)
                 {
-                    case MoveType.RESET:
+                    case MoveType.RESETMOVE:
                         _controller.ResetPosition();
                         break;
 
@@ -174,8 +173,7 @@ namespace IDHIPlugins
                             _controllerHeroine =
                                 GetControllerByType(CharacterType.Heroine);
 
-                            var positions = new Dictionary<CharacterType, PositionData>
-                            {
+                            var positions = new Dictionary<CharacterType, PositionData> {
                                 [chaType] = new(_controllerHeroine.Movement,
                                     Vector3.zero)
                             };
