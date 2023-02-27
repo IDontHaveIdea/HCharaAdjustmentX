@@ -12,17 +12,10 @@ using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
-    public enum Axis
-    {
-        UNKNOWN = -1,
-        X = 0,
-        Y = 1,
-        Z = 2
-    }
-
     public struct AxisButton : IColorActionStateButton
     {
         private Axis _currentAxis;
+        private readonly HCharaAdjusmentXController _controller;
 
         #region Properties
         public Axis Axis
@@ -35,13 +28,13 @@ namespace IDHIPlugins
             private set
             {
                 _currentAxis = value;
-                CharMovement.CurrentAxis = value;
+                _controller.CurrentAxis = value;
             }
         }
+        public CharacterType ChaType { get; private set; }
         #endregion
 
         #region Interface Properties
-        //public string Text { get; set; }
         public string Text => $"Axis: {_currentAxis}";
         public Color BackgroundColor { get; set; }
         public Color ForegroundColor { get; set; }
@@ -50,11 +43,16 @@ namespace IDHIPlugins
 
         #region Constructors
         public AxisButton(
-            Rect position
+            Rect position,
+            CharacterType chaType
             )
         {
+            _controller = GetControllerByType(chaType);
             Position = position;
-            _currentAxis = Axis.X;
+            Axis = Axis.X;
+            ChaType = chaType;
+            ForegroundColor = Color.white;
+            BackgroundColor = Color.gray;
         }
         #endregion
 
@@ -63,18 +61,18 @@ namespace IDHIPlugins
         {
             if ((state >= 0) && (state < 3))
             {
-                _currentAxis = (Axis)state;
+                Axis = (Axis)state;
             }
         }
 
         public void SetState(Axis axis)
         {
-            _currentAxis = axis;
+            Axis = axis;
         }
 
         public void Process()
         {
-            _currentAxis = (Axis)(((int)_currentAxis + 1) % 3);
+            Axis = (Axis)(((int)_currentAxis + 1) % 3);
         }
         #endregion
     }
