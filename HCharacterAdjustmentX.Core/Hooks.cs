@@ -58,7 +58,7 @@ namespace IDHIPlugins
                 _Log.Warning($"[{callingMethod}] Calling ChangeCategoryPostfix");
 #endif
                 Utils.SetOriginalPositionAll();
-                Utils.RecalcAdjustmentAll("from [ChangeCategory]");
+                Utils.RecalcAdjustmentAll();
             }
 
             [HarmonyPrefix]
@@ -152,7 +152,7 @@ namespace IDHIPlugins
                 _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
                 Utils.SetMode(_nextAinmInfo.mode);
                 Utils.SetALMove(_nextAinmInfo);
-                Utils.SetOriginalPositionAll(_nextAinmInfo);
+                Utils.SetOriginalPositionAll();
                 Utils.RecalcAdjustmentAll();
                 Utils.InitialPosition();
             }
