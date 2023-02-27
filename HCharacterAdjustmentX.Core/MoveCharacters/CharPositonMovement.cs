@@ -25,10 +25,190 @@ namespace IDHIPlugins
             internal static HCharaAdjusmentXController _controllerPlayer;
             internal static HCharaAdjusmentXController _controllerHeroine;
             internal static bool _doShortcutMove;
-            internal static bool _positiveMove;
-            internal static string _animationGUID = "";
-            internal static int _animationID = 0;
-            internal static string _pathFemaleBase = "";
+            #endregion
+
+            #region Properties
+            internal static Axis CurrentAxis { get; set; }
+            #endregion
+            /// <summary>
+            /// Check for configured key shortcuts and execute the type of movement
+            /// desired
+            ///
+            /// TODO:
+            ///     Classify positions for correct relative left/right
+            ///     and forward/backwards
+            /// </summary>
+            /// <param name="chaType">Character type</param>
+            /// <param name="moveType">Move triggered</param>
+            /// <returns></returns>
+            public static bool Move(CharacterType chaType, MoveType moveType)
+            {
+                _doShortcutMove = false;
+
+                _controller = GetControllerByType(chaType);
+                _chaControl = _controller.ChaControl;
+
+                if (_chaControl == null)
+                {
+                    throw new NullReferenceException($"HCAX0040: HProc instance " +
+                        $"invalid cannot get ChaControl for {chaType}.");
+                }
+
+                //_pathFemaleBase = _hprocInstance.flags.nowAnimationInfo
+                //    .pathFemaleBase.assetpath;
+
+                // Normal button press
+                var originalPosition = _controller.OriginalPosition;
+                var fullMovement = _controller.Movement;
+                if (!_controller.Moved)
+                {
+                    if ((_controller.Movement == Vector3.zero)
+                        && (_controller.ALMovement != Vector3.zero))
+                    {
+                        fullMovement = _controller.ALMovement;
+                    }
+                }
+                
+                switch (moveType)
+                {
+                    case MoveType.RESETMOVE:
+                        _controller.ResetPosition();
+                        break;
+
+                    case MoveType.UP:
+                        fullMovement += (Vector3.up * _fAdjustStep);
+                        _doShortcutMove = true;
+                        break;
+
+                    case MoveType.DOWN:
+                        fullMovement += (Vector3.down * _fAdjustStep);
+                        _doShortcutMove = true;
+                        break;
+
+                    case MoveType.RIGHT:
+                        fullMovement += (Vector3.right * _fAdjustStep);
+                        _doShortcutMove = true;
+                        break;
+
+                    case MoveType.LEFT:
+                        fullMovement += (Vector3.left * _fAdjustStep);
+                        _doShortcutMove = true;
+                        break;
+
+                    case MoveType.FORWARD:
+                        fullMovement += (Vector3.forward * _fAdjustStep);
+                        _doShortcutMove = true;
+                        break;
+
+                    case MoveType.BACK:
+                        fullMovement += (Vector3.back * _fAdjustStep);
+                        _doShortcutMove = true;
+                        break;
+                    case MoveType.SAVE:
+                        if (!_animationKey.IsNullOrEmpty())
+                        {
+                            var controllerPlayer =
+                                GetControllerByType(CharacterType.Player);
+                            var controllerHeroine =
+                                GetControllerByType(CharacterType.Heroine);
+
+                            var positions = new Dictionary<CharacterType, PositionData>
+                            {
+                                [CharacterType.Heroine] =
+                                    new(controllerHeroine.Movement, Vector3.zero),
+                                [CharacterType.Player] =
+                                    new(controllerPlayer.Movement, Vector3.zero)
+                            };
+
+                            controllerHeroine.MoveData[_animationKey] = positions;
+                        }
+                        _doShortcutMove = false;
+                        _controller.SaveData();
+                        break;
+                    case MoveType.LOAD:
+                        if (!_animationKey.IsNullOrEmpty())
+                        {
+                            var controllerHeroine =
+                                GetControllerByType(CharacterType.Heroine);
+                            if (controllerHeroine.MoveData.Data
+                                .TryGetValue(_animationKey, out var positions))
+                            {
+                                fullMovement = positions[chaType].Position;
+                            }
+                        }
+                        _doShortcutMove = true;
+                        break;
+                    case MoveType.ROTP:
+                        _doShortcutMove = false;
+                        break;
+                    case MoveType.ROTN:
+                        _doShortcutMove = false;
+                        break;
+                    // Execute a move event with current parameters used
+                    // for automatic position adjustment
+                    case MoveType.MOVE:
+                        _doShortcutMove = true;
+                        break;
+                    default:
+                        _doShortcutMove = false;
+                        break;
+                }
+                if (_doShortcutMove)
+                {
+                    if (!_controller.Moved)
+                    {
+                        _controller.Moved = true;
+                    }
+                    var newPosition = RecalcPosition(
+                        _chaControl, originalPosition, fullMovement);
+                    _doShortcutMove = false;
+                    _chaControl.transform.position = newPosition;
+                    _controller.Movement = fullMovement;
+                    _controller.LastMovePosition = newPosition;
+                }
+                return _doShortcutMove;
+            }
+
+            internal static Vector3 RecalcPosition(
+                ChaControl chaControl,
+                Vector3 original,
+                Vector3 fullMove)
+            {
+                try
+                {
+                    var currentPosition = chaControl.transform.position;
+
+                    var fullNewPosition = original + fullMove
+                        .MovementTransform(chaControl.transform);
+
+                    if (DebugInfo.Value)
+                    {
+                        _Log.Debug($"[RecalcPosition] Move {chaControl.name}\n" +
+                            $" original position {original.Format()}\n" +
+                            $"  current position {currentPosition.Format()}\n" +
+                            $"    move by vector {fullMove.Format()}\n" +
+                            $"position by vector {fullNewPosition.Format()}");
+                    }
+                    return fullNewPosition;
+                }
+                catch (Exception e)
+                {
+                    _Log.Level(LogLevel.Error, $"HCAX0048: Cannot adjust position " +
+                        $"{chaControl.name} - {e}.");
+                }
+                return Vector3.zero;
+            }
+        }
+
+        #region Backup
+        internal class CharPositionMovementReference
+        {
+            #region private fields
+            internal static ChaControl _chaControl;
+            internal static HCharaAdjusmentXController _controller;
+            internal static HCharaAdjusmentXController _controllerPlayer;
+            internal static HCharaAdjusmentXController _controllerHeroine;
+            internal static bool _doShortcutMove;
             #endregion
 
             #region Properties
@@ -52,12 +232,12 @@ namespace IDHIPlugins
                 if (chaType == CharacterType.Player)
                 {
                     _chaControl = _hprocInstance.flags.player?.chaCtrl;
-                    _positiveMove = false;
+                    //_positiveMove = false;
                 }
                 else
                 {
                     _chaControl = _hprocInstance.flags.lstHeroine[(int)chaType]?.chaCtrl;
-                    _positiveMove = true;
+                    //_positiveMove = true;
                 }
                 if (_chaControl == null)
                 {
@@ -66,10 +246,6 @@ namespace IDHIPlugins
                 }
 
                 _controller = GetControllerByType(chaType);
-                _animationID = _hprocInstance.flags.nowAnimationInfo.id;
-                _animationGUID = _hprocInstance.flags.nowAnimationInfo.nameAnimation;
-                _pathFemaleBase = _hprocInstance.flags.nowAnimationInfo
-                    .pathFemaleBase.assetpath;
 
                 // Normal button press
                 var originalPosition = _controller.OriginalPosition;
@@ -84,16 +260,7 @@ namespace IDHIPlugins
                         movement = _controller.ALMovement;
                     }
                 }
-#if DEBUG
-                var callingMethod = Utilities.CallingMethod();
-                _Log.Warning($"[CharMovement.Move] Calling [{callingMethod}] START with " +
-                    $"Moved={_controller.Moved} for KEY={_animationKey}\n" +
-                    $"        Move Step={_fAdjustStep}" +
-                    $"        Move Step={_fRotationStep}" +
-                    $"   Saved Movement={_controller.Movement.Format()}\n" +
-                    $"           ALMove={_controller.ALMovement.Format()} " +
-                    $"Adjusted Movement={movement.Format()}");
-#endif
+
                 Vector3 newPosition = new(0, 0, 0);
                 switch (moveType)
                 {
@@ -134,7 +301,7 @@ namespace IDHIPlugins
                         else
                         {
                             movement.x -= _fAdjustStep;
-                            
+
                         }
                         fullMovement += (Vector3.left * _fAdjustStep);
                         _doShortcutMove = true;
@@ -218,24 +385,20 @@ namespace IDHIPlugins
                 }
                 if (_doShortcutMove)
                 {
-                    var tmp = _chaControl.transform.position;
+                    //var tmp = _chaControl.transform.position;
                     if (!_controller.Moved)
                     {
                         _controller.Moved = true;
                     }
                     newPosition = RecalcPosition(
                         _chaControl, originalPosition, movement, fullMovement);
-#if DEBUG
-                    _Log.Info($"HCAX0046: Move {chaType} by {movement.Format()}\n"
-                        + $"from position {tmp.Format()} "
-                        + $"to position {newPosition.Format()}");
-#endif
                     _doShortcutMove = false;
                     _chaControl.transform.position = newPosition;
                     _controller.Movement = fullMovement;
                     _controller.LastMovePosition = newPosition;
+                    return true;
                 }
-                return _doShortcutMove;
+                return false;
             }
 
             internal static Vector3 RecalcPosition(
@@ -306,5 +469,6 @@ namespace IDHIPlugins
                     return tmp;
                 };
         }
+        #endregion
     }
 }
