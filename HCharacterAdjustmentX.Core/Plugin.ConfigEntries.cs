@@ -23,7 +23,8 @@ namespace IDHIPlugins
         internal static ConfigEntry<bool> DebugToConsole;
         internal static ConfigEntry<KeyboardShortcut> GroupGuide { get; set; }
         internal static ConfigEntry<float> cfgAdjustmentStep;
-        
+        internal static ConfigEntry<float> cfgRotationStep;
+
         internal void ConfigEntries(bool bheroine3P = false)
         {
             // Definition of configuration items
@@ -101,6 +102,27 @@ namespace IDHIPlugins
 #endif
                 }
             };
+
+            cfgRotationStep = Config.Bind(
+                section: sectionKeys,
+                key: "Rotation step amount",
+                defaultValue: 5f,
+                configDescription: new ConfigDescription(
+                    description: "Set the rotation step by with to move",
+                    acceptableValues: null,
+                    tags: new ConfigurationManagerAttributes { Order = 14 }));
+            cfgAdjustmentStep.SettingChanged += (_sender, _args) =>
+            {
+                if (_fAdjustStep != cfgAdjustmentStep.Value)
+                {
+                    _fAdjustStep = cfgAdjustmentStep.Value;
+#if DEBUG
+                    _Log.Info($"HCAX0018: Movement step read in configuration - " +
+                        $"{cfgAdjustmentStep.Value}");
+#endif
+                }
+            };
+
             #endregion Steps
         }
 
