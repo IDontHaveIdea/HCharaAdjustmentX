@@ -3,6 +3,7 @@
 //
 using System.Collections.Generic;
 
+using UnityEngine;
 
 namespace IDHIPlugins
 {
@@ -30,25 +31,6 @@ namespace IDHIPlugins
             buttonLabels[10]
         };
 
-        public enum MoveType
-        {
-            UP,
-            DOWN,
-            LEFT,
-            RIGHT,
-            FORWARD,
-            BACK,
-            SAVE,
-            LOAD,
-            ROTP,
-            ROTN,
-            AXIS,
-            RESET,
-            RESETROT,
-            MOVE,
-            UNKNOWN
-        }
-
         public static readonly Dictionary<string, MoveType> LabelType = new()
         {
             { buttonLabels[0], MoveType.UP },
@@ -62,10 +44,8 @@ namespace IDHIPlugins
             { buttonLabels[8], MoveType.ROTP },
             { buttonLabels[9], MoveType.ROTN },
             { buttonLabels[10], MoveType.AXIS },
-            { buttonLabels[11], MoveType.RESET },
-            { buttonLabels[12], MoveType.RESETROT }
+            { buttonLabels[11], MoveType.RESETMOVE },
+            { buttonLabels[12], MoveType.RESETROTATION }
         };
-
-
     }
 }
