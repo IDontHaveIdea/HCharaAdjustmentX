@@ -25,7 +25,8 @@ namespace IDHIPlugins
                 { CharacterType.Player, new ButtonsInterface(CharacterType.Player) },
                 { CharacterType.Heroine3P, new ButtonsInterface(CharacterType.Heroine3P) }
             };
-        internal static Dictionary<CharacterType, List<MoveActionButton>> _botones =
+        //internal static Dictionary<CharacterType, List<MoveActionButton>> _botones =
+        internal static Dictionary<CharacterType, List<IColorActionStateButton>> _botones =
             new()
             {
                 { CharacterType.Heroine, null },
@@ -150,10 +151,10 @@ namespace IDHIPlugins
         private static bool CanShow()
         {
             // character is not showing
-            if (!Player.visibleAll)
-            {
-                return false;
-            }
+            //if (!Player.visibleAll)
+            //{
+            //    return false;
+            //}
             // Some pop up dialog on
             if (SceneApi.GetIsOverlap())
             {
