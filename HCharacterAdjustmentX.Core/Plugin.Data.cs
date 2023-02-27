@@ -88,6 +88,7 @@ namespace IDHIPlugins
             }
         }
 
+        /*
         public class CharacterTypeData
         {
             private Dictionary<CharacterType, PositionData> _data;
@@ -103,7 +104,7 @@ namespace IDHIPlugins
                 get { return _data[key]; }
                 set { _data[key] = value; }
             }
-        }
+        }*/
 
         public sealed class MoveData
         {
