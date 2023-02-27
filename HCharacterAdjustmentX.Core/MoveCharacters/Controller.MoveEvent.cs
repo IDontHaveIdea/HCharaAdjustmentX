@@ -12,7 +12,7 @@ namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
     {
-        /// <summary>
+        /*/// <summary>
         /// Move events
         /// </summary>
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
@@ -21,11 +21,11 @@ namespace IDHIPlugins
 
             public class MoveRequestEventArgs : EventArgs
             {
-                internal Move.MoveType Move { get; }
+                internal MoveType Move { get; }
                 internal CharacterType ChaType { get; }
 
                 internal MoveRequestEventArgs(CharacterType chaType,
-                    Move.MoveType move)
+                    MoveType move)
                 {
                     ChaType = chaType;
                     Move = move;
@@ -54,9 +54,9 @@ namespace IDHIPlugins
                     _Log.Info($"HCAX0049: [RegisterMovementEvents] Call to action " +
                         $"{_args.Move} - {_args.ChaType}");
 #endif
-                    CharMovement.Move(_args.ChaType, _args.Move);
+                    CharPositionMovement.Move(_args.ChaType, _args.Move);
                 };
             }
-        }
+        }*/
     }
 }
