@@ -211,15 +211,15 @@ namespace IDHIPlugins
         /// Show some information for Heroine 1
         /// </summary>
         /// <param name="instance"></param>
-        internal static void InitialPositionInfo(HSceneProc instance)
-        {
+        //internal static void InitialPositionInfo(HSceneProc instance)
+        //{
             //if (!HProcScene.Nakadashi || (instance == null))
-            if (!HProcMonitor.Nakadashi || (instance == null))
-            {
-                return;
-            }
-            var tmp = instance.flags.lstHeroine[0].chaCtrl.transform;
-        }
+        //    if (!HProcMonitor.Nakadashi || (instance == null))
+        //    {
+        //        return;
+        //    }
+        //    var tmp = instance.flags.lstHeroine[0].chaCtrl.transform;
+        //}
 
         /// <summary>
         /// Show some information for Heroine 1
@@ -254,9 +254,9 @@ namespace IDHIPlugins
                         {
                             var movement = data.Position;
                             ctrl.Movement = movement;
-                            CTRL.InvokeOnMoveRequest(null,
-                                new CTRL.MoveRequestEventArgs(
-                                    ctrl.ChaType, Move.MoveType.MOVE));
+                            MoveEvent.InvokeOnPositionMoveEvent(null,
+                                new MoveEvent.MoveEventArgs(
+                                    ctrl.ChaType, MoveType.MOVE));
                         }
                     }
                 }
@@ -297,8 +297,7 @@ namespace IDHIPlugins
         /// from original position saved
         /// </summary>
         /// <param name="message"></param>
-        internal static void SetOriginalPositionAll(
-            HSceneProc.AnimationListInfo _nextAinmInfo = null)
+        internal static void SetOriginalPositionAll()
         {
             if (_hprocInstance == null)
             {
@@ -327,10 +326,7 @@ namespace IDHIPlugins
 
             if (_animationLoaderMovementOk)
             {
-                List<Vector3> movement = new() {
-                new Vector3(0, 0, 0), new Vector3(0, 0, 0) };
-
-                movement = Utils
+                var movement = Utils
                     .GetAnimationMovement(_nextAinmInfo);
 
                 var heroines = _hprocInstance.flags.lstHeroine;
@@ -366,7 +362,7 @@ namespace IDHIPlugins
         /// Turn on recalculation flag
         /// </summary>
         /// <param name="message"></param>
-        internal static void RecalcAdjustmentAll(string message = null)
+        internal static void RecalcAdjustmentAll()
         {
             if (_hprocInstance == null)
             {
