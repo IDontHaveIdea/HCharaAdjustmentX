@@ -5,8 +5,7 @@ using UnityEngine;
 
 using IDHIUtils;
 
-using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
-using static IDHIPlugins.Move;
+//using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
@@ -27,7 +26,7 @@ namespace IDHIPlugins
             Rect position,
             string text,
             MoveType move,
-            CharacterType chaType) : this()
+            CharacterType chaType)
         {
             Position = position;
             Text = text;
@@ -47,7 +46,9 @@ namespace IDHIPlugins
 #if DEBUG
             _Log.Info($"HCAX0050: {Text} Button pressed for {ChaType} ");
 #endif
-            InvokeOnMoveRequest(null, new MoveRequestEventArgs(ChaType, Move));
+            MoveEvent.InvokeOnPositionMoveEvent(
+                null,
+                new MoveEvent.MoveEventArgs(ChaType, Move));
         }
 
         public void SetState(byte state)
