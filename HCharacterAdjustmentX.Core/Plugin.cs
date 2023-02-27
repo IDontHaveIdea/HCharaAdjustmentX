@@ -104,7 +104,7 @@ namespace IDHIPlugins
 
             // Hook to HProcMonitor
             HProcMonitor.OnInit += OnHInit;
-            CTRL.RegisterMovementEvents();
+            MoveEvent.RegisterMoveEvents();
 
             // Start in disabled mode
             enabled = false;
