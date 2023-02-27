@@ -15,6 +15,26 @@ using IDHIUtils;
 
 namespace IDHIPlugins
 {
+    /*public enum CharType
+    {
+        Heroine,
+        Heroine3P,
+        Player,
+        Janitor,
+        Group,
+        Unknown
+    }*/
+
+    public enum CharacterType
+    {
+        Heroine,
+        Heroine3P,
+        Player,
+        Janitor,
+        Group,
+        Unknown
+    }
+
     public partial class HCharaAdjustmentX
     {
         // Controller
@@ -25,26 +45,27 @@ namespace IDHIPlugins
         internal static Vector3 _rightXAxisAdjustUnit = Vector3.zero;
         internal static Vector3 _upYAxisAdjustUnit = Vector3.zero;
         internal static float _fAdjustStep = 0.01f;
-        #endregion
-
-        #region enums
-        public enum CharacterType { Heroine, Heroine3P, Player, Janitor, Group, Unknown }
+        internal static float _fRotationStep = 5f;
         #endregion
 
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
             #region Fields
             internal MoveData MoveData;
-            internal List<MoveActionButton> buttons;
+            // internal List<MoveActionButton> buttons;
+            internal List<IColorActionStateButton> buttons;
             #endregion
 
             #region Properties
             public bool DoRecalc { get; set; } = true;
             public bool Moved { get; set; } = false;
             public Vector3 OriginalPosition { get; set; } = new(0, 0, 0);
+            public Quaternion OriginalRotation { get; set; } = new(0, 0, 0, 0);
             public Vector3 LastMovePosition { get; set; } = new(0, 0, 0);
             public Vector3 FoundPosition { get; set; } = new(0, 0, 0);
             public Vector3 Movement { get; set; } = new(0, 0, 0);
+            public Vector3 Rotation { get; set; } = new(0, 0, 0);
+            public Axis CurrentAxis { get; set; } = Axis.UNKNOWN;
             public Vector3 ALMovement { get; set; } = new(0, 0, 0);
             internal CharacterType ChaType { get; set; } = CharacterType.Unknown;
             #endregion
@@ -200,12 +221,12 @@ namespace IDHIPlugins
                 {
                     //buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
                     //    width: 62f, height: 25f, xOffset: (-126f)).Buttons;
-                    buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
+                    buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
                         width: 62f, height: 25f, xOffset: (-126f)).Buttons;
                 }
                 else if (characterType == CharacterType.Player)
                 {
-                    buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.08f,
+                    buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
                         width: 62f, height: 25f, xOffset: (-248f)).Buttons;
                 }
                 // Start disabled
@@ -219,8 +240,9 @@ namespace IDHIPlugins
             {
                 var nowHPointDataPos = _hprocTraverse.nowHpointDataPos;
                 var nowHPointData = _hprocTraverse.nowHpointData;
-
+                
                 OriginalPosition = nowHPointDataPos;
+                OriginalRotation = ChaControl.transform.rotation;
                 FoundPosition = ChaControl.transform.position;
                 LastMovePosition = Vector3.zero;
                 Movement = Vector3.zero;
@@ -238,6 +260,7 @@ namespace IDHIPlugins
                 lines.Append($"Last Move={LastMovePosition} Set={Vector3.zero}\n");
                 lines.Append(
                     $"Current Position={FoundPosition.Format()}\n" +
+                    $"Current Rotation={OriginalRotation.Format()}\n" +
                     $"          ALMove={ALMovement.Format()} Moved={Moved}\n" +
                     $"nowHpointDataPos={nowHPointDataPos.Format()}");
                 _Log.Info($"[SetOriginalPosition] Calling [{callingMethod}] " +
@@ -266,9 +289,9 @@ namespace IDHIPlugins
                     
                     if (ALMovement != Vector3.zero)
                     {
-                        InvokeOnMoveRequest(null,
-                            new MoveRequestEventArgs(
-                                ChaType, Move.MoveType.MOVE));
+                        MoveEvent.InvokeOnPositionMoveEvent(null,
+                            new MoveEvent.MoveEventArgs(
+                                ChaType, MoveType.MOVE));
                     }
 #if DEBUG
                     var finalPosition = ChaControl.transform.position;
@@ -284,6 +307,32 @@ namespace IDHIPlugins
                 }
             }
 
+            /// <summary>
+            /// Restore original position
+            /// </summary>
+            internal void ResetRotation()
+            {
+                var currentRotation = ChaControl.transform.rotation;
+
+                // Get calling method name
+                var callingMethod = Utilities.CallingMethod();
+                var rotation = Rotation;
+
+                if (OriginalRotation != new Quaternion(0, 0, 0, 0))
+                {
+                    ChaControl.transform.rotation = OriginalRotation;
+                    Rotation = Vector3.zero;
+#if DEBUG
+                    var finalPosition = ChaControl.transform.rotation;
+                    _Log.Info($"[ResetRotation] Calling [{callingMethod}] " +
+                        $"Reset position for {ChaType}\n" +
+                        $"  Angle Movement={rotation.Format()}\n" +
+                        $"    from current={currentRotation.Format()}\n" +
+                        $"              to={OriginalRotation.Format()}\n" +
+                        $"  final Rotation={finalPosition.Format()}");
+#endif
+                }
+            }
             #endregion
         }
     }
