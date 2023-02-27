@@ -8,7 +8,7 @@ using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
-    public enum MoveKind
+    public enum MoveType
     {
         UNKNOWN = -1,
         UP,
@@ -27,56 +27,66 @@ namespace IDHIPlugins
         MOVE
     }
 
-    public enum CharType
+    public partial class MoveEvent
     {
-        Heroine,
-        Heroine3P,
-        Player,
-        Janitor,
-        Group,
-        Unknown
-    }
-
-    public partial class MoveEvent2
-    {
-        public static event EventHandler<MoveEventArgs> OnMoveEvent;
+        public static event EventHandler<MoveEventArgs> OnPositionMoveEvent;
+        public static event EventHandler<MoveEventArgs> OnRotationEvent;
 
         public class MoveEventArgs : EventArgs
         {
-            internal MoveKind Move { get; }
-            //internal CharacterType ChaType { get; }
+            internal MoveType Move { get; }
+            internal CharacterType ChaType { get; }
 
             internal MoveEventArgs(
-                //CharacterType chaType,
-                MoveKind move)
+                CharacterType chaType,
+                MoveType move)
             {
-                //ChaType = chaType;
+                ChaType = chaType;
                 Move = move;
             }
         }
 
         /// <summary>
-        /// Trigger OnMoveEvent request event
+        /// Trigger OnPositionMoveEvent request event
         /// </summary>
         /// <param name="_sender">caller object</param>
         /// <param name="_args">event arguments</param>
-        internal static void InvokeOnMoveRequest(object _sender, MoveEventArgs _args)
+        internal static void InvokeOnPositionMoveEvent(object _sender, MoveEventArgs _args)
         {
-            OnMoveEvent?.Invoke(_sender, _args);
+            OnPositionMoveEvent?.Invoke(_sender, _args);
+        }
+
+        /// <summary>
+        /// Trigger OnRotationEvent request event
+        /// </summary>
+        /// <param name="_sender">caller object</param>
+        /// <param name="_args">event arguments</param>
+        internal static void InvokeOnRotationEvent(object _sender, MoveEventArgs _args)
+        {
+            OnPositionMoveEvent?.Invoke(_sender, _args);
         }
 
         // <summary>
         /// Add action to OnMoveEvent
         /// </summary>
-        internal static void RegisterMovementEvents()
+        internal static void RegisterMoveEvents()
         {
-            OnMoveEvent += (_sender, _args) =>
+            OnPositionMoveEvent += (_sender, _args) =>
             {
 #if DEBUG
-                _Log.Info($"[RegisterMovementEvents] Call to action " +
+                _Log.Info($"[RegisterMoveEvents] Call to position move action " +
                     $"{_args.Move}");
 #endif
-                //CharMovement.Move(_args.ChaType, _args.Move);
+                CharPositionMovement.Move(_args.ChaType, _args.Move);
+            };
+
+            OnRotationEvent += (_sender, _args) =>
+            {
+#if DEBUG
+                _Log.Info($"[RegisterMoveEvents] Call to rotation action " +
+                    $"{_args.Move}");
+#endif
+                CharRotationMovement.Move(_args.ChaType, _args.Move);
             };
         }
     }
