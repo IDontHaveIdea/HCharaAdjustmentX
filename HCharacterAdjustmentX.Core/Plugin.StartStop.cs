@@ -31,9 +31,13 @@ namespace IDHIPlugins
             _Log.Info($"[OnHProcExit] Removing patches and disabling HCAX.");
 #endif
             SetControllerEnabled(false);
-            if (_hprocInstance != null)
+            if (HPprocInstance != null)
             {
-                _hprocInstance = null;
+                HPprocInstance = null;
+            }
+            if (HProcTraverse != null)
+            {
+                HProcTraverse = null;
             }
             enabled = false;
             try
@@ -68,13 +72,12 @@ namespace IDHIPlugins
         {
             CharacterType chType;
             // HSceneProc instance will be used later
-            _hprocInstance = (HSceneProc)instance;
-            _hprocObject = instance;
-            _hprocTraverse = null;
-            _hprocTraverse = new HSceneProcTraverse(instance);
+            HProcObject = instance;
+            HPprocInstance = (HSceneProc)instance;
+            HProcTraverse = new HSceneProcTraverse(instance);
 
             // set various flags
-            Utils.SetMode(_hprocInstance.flags.mode);
+            Utils.SetMode(HProcTraverse.flags.mode);
 
             // verify if is a scene we support
             if (!IsSupportedScene)
@@ -84,20 +87,21 @@ namespace IDHIPlugins
                 return;
             }
 
-            // Creates guides and disables the controllers
-            for (var i = 0; i < _hprocInstance.flags.lstHeroine.Count; i++)
+            // Initialize character controllers
+            for (var i = 0; i < HProcTraverse.flags.lstHeroine.Count; i++)
             {
                 chType = (CharacterType)i;
 
-                GetController(_hprocInstance.flags.lstHeroine[i].chaCtrl).Init(
-                    _hprocInstance, chType);
+                GetController(HProcTraverse.flags.lstHeroine[i].chaCtrl).Init(
+                    HPprocInstance, chType);
             }
 
-            GetController(_hprocInstance.flags.player.chaCtrl).Init(
-                _hprocInstance, CharacterType.Player);
+            GetController(HProcTraverse.flags.player.chaCtrl).Init(
+                HPprocInstance, CharacterType.Player);
+
             // Group move guide off
-            _hprocInstance.sprite.axis.tglDraw.isOn = false;
-            _hprocInstance.guideObject.gameObject.SetActive(false);
+            HProcTraverse.sprite.axis.tglDraw.isOn = false;
+            HPprocInstance.guideObject.gameObject.SetActive(false);
         }
 
         /// <summary>
