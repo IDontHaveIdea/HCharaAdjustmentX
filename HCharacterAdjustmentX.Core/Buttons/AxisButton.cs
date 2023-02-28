@@ -47,7 +47,7 @@ namespace IDHIPlugins
         {
             _controller = GetControllerByType(chaType);
             Position = position;
-            Axis = Axis.X;
+            Axis = Axis.Y;
             ChaType = chaType;
             ForegroundColor = Color.white;
             BackgroundColor = Color.gray;
