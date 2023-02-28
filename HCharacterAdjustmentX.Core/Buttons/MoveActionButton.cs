@@ -9,7 +9,7 @@ using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
-    public struct MoveActionButton : IColorActionStateButton
+    public struct MoveActionButton : IColorButton
     {
         #region public properties
         public string Text { get; set;  }
@@ -23,13 +23,12 @@ namespace IDHIPlugins
         #region constructor
         public MoveActionButton(
             Rect position,
-            string text,
-            MoveType move,
+            ButtonProperties b,
             CharacterType chaType)
         {
             Position = position;
-            Text = text;
-            Move = move;
+            Text = b.Label;
+            Move = b.MoveType;
             ChaType = chaType;
             ForegroundColor = Color.white;
             BackgroundColor = Color.gray;
@@ -48,10 +47,6 @@ namespace IDHIPlugins
             MoveEvent.InvokeOnPositionMoveEvent(
                 null,
                 new MoveEvent.MoveEventArgs(ChaType, Move));
-        }
-
-        public void SetState(byte state)
-        {
         }
         #endregion
     }

@@ -1,8 +1,6 @@
 //
 // ActionButton
 //
-using System.Collections.Generic;
-
 using UnityEngine;
 
 using IDHIUtils;
@@ -12,7 +10,7 @@ using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
-    public struct AxisButton : IColorActionStateButton
+    public struct AxisButton : IColorButton
     {
         private Axis _currentAxis;
         private readonly HCharaAdjusmentXController _controller;
@@ -57,19 +55,6 @@ namespace IDHIPlugins
         #endregion
 
         #region public methods
-        public void SetState(byte state)
-        {
-            if ((state >= 0) && (state < 3))
-            {
-                Axis = (Axis)state;
-            }
-        }
-
-        public void SetState(Axis axis)
-        {
-            Axis = axis;
-        }
-
         public void Process()
         {
             Axis = (Axis)(((int)_currentAxis + 1) % 3);

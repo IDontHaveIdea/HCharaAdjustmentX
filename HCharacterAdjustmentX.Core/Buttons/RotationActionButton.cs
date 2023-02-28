@@ -10,7 +10,7 @@ using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
-    public struct RotationActionButton : IColorActionStateButton
+    public struct RotationActionButton : IColorButton
     {
         #region Properties
         public MoveType Move { get; set; }
@@ -27,14 +27,13 @@ namespace IDHIPlugins
         #region Constructors
         public RotationActionButton(
             Rect position,
-            string text,
-            MoveType move,
+            ButtonProperties b,
             CharacterType chaType
             )
         {
             Position = position;
-            Text = text;
-            Move = move;
+            Text = b.Label;
+            Move = b.MoveType;
             ChaType = chaType;
             ForegroundColor = Color.white;
             BackgroundColor = Color.gray;
@@ -51,10 +50,6 @@ namespace IDHIPlugins
             _Log.Info($"[RotationActionButton]: {Text} Button pressed.");
 #endif
             //InvokeOnMoveRequest(null, new MoveRequestEventArgs(ChaType, Move));
-        }
-
-        public void SetState(byte state)
-        {
         }
         #endregion
         
