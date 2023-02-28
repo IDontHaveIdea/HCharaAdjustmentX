@@ -27,9 +27,6 @@ namespace IDHIPlugins
             internal static bool _positiveMove;
             #endregion
 
-            #region Properties
-            internal static Axis CurrentAxis { get; set; }
-            #endregion
             /// <summary>
             /// Check for configured key shortcuts and execute the type of movement
             /// desired
@@ -46,6 +43,7 @@ namespace IDHIPlugins
                 _doAngleMove = false;
 
                 _controller = GetControllerByType(chaType);
+                _chaControl = _controller.ChaControl;
 
                 // Normal button press
                 var rotationPosition = _controller.OriginalRotation;
@@ -66,40 +64,25 @@ namespace IDHIPlugins
                 return _doAngleMove;
             }
 
-            internal static Vector3 RecalcPosition(
+            internal static Vector3 RecalcRotation(
                 ChaControl chaControl,
                 Vector3 original,
-                Vector3 move,
                 Vector3 fullMove)
             {
                 try
                 {
-                    var right = chaControl.transform.right * move.x;
-                    var up = chaControl.transform.up * move.y;
-                    var forward = chaControl.transform.forward * move.z;
 
                     var currentPosition = chaControl.transform.position;
-
-                    var newPosition = original;
-                    var fullNewPosition = original + fullMove
+                    var newPosition = original + fullMove
                         .MovementTransform(chaControl.transform);
-
-                    newPosition += up;
-                    newPosition += right;
-                    newPosition += forward;
 
                     if (DebugInfo.Value)
                     {
                         _Log.Debug($"[RecalcPosition] Move {chaControl.name}\n" +
                             $" original position {original.Format()}\n" +
                             $"  current position {currentPosition.Format()}\n" +
-                            $"      move by axis {move.Format()}\n" +
                             $"    move by vector {fullMove.Format()}\n" +
-                            $"           right x {right.Format()}\n" +
-                            $"              up y {up.Format()}\n" +
-                            $"         forward z {forward.Format()}\n" +
-                            $"  position by axis {newPosition.Format()}\n" +
-                            $"position by vector {fullNewPosition.Format()}");
+                            $"position by vector {newPosition.Format()}");
                     }
                     return newPosition;
                 }

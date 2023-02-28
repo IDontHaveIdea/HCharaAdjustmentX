@@ -7,45 +7,49 @@ using UnityEngine;
 
 namespace IDHIPlugins
 {
+    public enum ActionType
+    {
+        POSITION,
+        ROTATION,
+        AXIS
+    }
+
+    public struct ButtonProperties
+    {
+        public string Label { get; set; }
+        public MoveType MoveType { get; set; }
+        public ActionType ActionType { get; set; }
+        public bool DoubleWide { get; set; }
+        public ButtonProperties(
+            string label,
+            MoveType moveType,
+            ActionType actionType,
+            bool doubleWide = false)
+        {
+            Label = label;
+            MoveType = moveType;
+            ActionType = actionType;
+            DoubleWide = doubleWide;
+        }
+    }
+
     public readonly struct Move
     {
-        public static readonly List<string> buttonLabels = new()
+        public static readonly List<ButtonProperties> Buttons = new()
         {
-            "Up",
-            "Down",
-            "Left",
-            "Right",
-            "Forward",
-            "Back",
-            "Save",
-            "Load",
-            "Rot. +",
-            "Rot. -",
-            "Axis",
-            "R. Move",
-            "R. Rot."
-        };
-
-        public static readonly List<string> doubleWidthLabels = new()
-        {
-            buttonLabels[10]
-        };
-
-        public static readonly Dictionary<string, MoveType> LabelType = new()
-        {
-            { buttonLabels[0], MoveType.UP },
-            { buttonLabels[1], MoveType.DOWN },
-            { buttonLabels[2], MoveType.LEFT },
-            { buttonLabels[3], MoveType.RIGHT },
-            { buttonLabels[4], MoveType.FORWARD },
-            { buttonLabels[5], MoveType.BACK },
-            { buttonLabels[6], MoveType.SAVE },
-            { buttonLabels[7], MoveType.LOAD },
-            { buttonLabels[8], MoveType.POSITIVEROTATION },
-            { buttonLabels[9], MoveType.NEGATIVEROTATION },
-            { buttonLabels[10], MoveType.AXIS },
-            { buttonLabels[11], MoveType.RESETMOVE },
-            { buttonLabels[12], MoveType.RESETROTATION }
+            { new(     "Up", MoveType.UP, ActionType.POSITION) },
+            { new(   "Down", MoveType.DOWN, ActionType.POSITION) },
+            { new(   "Left", MoveType.LEFT, ActionType.POSITION) },
+            { new(  "Right", MoveType.RIGHT, ActionType.POSITION) },
+            { new("Forward", MoveType.FORWARD, ActionType.POSITION) },
+            { new(   "Back", MoveType.BACK, ActionType.POSITION) },
+            { new( "Rot. +", MoveType.POSITIVEROTATION, ActionType.ROTATION) },
+            { new( "Rot. -", MoveType.NEGATIVEROTATION, ActionType.ROTATION) },
+            { new(   "Axis", MoveType.AXIS, ActionType.AXIS, true) },
+            { new(   "Save", MoveType.SAVE, ActionType.POSITION) },
+            { new(   "Load", MoveType.LOAD, ActionType.POSITION) },
+            { new("R. Move", MoveType.RESETMOVE, ActionType.POSITION) },
+            { new("R. Rot.", MoveType.RESETROTATION, ActionType.ROTATION) }
         };
     }
 }
