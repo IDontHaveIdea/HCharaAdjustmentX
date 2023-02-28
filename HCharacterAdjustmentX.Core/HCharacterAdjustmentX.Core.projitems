@@ -16,10 +16,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)GUI\Plugin.ButtonsInterface.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GUI\Plugin.GUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hooks.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)movecharacters\CharRotationMovement.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\CharPositonMovement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Movecharacters\CharRotationMovement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Movecharacters\CharPositonMovement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Buttons\MoveActionButton.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MoveCharacters\Move.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Movecharacters\Move.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)move\Axis.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)move\MoveEvents.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plugin.ConfigEntries.cs" />
