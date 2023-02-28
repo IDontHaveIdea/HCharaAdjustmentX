@@ -38,7 +38,7 @@ namespace IDHIPlugins
         {
             #region Fields
             internal MoveData SaveMoveData;
-            internal List<IColorActionStateButton> buttons;
+            internal List<IColorButton> buttons;
             #endregion
 
             #region Properties
@@ -189,21 +189,26 @@ namespace IDHIPlugins
             internal void Init(HSceneProc hSceneProc, CharacterType characterType)
             {
 #if DEBUG
-                _Log.Info($"HCAX0025: Initialization for {characterType}");
+                _Log.Info($"[Init] Initialization for {characterType}");
 #endif
                 ChaType = characterType;
                 SaveMoveData ??= new(ChaControl);
                 SetOriginalPosition();
+                float xOffset = 0;
                 if (characterType == CharacterType.Heroine)
                 {
-                    buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
-                        width: 62f, height: 25f, xOffset: (-126f)).Buttons;
+                    xOffset = (-126f);
+                    //buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
+                    //    width: 62f, height: 25f, xOffset: (-126f)).Buttons;
                 }
                 else if (characterType == CharacterType.Player)
                 {
-                    buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
-                        width: 62f, height: 25f, xOffset: (-248f)).Buttons;
+                    xOffset = (-248f);
+                    //buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
+                    //    width: 62f, height: 25f, xOffset: (-248f)).Buttons;
                 }
+                buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
+                        width: 62f, height: 25f, xOffset: xOffset).Buttons;
                 // Start disabled
                 enabled = false;
             }
@@ -213,8 +218,8 @@ namespace IDHIPlugins
             /// </summary>
             internal void SetOriginalPosition()
             {
-                var nowHPointDataPos = _hprocTraverse.nowHpointDataPos;
-                var nowHPointData = _hprocTraverse.nowHpointData;
+                var nowHPointDataPos = HProcTraverse.nowHpointDataPos;
+                var nowHPointData = HProcTraverse.nowHpointData;
                 
                 OriginalPosition = nowHPointDataPos;
                 OriginalRotation = ChaControl.transform.rotation;
