@@ -63,7 +63,7 @@ namespace IDHIPlugins
                 
                 switch (moveType)
                 {
-                    case MoveType.RESETMOVE:
+                    case MoveType.RESETPOSITION:
                         _controller.ResetPosition();
                         _doPositionMove = false;
                         break;
