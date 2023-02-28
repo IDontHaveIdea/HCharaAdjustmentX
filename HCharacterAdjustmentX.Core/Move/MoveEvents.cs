@@ -63,7 +63,7 @@ namespace IDHIPlugins
         /// <param name="_args">event arguments</param>
         internal static void InvokeOnRotationEvent(object _sender, MoveEventArgs _args)
         {
-            OnPositionMoveEvent?.Invoke(_sender, _args);
+            OnRotationEvent?.Invoke(_sender, _args);
         }
 
         // <summary>
@@ -83,7 +83,7 @@ namespace IDHIPlugins
             OnRotationEvent += (_sender, _args) =>
             {
 #if DEBUG
-                _Log.Info($"[RegisterMoveEvents] Call to rotation action " +
+                _Log.Info($"[RegisterRotationEvents] Call to rotation action " +
                     $"{_args.Move}");
 #endif
                 CharRotationMovement.Move(_args.ChaType, _args.Move);
