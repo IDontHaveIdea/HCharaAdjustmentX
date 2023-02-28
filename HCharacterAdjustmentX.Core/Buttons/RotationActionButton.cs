@@ -49,7 +49,9 @@ namespace IDHIPlugins
 #if DEBUG
             _Log.Info($"[RotationActionButton]: {Text} Button pressed.");
 #endif
-            //InvokeOnMoveRequest(null, new MoveRequestEventArgs(ChaType, Move));
+            MoveEvent.InvokeOnRotationEvent(
+                null,
+                new MoveEvent.MoveEventArgs(ChaType, Move));
         }
         #endregion
         
