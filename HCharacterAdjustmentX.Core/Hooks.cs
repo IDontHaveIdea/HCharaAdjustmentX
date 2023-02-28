@@ -20,15 +20,20 @@ namespace IDHIPlugins
     public partial class HCharaAdjustmentX
     {
         // Hooks
+        #region Fields
         internal static Harmony _hookInstance;
-        internal static HSceneProc _hprocInstance;
-        internal static object _hprocObject;
         internal static HFlag.EMode _mode;
-        internal static string _animationKey = "";
-        internal static HSceneProcTraverse _hprocTraverse;
         internal static bool _MovePerformed = false;
         internal static string _hPointName = string.Empty;
         internal static Vector3 _hPointPos = Vector3.zero;
+        #endregion
+
+        #region Properties
+        internal static string AnimationKey { get; set; }
+        internal static object HProcObject { get; set; }
+        internal static HSceneProc HPprocInstance { get; set; }
+        internal static HSceneProcTraverse HProcTraverse { get; set; }
+        #endregion
 
         internal partial class Hooks
         {
@@ -75,13 +80,13 @@ namespace IDHIPlugins
                 // This hook is executed before HProcMonitor runs the first time
                 // HSceneProcMonin finish loading event to get nowHpointData the
                 // field needs to be initialized when null
-                _hprocTraverse ??= new(__instance);
+                HProcTraverse ??= new(__instance);
 
                 // Get calling method name
                 try
                 {
-                    var nowHPointDataPos = _hprocTraverse.nowHpointDataPos;
-                    var nowHPointData = _hprocTraverse.nowHpointData;
+                    var nowHPointDataPos = HProcTraverse.nowHpointDataPos;
+                    var nowHPointData = HProcTraverse.nowHpointData;
                     _hPointName = nowHPointData;
                     _hPointPos = nowHPointDataPos;
                     var callingMethod = Utilities.CallingMethod();
@@ -96,8 +101,8 @@ namespace IDHIPlugins
                         $"ChangeAnimatorPrefix");
                 }
 #endif
-                _animationKey = "";
-                _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
+                AnimationKey = "";
+                AnimationKey = Utils.GetAnimationKey(_nextAinmInfo);
                 Utils.SetALMove(_nextAinmInfo);
                 Utils.ResetPositionAll();
             }
@@ -119,8 +124,8 @@ namespace IDHIPlugins
 #if DEBUG
                 try
                 {
-                    var nowHPointDataPos = _hprocTraverse.nowHpointDataPos;
-                    var nowHPointData = _hprocTraverse.nowHpointData;
+                    var nowHPointDataPos = HProcTraverse.nowHpointDataPos;
+                    var nowHPointData = HProcTraverse.nowHpointData;
                     nowHPointData ??= "null";
                     if (nowHPointDataPos == null)
                     {
@@ -149,7 +154,7 @@ namespace IDHIPlugins
 #endif
                 }
 #endif
-                _animationKey = Utils.GetAnimationKey(_nextAinmInfo);
+                AnimationKey = Utils.GetAnimationKey(_nextAinmInfo);
                 Utils.SetMode(_nextAinmInfo.mode);
                 Utils.SetALMove(_nextAinmInfo);
                 Utils.SetOriginalPositionAll();
