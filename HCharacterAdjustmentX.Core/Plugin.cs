@@ -135,11 +135,11 @@ namespace IDHIPlugins
 
             if (chaType == CharacterType.Player)
             {
-                chaControl = _hprocInstance.flags.player?.chaCtrl;
+                chaControl = HPprocInstance.flags.player?.chaCtrl;
             }
             else
             {
-                chaControl = _hprocInstance.flags.lstHeroine[(int)chaType]?.chaCtrl;
+                chaControl = HPprocInstance.flags.lstHeroine[(int)chaType]?.chaCtrl;
             }
 
             return ((chaControl == null) || (chaControl.gameObject == null))
