@@ -22,7 +22,7 @@ namespace IDHIPlugins
         POSITIVEROTATION,
         NEGATIVEROTATION,
         AXIS,
-        RESETMOVE,
+        RESETPOSITION,
         RESETROTATION,
         MOVE
     }
