@@ -2,6 +2,7 @@
 // MoveEvent
 //
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
@@ -15,29 +16,25 @@ namespace IDHIPlugins
         Z = 2
     }
 
-    public readonly struct AxisVector
+    public class AxisVector
     {
-        private readonly Dictionary<Axis, Vector3> _values = new()
+        private static readonly Dictionary<Axis, Vector3> _values = new()
         {
             {Axis.X, Vector3.right},
             {Axis.Y, Vector3.up},
             {Axis.Z, Vector3.forward}
         };
 
-        public AxisVector()
+        public static bool TryGetValue(Axis key, out Vector3 result)
         {
+            return _values.TryGetValue(key, out result);
         }
 
-        public Vector3? this[Axis key]
+        public Vector3 this[Axis key]
         {
-            get
-            {
-                if (_values.TryGetValue(Axis.X, out var value))
-                {
-                    return value;
-                }
-                return null;
-            }
+            get { return _values[key]; }
+            set { _values[key] = value;}
         }
     }
+
 }
