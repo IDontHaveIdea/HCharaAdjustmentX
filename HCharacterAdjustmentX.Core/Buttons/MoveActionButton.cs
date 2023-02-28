@@ -11,11 +11,14 @@ namespace IDHIPlugins
 {
     public struct MoveActionButton : IColorButton
     {
-        #region public properties
+        #region Interface properties
         public string Text { get; set;  }
         public Color BackgroundColor { get; set; }
         public Color ForegroundColor { get; set; }
         public Rect Position { get; }
+        #endregion
+
+        #region Properties
         public MoveType Move { get; set; }
         public CharacterType ChaType { get; set; }
         #endregion
@@ -35,14 +38,14 @@ namespace IDHIPlugins
         }
         #endregion
 
-        #region public methods
+        #region Interface methods
         /// <summary>
         /// Trigger a move event
         /// </summary>
         public void Process()
         {
 #if DEBUG
-            _Log.Info($"HCAX0050: {Text} Button pressed for {ChaType} ");
+            _Log.Info($"[MoveActionButton.Process] {Text} Button pressed for {ChaType} ");
 #endif
             MoveEvent.InvokeOnPositionMoveEvent(
                 null,

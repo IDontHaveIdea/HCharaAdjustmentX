@@ -15,6 +15,13 @@ namespace IDHIPlugins
         private Axis _currentAxis;
         private readonly HCharaAdjusmentXController _controller;
 
+        #region Interface Properties
+        public string Text => $"Axis: {_currentAxis}";
+        public Color BackgroundColor { get; set; }
+        public Color ForegroundColor { get; set; }
+        public Rect Position { get; }
+        #endregion
+
         #region Properties
         public Axis Axis
         {
@@ -32,13 +39,6 @@ namespace IDHIPlugins
         public CharacterType ChaType { get; private set; }
         #endregion
 
-        #region Interface Properties
-        public string Text => $"Axis: {_currentAxis}";
-        public Color BackgroundColor { get; set; }
-        public Color ForegroundColor { get; set; }
-        public Rect Position { get; }
-        #endregion
-
         #region Constructors
         public AxisButton(
             Rect position,
@@ -54,7 +54,7 @@ namespace IDHIPlugins
         }
         #endregion
 
-        #region public methods
+        #region Interface public methods
         public void Process()
         {
             Axis = (Axis)(((int)_currentAxis + 1) % 3);

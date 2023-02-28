@@ -12,16 +12,16 @@ namespace IDHIPlugins
 {
     public struct RotationActionButton : IColorButton
     {
-        #region Properties
-        public MoveType Move { get; set; }
-        public CharacterType ChaType { get; set; }
-        #endregion
-
         #region Interface Properties
         public string Text { get; set; }
         public Color BackgroundColor { get; set; }
         public Color ForegroundColor { get; set; }
         public Rect Position { get; }
+        #endregion
+
+        #region Properties
+        public MoveType Move { get; set; }
+        public CharacterType ChaType { get; set; }
         #endregion
 
         #region Constructors
@@ -40,14 +40,14 @@ namespace IDHIPlugins
         }
         #endregion
 
-        #region public methods
+        #region Interface methods
         /// <summary>
         /// Trigger a rotation event
         /// </summary>
         public void Process()
         {
 #if DEBUG
-            _Log.Info($"[RotationActionButton]: {Text} Button pressed.");
+            _Log.Info($"[RotationActionButton.Process]: {Text} Button pressed.");
 #endif
             MoveEvent.InvokeOnRotationEvent(
                 null,
