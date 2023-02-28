@@ -8,6 +8,7 @@ using IDHIUtils;
 using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
 using static IDHIPlugins.HCharaAdjustmentX;
 using static FaceScreenShot;
+using System.Linq;
 
 namespace IDHIPlugins
 {
@@ -19,11 +20,11 @@ namespace IDHIPlugins
             #region private fields
             private readonly float _width;
             private readonly float _heigth;
-            private List<IColorActionStateButton> _buttons = new();
+            private List<IColorButton> _buttons = new();
             #endregion
 
             #region public properties
-            internal List<IColorActionStateButton> Buttons => _buttons;
+            internal List<IColorButton> Buttons => _buttons;
             public float Height => _heigth;
             public float Width => _width;
             #endregion
@@ -69,12 +70,13 @@ namespace IDHIPlugins
                 var windowRect = new Rect(x, y, width, height);
                 var first = true;
 
-                _width = width * (Move.doubleWidthLabels.Count > 0 ? 2 : 1);
-                _heigth = Move.LabelType.Keys.Count * height;
+                _width = width * (Move.Buttons.Where(x => x.DoubleWide).Any() ? 2 : 1);
+                _heigth = Move.Buttons.Count * height;
 
+                /*
                 foreach (var label in Move.LabelType.Keys)
                 {
-                    if (_animationKey.IsNullOrEmpty()
+                    if (AnimationKey.IsNullOrEmpty()
                         && ((label == "Save") || (label == "Load")))
                     {
                         continue;
@@ -105,30 +107,71 @@ namespace IDHIPlugins
                         windowRect.x -= width;
                         windowRect.y += height;
                         first = true;
+                    } 
+                 */
+                foreach (var b in Move.Buttons)
+                {
+                    if (AnimationKey.IsNullOrEmpty()
+                        && ((b.MoveType == MoveType.SAVE) || (b.MoveType == MoveType.LOAD)))
+                    {
+                        continue;
+                    }
+
+                    if (b.DoubleWide)
+                    {
+                        windowRect.width *= 2;
+
+                        var DWMAButton = NewButton(windowRect, b, chaType);
+                        _buttons.Add(DWMAButton);
+
+                        windowRect.width /= 2;
+                        windowRect.y += height;
+                        continue;
+                    }
+
+                    var MAButton = NewButton(windowRect, b, chaType);
+                    _buttons.Add(MAButton);
+
+                    if (first)
+                    {
+                        windowRect.x += width;
+                        first = false;
+                    }
+                    else
+                    {
+                        windowRect.x -= width;
+                        windowRect.y += height;
+                        first = true;
                     }
                 }
             }
 
-            private static IColorActionStateButton NewButton(
+            private static IColorButton NewButton(
                 Rect windowRect,
-                string label,
+                ButtonProperties b,
                 CharacterType chaType)
             {
-                IColorActionStateButton button;
+                IColorButton button;
 
-                if (label == "Axis")
+                if (b.MoveType == MoveType.AXIS)
                 {
                     button = new AxisButton(
                         windowRect,
                         chaType);
                     _Log.Error($"[NewButton] Axis text={button.Text}");
                 }
+                else if (b.ActionType == ActionType.ROTATION)
+                {
+                    button = new RotationActionButton(
+                        windowRect,
+                        b,
+                        chaType);
+                }
                 else
                 {
                     button = new MoveActionButton(
                         windowRect,
-                        label,
-                        Move.LabelType[label],
+                        b,
                         chaType);
                 }
 

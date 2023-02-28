@@ -25,7 +25,7 @@ namespace IDHIPlugins
                 { CharacterType.Player, new ButtonsInterface(CharacterType.Player) },
                 { CharacterType.Heroine3P, new ButtonsInterface(CharacterType.Heroine3P) }
             };
-        internal static Dictionary<CharacterType, List<IColorActionStateButton>> _buttons =
+        internal static Dictionary<CharacterType, List<IColorButton>> _buttons =
             new()
             {
                 { CharacterType.Heroine, null },
@@ -138,9 +138,9 @@ namespace IDHIPlugins
 #if DEBUG
             _Log.Warning($"[ToggleGroupGuideObject] Group Guide set to={state}");
 #endif
-            _hprocInstance.sprite.axis.tglDraw.isOn = state;
-            _hprocInstance.sprite.MoveAxisDraw(_hprocInstance.sprite.axis.tglDraw.isOn);
-            _hprocInstance.guideObject.gameObject.SetActive(state);
+            HPprocInstance.sprite.axis.tglDraw.isOn = state;
+            HPprocInstance.sprite.MoveAxisDraw(HPprocInstance.sprite.axis.tglDraw.isOn);
+            HPprocInstance.guideObject.gameObject.SetActive(state);
         }
 
         /// <summary>
