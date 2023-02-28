@@ -27,10 +27,10 @@ namespace IDHIPlugins
         }
 
         /// <summary>
-        /// Adjust move vector to transform vector in Unity when using transform it looks
-        /// that moving forward sometimes is in the X axis (Why?) vector representing a
+        /// Adjust move vector to transform vector in Unity when using transform when
+        /// moving forward sometimes is in the X axis (Why?) vector representing a
         /// move are in the form (right, up, forward) this adjust the vector to the
-        /// game interpretation
+        /// game transform
         /// </summary>
         /// <param name="self">object self reference</param>
         /// <param name="transform">character Transform</param>
@@ -39,8 +39,11 @@ namespace IDHIPlugins
         {
             var result = new Vector3(0, 0, 0);
 
+            // sides move
             result += transform.right * self.x;
+            // up/down move
             result += transform.up * self.y;
+            // forward/backward move
             result += transform.forward * self.z;
 
             return result;
