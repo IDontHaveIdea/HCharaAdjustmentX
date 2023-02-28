@@ -189,7 +189,7 @@ namespace IDHIPlugins
         internal static bool IsNewPosition(ChaControl chaControl)
         {
             var controller = GetController(chaControl);
-            var currentPosition = _hprocTraverse.nowHpointDataPos;
+            var currentPosition = HProcTraverse.nowHpointDataPos;
             var originalPosition = controller.OriginalPosition;
             if (currentPosition != originalPosition)
             {
@@ -214,16 +214,16 @@ namespace IDHIPlugins
         /// <param name="instance"></param>
         internal static void InitialPosition()
         {
-            if (_hprocInstance == null)
+            if (HPprocInstance == null)
             {
                 return;
             }
-            if (_animationKey.IsNullOrEmpty())
+            if (AnimationKey.IsNullOrEmpty())
             {
                 return;
             }
 
-            var heroines = _hprocInstance.flags.lstHeroine;
+            var heroines = HPprocInstance.flags.lstHeroine;
             CTRL ctrl;
 
             for (var i = 0; i < heroines.Count; i++)
@@ -231,7 +231,7 @@ namespace IDHIPlugins
                 ctrl = GetController(heroines[i].chaCtrl);
                 if (ctrl.SaveMoveData.Data.Count > 0)
                 {
-                    ctrl.SaveMoveData.Data.TryGetValue(_animationKey,
+                    ctrl.SaveMoveData.Data.TryGetValue(AnimationKey,
                         out var position);
                     if (position != null)
                     {
@@ -257,12 +257,12 @@ namespace IDHIPlugins
         /// <param name="message"></param>
         internal static void ResetPositionAll()
         {
-            if (_hprocInstance == null)
+            if (HPprocInstance == null)
             {
                 return;
             }
 
-            var heroines = _hprocInstance.flags.lstHeroine;
+            var heroines = HPprocInstance.flags.lstHeroine;
             CTRL ctrl;
             for (var i = 0; i < heroines.Count; i++)
             {
@@ -272,8 +272,8 @@ namespace IDHIPlugins
                     ctrl.ResetPosition();
                 }
             }
-            ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
-            if (IsSamePosition(_hprocInstance.flags.player.chaCtrl))
+            ctrl = GetController(HPprocInstance.flags.player.chaCtrl);
+            if (IsSamePosition(HPprocInstance.flags.player.chaCtrl))
             {
                 ctrl.ResetPosition();
             }
@@ -286,12 +286,12 @@ namespace IDHIPlugins
         /// <param name="message"></param>
         internal static void SetOriginalPositionAll()
         {
-            if (_hprocInstance == null)
+            if (HPprocInstance == null)
             {
                 return;
             }
 
-            var heroines = _hprocInstance.flags.lstHeroine;
+            var heroines = HPprocInstance.flags.lstHeroine;
             CTRL ctrl;
             for (var i = 0; i < heroines.Count; i++)
             {
@@ -299,14 +299,14 @@ namespace IDHIPlugins
                 ctrl.SetOriginalPosition();
             }
 
-            ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
+            ctrl = GetController(HPprocInstance.flags.player.chaCtrl);
             ctrl.SetOriginalPosition();
         }
 
         internal static void SetALMove(
             HSceneProc.AnimationListInfo _nextAinmInfo)
         {
-            if (_hprocInstance == null)
+            if (HPprocInstance == null)
             {
                 return;
             }
@@ -316,7 +316,7 @@ namespace IDHIPlugins
                 var movement = Utils
                     .GetAnimationMovement(_nextAinmInfo);
 
-                var heroines = _hprocInstance.flags.lstHeroine;
+                var heroines = HPprocInstance.flags.lstHeroine;
                 CTRL ctrl;
                 for (var i = 0; i < heroines.Count; i++)
                 {
@@ -326,7 +326,7 @@ namespace IDHIPlugins
                         ctrl.ALMovement = movement[(int)Sex.Female];
                     }
                 }
-                ctrl = GetController(_hprocInstance.flags.player.chaCtrl);
+                ctrl = GetController(HPprocInstance.flags.player.chaCtrl);
                 ctrl.ALMovement = movement[(int)Sex.Male];
             }
         }
@@ -351,16 +351,16 @@ namespace IDHIPlugins
         /// <param name="message"></param>
         internal static void RecalcAdjustmentAll()
         {
-            if (_hprocInstance == null)
+            if (HPprocInstance == null)
             {
                 return;
             }
-            var heroines = _hprocInstance.flags.lstHeroine;
+            var heroines = HPprocInstance.flags.lstHeroine;
             for (var i = 0; i < heroines.Count; i++)
             {
                 GetController(heroines[i].chaCtrl).DoRecalc = true;
             }
-            GetController(_hprocInstance.flags.player.chaCtrl).DoRecalc = true;
+            GetController(HPprocInstance.flags.player.chaCtrl).DoRecalc = true;
         }
     }
 }
