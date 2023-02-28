@@ -65,6 +65,7 @@ namespace IDHIPlugins
                 {
                     case MoveType.RESETMOVE:
                         _controller.ResetPosition();
+                        _doPositionMove = false;
                         break;
 
                     case MoveType.UP:
@@ -155,12 +156,13 @@ namespace IDHIPlugins
                     }
                     var newPosition = RecalcPosition(
                         _chaControl, originalPosition, fullMovement);
-                    _doPositionMove = false;
+                    _chaControl.transform.position = originalPosition;
                     _chaControl.transform.position = newPosition;
                     _controller.Movement = fullMovement;
                     _controller.LastMovePosition = newPosition;
+                    return true;
                 }
-                return _doPositionMove;
+                return false;
             }
 
             internal static Vector3 RecalcPosition(
