@@ -33,5 +33,6 @@ namespace IDHIPlugins
 #endif
         public const string PluginName = "HCharaAdjustmentX";
         public const string Version = "0.5.0.0";
+        public const int DataVersin = 1;
     }
 }
