@@ -116,9 +116,16 @@ namespace IDHIPlugins
                 set { _data[key] = value; }
             }
 
-            internal bool TryGetValue(string  key, out Dictionary<CharacterType, PositionData> positions)
+            internal bool TryGetValue(
+                string  key,
+                out Dictionary<CharacterType, PositionData> positions)
             {
                 return _data.TryGetValue(key, out positions);
+            }
+
+            internal bool Remove(string key)
+            {
+                return _data.Remove(key);
             }
 
             internal void Load(PluginData data)
@@ -164,7 +171,7 @@ namespace IDHIPlugins
                     ?? "CHACONTROL FAIL";
 
                 var plugData = new PluginData {
-                    version = 1
+                    version = DataVersin
                 };
                 var MoveDataSerialize = PrepareSerialize();
                 plugData.data.Add(MoveDataID,
