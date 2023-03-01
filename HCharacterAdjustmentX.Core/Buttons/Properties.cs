@@ -52,13 +52,13 @@ namespace IDHIPlugins
             { new(  "Right", MoveType.RIGHT, ActionType.POSITION) },
             { new("Forward", MoveType.FORWARD, ActionType.POSITION) },
             { new(   "Back", MoveType.BACK, ActionType.POSITION) },
+            { new("Reset Move", MoveType.RESETPOSITION, ActionType.POSITION, doubleWide: true) },
             { new( "Rot. +", MoveType.POSITIVEROTATION, ActionType.ROTATION) },
             { new( "Rot. -", MoveType.NEGATIVEROTATION, ActionType.ROTATION) },
-            { new(   "Axis", MoveType.AXIS, ActionType.AXIS, true) },
+            { new(   "Axis", MoveType.AXIS, ActionType.AXIS, doubleWide: true) },
+            { new("Reset Rotation", MoveType.RESETROTATION, ActionType.ROTATION, doubleWide: true) },
             { new(   "Save", MoveType.SAVE, ActionType.POSITION) },
-            { new(   "Load", MoveType.LOAD, ActionType.POSITION) },
-            { new("R. Move", MoveType.RESETPOSITION, ActionType.POSITION) },
-            { new("R. Rot.", MoveType.RESETROTATION, ActionType.ROTATION) }
+            { new(   "Load", MoveType.LOAD, ActionType.POSITION) }
         };
     }
 
