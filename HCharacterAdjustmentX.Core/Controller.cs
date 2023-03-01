@@ -37,7 +37,7 @@ namespace IDHIPlugins
         public partial class HCharaAdjusmentXController : CharaCustomFunctionController
         {
             #region Fields
-            internal MoveData SaveMoveData;
+            internal MoveData MoveData;
             internal List<IColorButton> buttons;
             #endregion
 
@@ -65,13 +65,13 @@ namespace IDHIPlugins
                 }
 
                 // Initialize MoveData if null
-                SaveMoveData ??= new(ChaControl);
+                MoveData ??= new(ChaControl);
 
                 var data = GetExtendedData();
 
                 if (data != null)
                 {
-                    SaveMoveData.Load(data);
+                    MoveData.Load(data);
                 }
                 else
                 {
@@ -90,9 +90,9 @@ namespace IDHIPlugins
                 {
                     return;
                 }
-                if (SaveMoveData != null)
+                if (MoveData != null)
                 {
-                    if (SaveMoveData.Count == 0)
+                    if (MoveData.Count == 0)
                     {
 #if DEBUG
                         var name = ChaControl.chaFile?.parameter.fullname.Trim()
@@ -104,7 +104,7 @@ namespace IDHIPlugins
                     }
                     else
                     {
-                        SetExtendedData(SaveMoveData.Save());
+                        SetExtendedData(MoveData.Save());
                     }
                 }
                 else
@@ -192,23 +192,28 @@ namespace IDHIPlugins
                 _Log.Info($"[Init] Initialization for {characterType}");
 #endif
                 ChaType = characterType;
-                SaveMoveData ??= new(ChaControl);
+                MoveData ??= new(ChaControl);
                 SetOriginalPosition();
-                float xOffset = 0;
+
+                var xOffset = 0f;
+                var width = 62f;
+                var height = 25f;
+
                 if (characterType == CharacterType.Heroine)
                 {
-                    xOffset = (-126f);
                     //buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
                     //    width: 62f, height: 25f, xOffset: (-126f)).Buttons;
+                    xOffset = (-((width * 2) + 2));
                 }
                 else if (characterType == CharacterType.Player)
                 {
-                    xOffset = (-248f);
                     //buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
                     //    width: 62f, height: 25f, xOffset: (-248f)).Buttons;
+                    xOffset = (-(width * 4 + 2));
                 }
                 buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
-                        width: 62f, height: 25f, xOffset: xOffset).Buttons;
+                        width: width, height: height, xOffset: xOffset).Buttons;
+
                 // Start disabled
                 enabled = false;
             }
