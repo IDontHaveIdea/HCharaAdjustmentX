@@ -229,9 +229,9 @@ namespace IDHIPlugins
             for (var i = 0; i < heroines.Count; i++)
             {
                 ctrl = GetController(heroines[i].chaCtrl);
-                if (ctrl.SaveMoveData.Data.Count > 0)
+                if (ctrl.MoveData.Data.Count > 0)
                 {
-                    ctrl.SaveMoveData.Data.TryGetValue(AnimationKey,
+                    ctrl.MoveData.Data.TryGetValue(AnimationKey,
                         out var position);
                     if (position != null)
                     {
