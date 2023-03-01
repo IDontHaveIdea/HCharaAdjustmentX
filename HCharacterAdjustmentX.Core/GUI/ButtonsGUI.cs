@@ -20,6 +20,8 @@ namespace IDHIPlugins
             #region private fields
             private readonly float _width;
             private readonly float _heigth;
+            private int _heightBase = 1080;
+            private int _widthBase = 1920;
             private List<IColorButton> _buttons = new();
             #endregion
 
@@ -53,6 +55,19 @@ namespace IDHIPlugins
                 float width, float height,
                 float xOffset = 0f, float yOffset = 0f)
             {
+                // Adjust for screen size
+                if (Screen.height != _heightBase)
+                {
+                    height = (int)((Screen.height * (int)height) / _heightBase);
+                }
+
+                // TODO: work with width have to change font size 720 may be to small
+                // altering only the height kind of works
+                //if (Screen.width != _widthBase)
+                //{
+                //    width = (int)((Screen.width * (int)width) / _widthBase);
+                //}
+
                 // Get margin percent base on screen width and height
                 var x = Screen.width * xMargin;
                 var y = Screen.height * yMargin;
@@ -73,42 +88,6 @@ namespace IDHIPlugins
                 _width = width * (Move.Buttons.Where(x => x.DoubleWide).Any() ? 2 : 1);
                 _heigth = Move.Buttons.Count * height;
 
-                /*
-                foreach (var label in Move.LabelType.Keys)
-                {
-                    if (AnimationKey.IsNullOrEmpty()
-                        && ((label == "Save") || (label == "Load")))
-                    {
-                        continue;
-                    }
-
-                    if (Move.doubleWidthLabels.Contains(label))
-                    {
-                        windowRect.width *= 2;
-
-                        var DWMAButton = NewButton(windowRect, label, chaType);
-                        _buttons.Add(DWMAButton);
-
-                        windowRect.width /= 2;
-                        windowRect.y += height;
-                        continue;
-                    }
-
-                    var MAButton = NewButton(windowRect, label, chaType);
-                    _buttons.Add(MAButton);
-
-                    if (first)
-                    {
-                        windowRect.x += width;
-                        first = false;
-                    }
-                    else
-                    {
-                        windowRect.x -= width;
-                        windowRect.y += height;
-                        first = true;
-                    } 
-                 */
                 foreach (var b in Move.Buttons)
                 {
                     if (AnimationKey.IsNullOrEmpty()
@@ -121,16 +100,14 @@ namespace IDHIPlugins
                     {
                         windowRect.width *= 2;
 
-                        var DWMAButton = NewButton(windowRect, b, chaType);
-                        _buttons.Add(DWMAButton);
+                        _buttons.Add(NewButton(windowRect, b, chaType));
 
                         windowRect.width /= 2;
                         windowRect.y += height;
                         continue;
                     }
 
-                    var MAButton = NewButton(windowRect, b, chaType);
-                    _buttons.Add(MAButton);
+                    _buttons.Add(NewButton(windowRect, b, chaType));
 
                     if (first)
                     {
