@@ -5,8 +5,6 @@ using UnityEngine;
 
 using BepInEx.Logging;
 
-using KKAPI.Utilities;
-
 using IDHIUtils;
 
 
@@ -115,7 +113,14 @@ namespace IDHIPlugins
                                         controllerPlayer.Rotation)
                             };
 
-                            controllerHeroine.SaveMoveData[AnimationKey] = positions;
+                            if (!PositionsEmpty(positions))
+                            {
+                                controllerHeroine.MoveData[AnimationKey] = positions;
+                            }
+                            else
+                            {
+                                controllerHeroine.MoveData.Remove(AnimationKey);
+                            }
                             controllerHeroine.SaveData();
                         }
                         _doPositionMove = false;
@@ -125,7 +130,7 @@ namespace IDHIPlugins
                         {
                             var controllerHeroine =
                                 GetControllerByType(CharacterType.Heroine);
-                            if (controllerHeroine.SaveMoveData
+                            if (controllerHeroine.MoveData
                                 .TryGetValue(AnimationKey, out var positions))
                             {
                                 fullMovement = positions[chaType].Position;
@@ -202,6 +207,22 @@ namespace IDHIPlugins
                         $"position {chaControl.name} - {e}.");
                 }
                 return Vector3.zero;
+            }
+
+            private static bool PositionsEmpty(Dictionary<CharacterType, PositionData> positions)
+            {
+                foreach ( var position in positions )
+                {
+                    if (position.Value.Position != Vector3.zero)
+                    {
+                        return false;
+                    }
+                    if (position.Value.Rotation != Vector3.zero)
+                    {
+                        return false;
+                    }
+                }
+                return true;
             }
         }
     }
