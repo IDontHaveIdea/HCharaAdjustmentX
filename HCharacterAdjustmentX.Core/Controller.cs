@@ -38,7 +38,7 @@ namespace IDHIPlugins
         {
             #region Fields
             internal MoveData MoveData;
-            internal List<IColorButton> buttons;
+            internal List<IColorButton> ControllerButtons;
             #endregion
 
             #region Properties
@@ -211,7 +211,7 @@ namespace IDHIPlugins
                     //    width: 62f, height: 25f, xOffset: (-248f)).Buttons;
                     xOffset = (-(width * 4 + 2));
                 }
-                buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
+                ControllerButtons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
                         width: width, height: height, xOffset: xOffset).Buttons;
 
                 // Start disabled
