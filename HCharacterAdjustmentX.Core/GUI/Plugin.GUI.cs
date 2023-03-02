@@ -127,7 +127,7 @@ namespace IDHIPlugins
                 }
             }
 
-            _buttons[chaType] = GetControllerByType(chaType).buttons.ToList();
+            _buttons[chaType] = GetControllerByType(chaType).ControllerButtons.ToList();
         }
 
         /// <summary>
