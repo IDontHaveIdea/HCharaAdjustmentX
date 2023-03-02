@@ -1,5 +1,6 @@
 ﻿//
-// ActionButton
+// RotationActionButton
+// For now position move and rotation are separate
 //
 using UnityEngine;
 
