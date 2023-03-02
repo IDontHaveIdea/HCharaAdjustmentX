@@ -46,19 +46,19 @@ namespace IDHIPlugins
     {
         public static readonly List<ButtonProperties> Buttons = new()
         {
-            { new(     "Up", MoveType.UP, ActionType.POSITION) },
-            { new(   "Down", MoveType.DOWN, ActionType.POSITION) },
-            { new(   "Left", MoveType.LEFT, ActionType.POSITION) },
-            { new(  "Right", MoveType.RIGHT, ActionType.POSITION) },
-            { new("Forward", MoveType.FORWARD, ActionType.POSITION) },
-            { new(   "Back", MoveType.BACK, ActionType.POSITION) },
-            { new("Reset Move", MoveType.RESETPOSITION, ActionType.POSITION, doubleWide: true) },
-            { new( "Rot. +", MoveType.POSITIVEROTATION, ActionType.ROTATION) },
-            { new( "Rot. -", MoveType.NEGATIVEROTATION, ActionType.ROTATION) },
-            { new(   "Axis", MoveType.AXIS, ActionType.AXIS, doubleWide: true) },
+            { new(            "Up", MoveType.UP, ActionType.POSITION) },
+            { new(          "Down", MoveType.DOWN, ActionType.POSITION) },
+            { new(          "Left", MoveType.LEFT, ActionType.POSITION) },
+            { new(         "Right", MoveType.RIGHT, ActionType.POSITION) },
+            { new(       "Forward", MoveType.FORWARD, ActionType.POSITION) },
+            { new(          "Back", MoveType.BACK, ActionType.POSITION) },
+            { new(    "Reset Move", MoveType.RESETPOSITION, ActionType.POSITION, doubleWide: true) },
+            { new(        "Rot. +", MoveType.POSITIVEROTATION, ActionType.ROTATION) },
+            { new(        "Rot. -", MoveType.NEGATIVEROTATION, ActionType.ROTATION) },
+            { new(          "Axis", MoveType.AXIS, ActionType.AXIS, doubleWide: true) },
             { new("Reset Rotation", MoveType.RESETROTATION, ActionType.ROTATION, doubleWide: true) },
-            { new(   "Save", MoveType.SAVE, ActionType.POSITION) },
-            { new(   "Load", MoveType.LOAD, ActionType.POSITION) }
+            { new(          "Save", MoveType.SAVE, ActionType.POSITION) },
+            { new(          "Load", MoveType.LOAD, ActionType.POSITION) }
         };
     }
 
@@ -69,6 +69,13 @@ namespace IDHIPlugins
             {Axis.X, Vector3.right},
             {Axis.Y, Vector3.up},
             {Axis.Z, Vector3.forward}
+        };
+
+        public static readonly Dictionary<Axis, string> Color = new()
+        {
+            {Axis.X, "Red"},
+            {Axis.Y, "Green"},
+            {Axis.Z, "Blue"}
         };
 
         public static bool TryGetValue(Axis key, out Vector3 result)
