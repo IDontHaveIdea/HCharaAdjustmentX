@@ -5,8 +5,6 @@ using KKAPI;
 
 using IDHIUtils;
 
-using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
-
 
 namespace IDHIPlugins
 {
@@ -15,10 +13,7 @@ namespace IDHIPlugins
         #region private classes
         internal class ButtonsInterface
         {
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Style",
-                "IDE0044:Add readonly modifier",
-                Justification = "Field is dependent on the class instance.")]
-            private CharacterType _chaType;
+            private readonly CharacterType _chaType;
             private bool _showInterface;
             private ChaControl _chaControl;
 
