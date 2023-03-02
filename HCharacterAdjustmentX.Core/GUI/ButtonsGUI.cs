@@ -1,14 +1,13 @@
-﻿// Buttons interface for character movements
+﻿//
+// Buttons GUI interface for character movements
 //
 using System.Collections.Generic;
+using System.Linq;
+
 using UnityEngine;
 
 using IDHIUtils;
 
-using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
-using static IDHIPlugins.HCharaAdjustmentX;
-using static FaceScreenShot;
-using System.Linq;
 
 namespace IDHIPlugins
 {
@@ -20,8 +19,8 @@ namespace IDHIPlugins
             #region private fields
             private readonly float _width;
             private readonly float _heigth;
-            private int _heightBase = 1080;
-            private int _widthBase = 1920;
+            private readonly int _heightBase = 1080;
+            //private int _widthBase = 1920;
             private List<IColorButton> _buttons = new();
             #endregion
 
