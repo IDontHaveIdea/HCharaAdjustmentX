@@ -23,7 +23,6 @@ namespace IDHIPlugins
             internal static ChaControl _chaControl;
             internal static HCharaAdjusmentXController _controller;
             internal static bool _doAngleMove;
-            internal static bool _positiveMove;
             #endregion
 
             /// <summary>
@@ -50,9 +49,9 @@ namespace IDHIPlugins
                 int index;
                 float currentAngle;
                 float newAngle;
-
+#if DEBUG
                 _Log.Warning($"[CharRotationMovement.Move] Called for {chaType} to {moveType} eulerAngles={eulerRotations}");
-
+#endif
                 switch (moveType)
                 {
                     case MoveType.RESETROTATION:
