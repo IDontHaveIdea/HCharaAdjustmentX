@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using static IDHIPlugins.HCharaAdjustmentX;
 
 namespace IDHIPlugins
 {
@@ -71,11 +72,18 @@ namespace IDHIPlugins
             {Axis.Z, Vector3.forward}
         };
 
-        public static readonly Dictionary<Axis, string> Color = new()
+        public static readonly Dictionary<Axis, string> ColorName = new()
         {
             {Axis.X, "Red"},
             {Axis.Y, "Green"},
             {Axis.Z, "Blue"}
+        };
+
+        public static readonly Dictionary<Axis, Color>  Color = new()
+        {
+            {Axis.X, _SvgColor.magenta},
+            {Axis.Y, _SvgColor.lime},
+            {Axis.Z, _SvgColor.deepskyblue}
         };
 
         public static bool TryGetValue(Axis key, out Vector3 result)

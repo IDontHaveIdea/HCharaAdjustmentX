@@ -16,7 +16,7 @@ namespace IDHIPlugins
         private readonly HCharaAdjusmentXController _controller;
 
         #region Interface Properties
-        public string Text => $"Axis: {_currentAxis} ({AxisVector.Color[_currentAxis]})";
+        public string Text => $"Axis: {_currentAxis} ({AxisVector.ColorName[_currentAxis]})";
         public Color BackgroundColor { get; set; }
         public Color ForegroundColor { get; set; }
         public Rect Position { get; }
@@ -34,6 +34,7 @@ namespace IDHIPlugins
             {
                 _currentAxis = value;
                 _controller.CurrentAxis = value;
+                ForegroundColor = AxisVector.Color[value];
 #if DEBUG
                 _Log.Warning($"[Axis] _currentAxis={_currentAxis} for ChaType={ChaType} " +
                     $"set to={_controller.CurrentAxis}");
@@ -50,11 +51,12 @@ namespace IDHIPlugins
             )
         {
             ChaType = chaType;
+            // Used in Axis property
             _controller = GetControllerByType(chaType);
             Position = position;
             Axis = Axis.Y;
-            ForegroundColor = Color.white;
             BackgroundColor = Color.gray;
+
 #if DEBUG
             _Log.Warning($"[Axis] Constructor for {chaType} set ChaType={ChaType} " +
                 $"set axis to={_controller.CurrentAxis} controller " +
