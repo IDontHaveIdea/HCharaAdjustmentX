@@ -134,7 +134,6 @@ namespace IDHIPlugins
                     button = new AxisButton(
                         windowRect,
                         chaType);
-                    _Log.Error($"[NewButton] Axis text={button.Text}");
                 }
                 else if (b.ActionType == ActionType.ROTATION)
                 {
