@@ -16,8 +16,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)GUI\ButtonsInterface.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GUI\Plugin.GUI.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Hooks.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Movecharacters\CharRotationMovement.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Movecharacters\CharPositonMovement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Move\CharRotationMovement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Move\CharPositonMovement.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Buttons\MoveActionButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Buttons\Properties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)move\MoveEvents.cs" />

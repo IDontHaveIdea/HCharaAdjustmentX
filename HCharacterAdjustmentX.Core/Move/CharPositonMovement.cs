@@ -197,7 +197,8 @@ namespace IDHIPlugins
                             $"   trans. move vector{transformMove.Format()}\n" +
                             $"    diff. move vector{diffVector.Format()}\n" +
                             $"  normal calc vector {calcPositon.Format()}\n" +
-                            $"        new position {newPosition.Format()}");
+                            $"        new position {newPosition.Format()}\n" +
+                            $"            rotation {chaControl.transform.rotation.Format()}");
                     }
                     return newPosition;
                 }
