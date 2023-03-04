@@ -16,10 +16,6 @@ using IDHIUtils;
 
 #endregion Assembly attributes
 
-//
-// Login ID: 0007, 0008, 0017, 0042
-//
-
 
 namespace IDHIPlugins
 {
@@ -32,7 +28,7 @@ namespace IDHIPlugins
         public const string PluginDisplayName = "HScene Character AdjustmentX";
 #endif
         public const string PluginName = "HCharaAdjustmentX";
-        public const string Version = "0.5.0.0";
+        public const string Version = "0.6.0.0";
         public const int DataVersin = 1;
     }
 }
