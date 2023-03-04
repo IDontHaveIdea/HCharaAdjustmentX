@@ -39,6 +39,8 @@ namespace IDHIPlugins
             #region Fields
             internal MoveData MoveData;
             internal List<IColorButton> ControllerButtons;
+            internal int _height;
+            internal float _shapeHeight;
             #endregion
 
             #region Properties
@@ -195,24 +197,26 @@ namespace IDHIPlugins
                 MoveData ??= new(ChaControl);
                 SetOriginalPosition();
 
+                _height = ChaControl.Height();
+                _shapeHeight = ChaControl.ShapeValueBody(
+                    ChaFileDefine.BodyShapeIdx.Height);
+
                 var xOffset = 0f;
                 var width = 62f;
                 var height = 25f;
 
                 if (characterType == CharacterType.Heroine)
                 {
-                    //buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
-                    //    width: 62f, height: 25f, xOffset: (-126f)).Buttons;
                     xOffset = (-((width * 2) + 2));
                 }
                 else if (characterType == CharacterType.Player)
                 {
-                    //buttons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
-                    //    width: 62f, height: 25f, xOffset: (-248f)).Buttons;
                     xOffset = (-(width * 4 + 2));
                 }
-                ControllerButtons = new ButtonsGUI(characterType, xMargin: 0f, yMargin: 0.075f,
-                        width: width, height: height, xOffset: xOffset).Buttons;
+                // TODO: To many arguments use a struct
+                ControllerButtons = new ButtonsGUI(characterType, xMargin: 0f,
+                    yMargin: 0.075f, width: width, height: height,
+                    xOffset: xOffset).Buttons;
 
                 // Start disabled
                 enabled = false;
@@ -233,14 +237,13 @@ namespace IDHIPlugins
                 Movement = Vector3.zero;
                 Moved = false;
 #if DEBUG
-                var original = OriginalPosition;
                 var lines = new StringBuilder();
                 // Get calling method name
                 var callingMethod = Utilities.CallingMethod();
 
                 // Real original position AnimationLoader can change them when we get
                 // here
-                lines.Append($"Name={nowHPointData} Original={original} " +
+                lines.Append($"Name={nowHPointData} Original={OriginalPosition} " +
                     $"Set={nowHPointDataPos} ");
                 lines.Append($"Last Move={LastMovePosition} Set={Vector3.zero}\n");
                 lines.Append(
