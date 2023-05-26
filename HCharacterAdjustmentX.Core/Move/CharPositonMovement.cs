@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Ignore Spelling: cha
+
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -6,9 +8,10 @@ using UnityEngine;
 using BepInEx.Logging;
 
 using IDHIUtils;
+using static FaceScreenShot;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public partial class HCharaAdjustmentX
     {
@@ -19,7 +22,7 @@ namespace IDHIPlugins
         {
             #region private fields
             internal static ChaControl _chaControl;
-            internal static HCharaAdjusmentXController _controller;
+            internal static HCharaAdjustmentXController _controller;
             internal static bool _doPositionMove;
             #endregion
 
@@ -188,17 +191,23 @@ namespace IDHIPlugins
 
                     if (DebugInfo.Value)
                     {
-                        _Log.Debug($"[RecalcPosition] Move {chaControl.name}\n" +
-                            $"          forward is {Vector3.forward}\n" +
-                            $"transform forward is {chaControl.transform.forward}\n" +
-                            $"   original position {original.Format()}\n" +
-                            $"    current position {currentPosition.Format()}\n" +
-                            $"         move vector {fullMove.Format()}\n" +
-                            $"   trans. move vector{transformMove.Format()}\n" +
-                            $"    diff. move vector{diffVector.Format()}\n" +
-                            $"  normal calc vector {calcPositon.Format()}\n" +
-                            $"        new position {newPosition.Format()}\n" +
-                            $"            rotation {chaControl.transform.rotation.Format()}");
+                        _Log.Debug($"[RecalcPosition] For {chaControl.name}\n" +
+                            $" Movement={fullMove.Format()}\n" +
+                            $"transform={transformMove.Format()}\n" +
+                            $"     from={original.Format()}\n" +
+                            $"       to={newPosition.Format()}\n" +
+                            $" original={original.Format()}");
+                        //_Log.Debug($"[RecalcPosition] Move {chaControl.name}\n" +
+                        //    $"          forward is {Vector3.forward}\n" +
+                        //    $"transform forward is {chaControl.transform.forward}\n" +
+                        //    $"   original position {original.Format()}\n" +
+                        //    $"    current position {currentPosition.Format()}\n" +
+                        //    $"         move vector {fullMove.Format()}\n" +
+                        //    $"   trans. move vector{transformMove.Format()}\n" +
+                        //    $"    diff. move vector{diffVector.Format()}\n" +
+                        //    $"  normal calc vector {calcPositon.Format()}\n" +
+                        //    $"        new position {newPosition.Format()}\n" +
+                        //    $"            rotation {chaControl.transform.rotation.Format()}");
                     }
                     return newPosition;
                 }
