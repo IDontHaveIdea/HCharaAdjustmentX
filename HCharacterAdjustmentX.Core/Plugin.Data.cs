@@ -14,7 +14,7 @@ using ExtensibleSaveFormat;
 using IDHIUtils;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public partial class HCharaAdjustmentX
     {
@@ -277,7 +277,7 @@ namespace IDHIPlugins
 
             if (lines.Length > 0)
             {
-                _Log.Debug($"[PrintData] [{name}]\n\n{lines}");
+                //_Log.Debug($"[PrintData] [{name}]\n\n{lines}");
             }
         }
     }

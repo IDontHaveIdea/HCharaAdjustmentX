@@ -1,6 +1,8 @@
 ﻿//
 // HCharaAdjustmentX entry point
 //
+// Ignore Spelling: cha
+
 using BepInEx;
 
 using KKAPI;
@@ -8,10 +10,10 @@ using KKAPI.Chara;
 
 using IDHIUtils;
 
-using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
+using CTRL = IDHIPlugIns.HCharaAdjustmentX.HCharaAdjustmentXController;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     /// <summary>
     /// This plug-in allows the position adjustment of the female character closer/apart,
@@ -83,21 +85,21 @@ namespace IDHIPlugins
         }
 
 #if DEBUG
-        private void OnEnable()
-        {
-            _Log.Info($"HCAX1313: [OnEnabled] Called.");
-        }
+        //private void OnEnable()
+        //{
+            //_Log.Info($"HCAX1313: [OnEnabled] Called.");
+        //}
 
-        private void OnDisable()
-        {
-            _Log.Info("HCAX1314: [OnDisabled] Called.");
-        }
+        //private void OnDisable()
+        //{
+            //_Log.Info("HCAX1314: [OnDisabled] Called.");
+        //}
 #endif
 
         private void Start()
         {
 #if DEBUG
-            _Log.Info("HCAX1315: Start Called.");
+            //_Log.Info("HCAX1315: Start Called.");
 #endif
 
             ConfigEntries();
@@ -117,10 +119,10 @@ namespace IDHIPlugins
         /// </summary>
         /// <param name="chaControl"></param>
         /// <returns></returns>
-        public static HCharaAdjusmentXController GetController(ChaControl chaControl)
+        public static HCharaAdjustmentXController GetController(ChaControl chaControl)
         {
             return ((chaControl == null) || (chaControl.gameObject == null))
-                ? null : chaControl.GetComponent<HCharaAdjusmentXController>();
+                ? null : chaControl.GetComponent<HCharaAdjustmentXController>();
         }
 
         /// <summary>
@@ -128,7 +130,7 @@ namespace IDHIPlugins
         /// </summary>
         /// <param name="chaType"></param>
         /// <returns></returns>
-        public static HCharaAdjusmentXController GetControllerByType(
+        public static HCharaAdjustmentXController GetControllerByType(
             CharacterType chaType)
         {
             ChaControl chaControl;
@@ -143,7 +145,7 @@ namespace IDHIPlugins
             }
 
             return ((chaControl == null) || (chaControl.gameObject == null))
-                ? null : chaControl.GetComponent<HCharaAdjusmentXController>();
+                ? null : chaControl.GetComponent<HCharaAdjustmentXController>();
         }
         #endregion
     }

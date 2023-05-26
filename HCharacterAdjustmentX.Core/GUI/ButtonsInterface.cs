@@ -6,7 +6,7 @@ using KKAPI;
 using IDHIUtils;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public partial class HCharaAdjustmentX
     {

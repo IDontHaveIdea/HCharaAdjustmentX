@@ -9,7 +9,7 @@ using UnityEngine;
 using IDHIUtils;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public partial class HCharaAdjustmentX
     {

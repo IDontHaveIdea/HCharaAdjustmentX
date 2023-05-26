@@ -4,9 +4,9 @@
 using System;
 using System.Collections.Generic;
 
-using static IDHIPlugins.HCharaAdjustmentX;
+using static IDHIPlugIns.HCharaAdjustmentX;
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public enum MoveType
     {
@@ -74,8 +74,8 @@ namespace IDHIPlugins
             OnPositionMoveEvent += (_sender, _args) =>
             {
 #if DEBUG
-                _Log.Info($"[RegisterMoveEvents] Call to position move action " +
-                    $"{_args.Move}");
+                //_Log.Info($"[RegisterMoveEvents] Call to position move action " +
+                //    $"{_args.Move}");
 #endif
                 CharPositionMovement.Move(_args.ChaType, _args.Move);
             };
@@ -83,8 +83,8 @@ namespace IDHIPlugins
             OnRotationEvent += (_sender, _args) =>
             {
 #if DEBUG
-                _Log.Info($"[RegisterRotationEvents] Call to rotation action " +
-                    $"{_args.Move}");
+                //_Log.Info($"[RegisterRotationEvents] Call to rotation action " +
+                //    $"{_args.Move}");
 #endif
                 CharRotationMovement.Move(_args.ChaType, _args.Move);
             };

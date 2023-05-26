@@ -2,14 +2,16 @@
 // RotationActionButton
 // For now position move and rotation are separate
 //
+// Ignore Spelling: cha
+
 using UnityEngine;
 
 using IDHIUtils;
 
-using static IDHIPlugins.HCharaAdjustmentX;
+using static IDHIPlugIns.HCharaAdjustmentX;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public struct RotationActionButton : IColorButton
     {
@@ -45,10 +47,10 @@ namespace IDHIPlugins
         /// <summary>
         /// Trigger a rotation event
         /// </summary>
-        public void Process()
+        public readonly void Process()
         {
 #if DEBUG
-            _Log.Info($"[RotationActionButton.Process]: {Text} Button pressed.");
+            //_Log.Info($"[RotationActionButton.Process]: {Text} Button pressed.");
 #endif
             MoveEvent.InvokeOnRotationEvent(
                 null,

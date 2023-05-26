@@ -1,3 +1,5 @@
+// Ignore Spelling: cha
+
 using System;
 
 using UnityEngine;
@@ -10,7 +12,7 @@ using IDHIUtils;
 
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public partial class HCharaAdjustmentX
     {
@@ -21,7 +23,7 @@ namespace IDHIPlugins
         {
             #region private fields
             internal static ChaControl _chaControl;
-            internal static HCharaAdjusmentXController _controller;
+            internal static HCharaAdjustmentXController _controller;
             internal static bool _doAngleMove;
             #endregion
 

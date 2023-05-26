@@ -1,6 +1,8 @@
 ﻿//
 // Character Controller
 //
+// Ignore Spelling: Recalc
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,7 +15,7 @@ using KKAPI.Chara;
 
 using IDHIUtils;
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public enum CharacterType
     {
@@ -34,7 +36,7 @@ namespace IDHIPlugins
         internal static float _fRotationStep = 5f;
         #endregion
 
-        public partial class HCharaAdjusmentXController : CharaCustomFunctionController
+        public partial class HCharaAdjustmentXController : CharaCustomFunctionController
         {
             #region Fields
             internal MoveData MoveData;
@@ -80,7 +82,7 @@ namespace IDHIPlugins
                     var name = ChaControl.chaFile.parameter.fullname.Trim()
                             ?? string.Empty;
 #if DEBUG
-                    _Log.Info($"[ReadData] [{name}] Data is null.");
+                    //_Log.Info($"[ReadData] [{name}] Data is null.");
 #endif
                 }
             }
@@ -97,10 +99,10 @@ namespace IDHIPlugins
                     if (MoveData.Count == 0)
                     {
 #if DEBUG
-                        var name = ChaControl.chaFile?.parameter.fullname.Trim()
-                            ?? string.Empty;
-                        _Log.Info($"[SaveData] [{name}] MoveData total is 0 setting "
-                            + $"ExtendedData to null(Not Really!).");
+                        //var name = ChaControl.chaFile?.parameter.fullname.Trim()
+                        //    ?? string.Empty;
+                        //_Log.Info($"[SaveData] [{name}] MoveData total is 0 setting "
+                        //    + $"ExtendedData to null(Not Really!).");
 #endif
                         //SetExtendedData(null);
                     }
@@ -112,9 +114,9 @@ namespace IDHIPlugins
                 else
                 {
 #if DEBUG
-                    var name = ChaControl.chaFile?.parameter.fullname.Trim()
-                        ?? string.Empty;
-                    _Log.Info($"[SaveData] [{name}] MoveData is null.");
+                    //var name = ChaControl.chaFile?.parameter.fullname.Trim()
+                    //    ?? string.Empty;
+                    //_Log.Info($"[SaveData] [{name}] MoveData is null.");
 #endif
                 }
             }
@@ -191,7 +193,7 @@ namespace IDHIPlugins
             internal void Init(HSceneProc hSceneProc, CharacterType characterType)
             {
 #if DEBUG
-                _Log.Info($"[Init] Initialization for {characterType}");
+                //_Log.Info($"[Init] Initialization for {characterType}");
 #endif
                 ChaType = characterType;
                 MoveData ??= new(ChaControl);
@@ -236,23 +238,29 @@ namespace IDHIPlugins
                 LastMovePosition = Vector3.zero;
                 Movement = Vector3.zero;
                 Moved = false;
+                if (OriginalPosition != FoundPosition)
+                {
+                    _Log.Level(BepInEx.Logging.LogLevel.Warning, $"[SetOriginalPosition] " +
+                        $"Original position and found position mismatched " +
+                        $"{OriginalPosition.Format()}!={FoundPosition.Format()}");
+                }
 #if DEBUG
-                var lines = new StringBuilder();
+                //var lines = new StringBuilder();
                 // Get calling method name
-                var callingMethod = Utilities.CallingMethod();
+                //var callingMethod = Utilities.CallingMethod();
 
                 // Real original position AnimationLoader can change them when we get
                 // here
-                lines.Append($"Name={nowHPointData} Original={OriginalPosition} " +
-                    $"Set={nowHPointDataPos} ");
-                lines.Append($"Last Move={LastMovePosition} Set={Vector3.zero}\n");
-                lines.Append(
-                    $"Current Position={FoundPosition.Format()}\n" +
-                    $"Current Rotation={OriginalRotation.Format()}\n" +
-                    $"          ALMove={ALMovement.Format()} Moved={Moved}\n" +
-                    $"nowHpointDataPos={nowHPointDataPos.Format()}");
-                _Log.Info($"[SetOriginalPosition] Calling [{callingMethod}] " +
-                    $"ChaType={ChaType} {lines}");
+                //lines.Append($"Name={nowHPointData} Original={OriginalPosition} " +
+                //    $"Set={nowHPointDataPos} ");
+                //lines.Append($"Last Move={LastMovePosition} Set={Vector3.zero}\n");
+                //lines.Append(
+                //    $"Current Position={FoundPosition.Format()}\n" +
+                //    $"Current Rotation={OriginalRotation.Format()}\n" +
+                //    $"          ALMove={ALMovement.Format()} Moved={Moved}\n" +
+                //    $"nowHpointDataPos={nowHPointDataPos.Format()}");
+                //_Log.Info($"[SetOriginalPosition] Calling [{callingMethod}] " +
+                //    $"ChaType={ChaType} {lines}");
 #endif
             }
 
@@ -284,13 +292,20 @@ namespace IDHIPlugins
 #if DEBUG
                     var finalPosition = ChaControl.transform.position;
                     _Log.Info($"[ResetPosition] Calling [{callingMethod}] " +
-                        $"Reset position for {ChaType}\n" +
-                        $"      ALMovement={ALMovement.Format()} Moved={moved}\n" +
-                        $"        Movement={movement.Format()}\n" +
-                        $"    from current={currentPosition.Format()}\n" +
-                        $"              to={OriginalPosition.Format()}\n" +
-                        $"nowHpointDataPos={_hPointPos.Format()}\n" +
-                        $"   finalPosiiton={finalPosition.Format()}");
+                        $"For {ChaType}\n" +
+                        $"    Movement={movement.Format()}\n" +
+                        $"from current={currentPosition.Format()}\n" +
+                        $"          to={finalPosition.Format()}\n" +
+                        $"    original={OriginalPosition.Format()}");
+                    //_Log.Info($"[ResetPosition] Calling [{callingMethod}] " +
+                    //    $"Reset position for {ChaType}\n" +
+                    //    $"      ALMovement={ALMovement.Format()} Moved={moved}\n" +
+                    //    $"        Movement={movement.Format()}\n" +
+                    //    $"    from current={currentPosition.Format()}\n" +
+                    //    $"              to={OriginalPosition.Format()}\n" +
+                    //    $"nowHpointDataPos={_hPointPos.Format()}\n" +
+                    //    $"   finalPosiiton={finalPosition.Format()}");
+
 #endif
                 }
             }
@@ -313,7 +328,7 @@ namespace IDHIPlugins
 #if DEBUG
                     var finalPosition = ChaControl.transform.rotation;
                     _Log.Info($"[ResetRotation] Calling [{callingMethod}] " +
-                        $"Reset position for {ChaType}\n" +
+                        $"Reset rotation for {ChaType}\n" +
                         $"  Angle Movement={rotation.Format()}\n" +
                         $"    from current={currentRotation.Format()}\n" +
                         $"              to={OriginalRotation.Format()}\n" +

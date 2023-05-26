@@ -1,22 +1,24 @@
 ﻿//
 // ActionButton
 //
+// Ignore Spelling: Cha
+
 using UnityEngine;
 
 using IDHIUtils;
 
-using static IDHIPlugins.HCharaAdjustmentX;
+using static IDHIPlugIns.HCharaAdjustmentX;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public struct AxisButton : IColorButton
     {
         private Axis _currentAxis;
-        private readonly HCharaAdjusmentXController _controller;
+        private readonly HCharaAdjustmentXController _controller;
 
         #region Interface Properties
-        public string Text => $"Axis: {_currentAxis} ({AxisVector.ColorName[_currentAxis]})";
+        public readonly string Text => $"Axis: {_currentAxis} ({AxisVector.ColorName[_currentAxis]})";
         public Color BackgroundColor { get; set; }
         public Color ForegroundColor { get; set; }
         public Rect Position { get; }
@@ -25,7 +27,7 @@ namespace IDHIPlugins
         #region Properties
         public Axis Axis
         {
-            get
+            readonly get
             {
                 return _currentAxis;
             }
@@ -36,8 +38,8 @@ namespace IDHIPlugins
                 _controller.CurrentAxis = value;
                 ForegroundColor = AxisVector.Color[value];
 #if DEBUG
-                _Log.Warning($"[Axis] _currentAxis={_currentAxis} for ChaType={ChaType} " +
-                    $"set to={_controller.CurrentAxis}");
+                //_Log.Warning($"[Axis] _currentAxis={_currentAxis} for ChaType={ChaType} " +
+                //    $"set to={_controller.CurrentAxis}");
 #endif
             }
         }
@@ -58,9 +60,9 @@ namespace IDHIPlugins
             BackgroundColor = Color.gray;
 
 #if DEBUG
-            _Log.Warning($"[Axis] Constructor for {chaType} set ChaType={ChaType} " +
-                $"set axis to={_controller.CurrentAxis} controller " +
-                $"type={_controller.ChaType}");
+            //_Log.Warning($"[Axis] Constructor for {chaType} set ChaType={ChaType} " +
+            //    $"set axis to={_controller.CurrentAxis} controller " +
+            //    $"type={_controller.ChaType}");
 #endif
         }
 #endregion
@@ -73,7 +75,7 @@ namespace IDHIPlugins
 #endif
             Axis = (Axis)(((int)_currentAxis + 1) % 3);
 #if DEBUG
-            _Log.Info($"[Axis.Process] Change axis from {axis} to {Axis}.");
+            //_Log.Info($"[Axis.Process] Change axis from {axis} to {Axis}.");
 #endif
         }
         #endregion

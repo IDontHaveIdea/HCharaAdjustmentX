@@ -11,7 +11,7 @@ using KKAPI.Utilities;
 //using IDHIUtils;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public partial class HCharaAdjustmentX
     {
@@ -30,7 +30,7 @@ namespace IDHIPlugins
             // Definition of configuration items
             var sectionKeys = "Keyboard Shortcuts for Guide";
 #if DEBUG
-            _Log.Info($"HCAX0016: Creating Shortcuts for Characters");
+            //_Log.Info($"HCAX0016: Creating Shortcuts for Characters");
             GroupGuide = Config.Bind(
                 section: sectionKeys,
                 key: "Show Group Guide",
@@ -79,7 +79,7 @@ namespace IDHIPlugins
 
             #region Steps
 #if DEBUG
-            _Log.Info($"HCAX0017: Creating Shortcuts for Steps");
+            //_Log.Info($"HCAX0017: Creating Shortcuts for Steps");
 #endif
 
             sectionKeys = "Movement Step";
@@ -97,8 +97,8 @@ namespace IDHIPlugins
                 {
                     _fAdjustStep = AdjustmentStep.Value;
 #if DEBUG
-                    _Log.Info($"HCAX0018: Movement step read in configuration - " +
-                        $"{AdjustmentStep.Value}");
+                    //_Log.Info($"HCAX0018: Movement step read in configuration - " +
+                    //    $"{AdjustmentStep.Value}");
 #endif
                 }
             };
@@ -117,8 +117,8 @@ namespace IDHIPlugins
                 {
                     _fRotationStep = RotationStep.Value;
 #if DEBUG
-                    _Log.Info($"HCAX0018: Movement step read in configuration - " +
-                        $"{RotationStep.Value}");
+                    //_Log.Info($"HCAX0018: Movement step read in configuration - " +
+                    //    $"{RotationStep.Value}");
 #endif
                 }
             };

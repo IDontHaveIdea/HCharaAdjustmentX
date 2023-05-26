@@ -9,7 +9,7 @@ using BepInEx.Logging;
 using IDHIUtils;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public partial class HCharaAdjustmentX
     {
@@ -28,7 +28,7 @@ namespace IDHIPlugins
         private void OnHProcExit(object s, EventArgs e)
         {
 #if DEBUG
-            _Log.Info($"[OnHProcExit] Removing patches and disabling HCAX.");
+            //_Log.Info($"[OnHProcExit] Removing patches and disabling HCAX.");
 #endif
             SetControllerEnabled(false);
             if (HPprocInstance != null)
@@ -49,7 +49,7 @@ namespace IDHIPlugins
                 _Log.Level(LogLevel.Error, $"HCAX0005: {ex}");
             }
 #if DEBUG
-            _Log.Info($"[OnHProcExit] Removing patches and disabling HCAX OK.");
+            //_Log.Info($"[OnHProcExit] Removing patches and disabling HCAX OK.");
 #endif
             HProcMonitor.OnExit -= OnHProcExit;
         }
@@ -58,7 +58,7 @@ namespace IDHIPlugins
             object s, HProcMonitor.HSceneLoadingEventArgs e)
         {
 #if DEBUG
-            _Log.Info($"[OnHProcFinishedLoading] Enabling HCAX.");
+            //_Log.Info($"[OnHProcFinishedLoading] Enabling HCAX.");
 #endif
             SetupController(e.ObjectInstance);
             Heroines = e.Females;
@@ -118,7 +118,7 @@ namespace IDHIPlugins
                     {
                         GetController(Heroines[i]).enabled = setState;
 #if DEBUG
-                        _Log.Info($"HCAX0009: Controller {setEnabled(setState)} for {(CharacterType)i}");
+                        //_Log.Info($"HCAX0009: Controller {setEnabled(setState)} for {(CharacterType)i}");
 #endif
                     }
                     catch (Exception e)
@@ -133,7 +133,7 @@ namespace IDHIPlugins
                 {
                     GetController(Player).enabled = setState;
 #if DEBUG
-                    _Log.Info($"HCAX0011: Controller {setEnabled(setState)} for Player");
+                    //_Log.Info($"HCAX0011: Controller {setEnabled(setState)} for Player");
 #endif
                 }
                 catch (Exception e)

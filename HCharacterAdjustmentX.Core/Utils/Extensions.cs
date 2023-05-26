@@ -4,10 +4,10 @@
 using System;
 using UnityEngine;
 
-using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
+using CTRL = IDHIPlugIns.HCharaAdjustmentX.HCharaAdjustmentXController;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     internal static class Extensions
     {

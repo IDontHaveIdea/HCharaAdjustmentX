@@ -1,13 +1,15 @@
 ﻿//
 // Move action button definition
 //
+// Ignore Spelling: Cha
+
 using UnityEngine;
 
 using IDHIUtils;
 
-using static IDHIPlugins.HCharaAdjustmentX;
+using static IDHIPlugIns.HCharaAdjustmentX;
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public struct MoveActionButton : IColorButton
     {
@@ -42,10 +44,10 @@ namespace IDHIPlugins
         /// <summary>
         /// Trigger a move event
         /// </summary>
-        public void Process()
+        public readonly void Process()
         {
 #if DEBUG
-            _Log.Info($"[MoveActionButton.Process] {Text} Button pressed for {ChaType} ");
+            //_Log.Info($"[MoveActionButton.Process] {Text} Button pressed for {ChaType} ");
 #endif
             MoveEvent.InvokeOnPositionMoveEvent(
                 null,

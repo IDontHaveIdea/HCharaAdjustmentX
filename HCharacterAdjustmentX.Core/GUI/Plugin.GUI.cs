@@ -9,10 +9,10 @@ using KKAPI;
 using UnityEngine;
 
 using IDHIUtils;
-using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
+using static IDHIPlugIns.HCharaAdjustmentX.HCharaAdjustmentXController;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public partial class HCharaAdjustmentX
     {
@@ -136,7 +136,7 @@ namespace IDHIPlugins
         public static void ToggleGroupGuideObject(bool state)
         {
 #if DEBUG
-            _Log.Warning($"[ToggleGroupGuideObject] Group Guide set to={state}");
+            //_Log.Warning($"[ToggleGroupGuideObject] Group Guide set to={state}");
 #endif
             HPprocInstance.sprite.axis.tglDraw.isOn = state;
             HPprocInstance.sprite.MoveAxisDraw(HPprocInstance.sprite.axis.tglDraw.isOn);

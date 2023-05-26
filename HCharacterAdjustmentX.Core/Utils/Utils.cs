@@ -1,6 +1,8 @@
 ﻿//
 // Utils.cs
 //
+// Ignore Spelling: Utils
+
 using System;
 using System.Collections.Generic;
 
@@ -10,11 +12,11 @@ using BepInEx.Logging;
 
 using IDHIUtils;
 
-using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjusmentXController;
-using static IDHIPlugins.HCharaAdjustmentX;
+using CTRL = IDHIPlugIns.HCharaAdjustmentX.HCharaAdjustmentXController;
+using static IDHIPlugIns.HCharaAdjustmentX;
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public class Utils
     {
@@ -150,8 +152,8 @@ namespace IDHIPlugins
                     _Log.Level(LogLevel.Error, $"HCAX0024A: Error - {e.Message}");
                 }
             }
-            _Log.Debug($"[GetAnimationKey] Animation key={result} " +
-                $"({Utilities.Translate(animation.nameAnimation)}).");
+            //_Log.Debug($"[GetAnimationKey] Animation key={result} " +
+            //    $"({Utilities.Translate(animation.nameAnimation)}).");
             return result;
         }
 
