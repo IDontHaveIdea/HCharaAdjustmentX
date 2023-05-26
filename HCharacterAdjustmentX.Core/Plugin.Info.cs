@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-using IDHIPlugins;
+using IDHIPlugIns;
 using IDHIUtils;
 
 #region Assembly attributes
@@ -17,7 +17,7 @@ using IDHIUtils;
 #endregion Assembly attributes
 
 
-namespace IDHIPlugins
+namespace IDHIPlugIns
 {
     public partial class HCharaAdjustmentX
     {
