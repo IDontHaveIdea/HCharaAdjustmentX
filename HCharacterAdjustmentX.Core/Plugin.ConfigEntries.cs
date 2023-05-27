@@ -21,6 +21,7 @@ namespace IDHIPlugIns
 
         internal static ConfigEntry<bool> DebugInfo;
         internal static ConfigEntry<bool> DebugToConsole;
+        internal static ConfigEntry<bool> DebugPositionInfo;
         internal static ConfigEntry<KeyboardShortcut> GroupGuide { get; set; }
         internal static ConfigEntry<float> AdjustmentStep;
         internal static ConfigEntry<float> RotationStep;
@@ -142,7 +143,8 @@ namespace IDHIPlugIns
             {
                 _Log.Enabled = DebugInfo.Value;
 #if DEBUG
-                _Log.Level(LogLevel.Info, $"HCAX0019A: Log.Enabled set to {_Log.Enabled}");
+                _Log.Level(LogLevel.Info, $"[ConfigDebugEnntry] Log.Enabled set to " +
+                    $"{_Log.Enabled}");
 #endif
             };
 
@@ -161,7 +163,27 @@ namespace IDHIPlugIns
             {
                 _Log.DebugToConsole = DebugToConsole.Value;
 #if DEBUG
-                _Log.Level(LogLevel.Info, $"HCAX0019B: Log.DebugToConsole set to {_Log.DebugToConsole}");
+                _Log.Level(LogLevel.Info, $"[ConfigDebugEnntry] Log.DebugToConsole " +
+                    $"set to {_Log.DebugToConsole}");
+#endif
+            };
+
+            DebugPositionInfo = Config.Bind(
+                section: "Debug",
+                key: "Debug positions details.",
+                defaultValue: false,
+                configDescription: new ConfigDescription(
+                    description: "Show detail information of positions Load/Save actions.",
+                    acceptableValues: null,
+                    tags: new ConfigurationManagerAttributes {
+                        Order = 1,
+                        IsAdvanced = true
+                    }));
+            DebugPositionInfo.SettingChanged += (_sender, _args) =>
+            {
+#if DEBUG
+                _Log.Level(LogLevel.Info, $"[ConfigDebugEnntry] Positions detail " +
+                    $"information set to {DebugPositionInfo.Value}");
 #endif
             };
 

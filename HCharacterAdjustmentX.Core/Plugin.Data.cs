@@ -257,6 +257,11 @@ namespace IDHIPlugIns
             Dictionary<string, Dictionary<CharacterType, PositionData>> MoveData,
             string name = "")
         {
+            if (!DebugPositionInfo.Value)
+            {
+                return;
+            }
+
             var lines = new StringBuilder();
 #if DEBUG
             var calllingMethod = Utilities.CallingMethod();
@@ -277,7 +282,7 @@ namespace IDHIPlugIns
 
             if (lines.Length > 0)
             {
-                //_Log.Debug($"[PrintData] [{name}]\n\n{lines}");
+                _Log.Debug($"[PrintData] [{name}]\n\n{lines}");
             }
         }
     }
