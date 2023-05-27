@@ -82,7 +82,7 @@ namespace IDHIPlugIns
                     var name = ChaControl.chaFile.parameter.fullname.Trim()
                             ?? string.Empty;
 #if DEBUG
-                    //_Log.Info($"[ReadData] [{name}] Data is null.");
+                    _Log.Debug($"[ReadData] [{name}] Data is null.");
 #endif
                 }
             }
