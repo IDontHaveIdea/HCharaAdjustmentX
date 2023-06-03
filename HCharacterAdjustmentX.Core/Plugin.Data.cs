@@ -171,7 +171,7 @@ namespace IDHIPlugIns
                     ?? "CHACONTROL FAIL";
 
                 var plugData = new PluginData {
-                    version = DataVersin
+                    version = DataVersion
                 };
                 var MoveDataSerialize = PrepareSerialize();
                 plugData.data.Add(MoveDataID,
