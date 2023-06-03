@@ -2,9 +2,11 @@
 // MoveEvent
 //
 using System;
-using System.Collections.Generic;
+
+using Illusion.Game;
 
 using static IDHIPlugIns.HCharaAdjustmentX;
+
 
 namespace IDHIPlugIns
 {
@@ -76,6 +78,7 @@ namespace IDHIPlugIns
 #if DEBUG
                 //_Log.Info($"[RegisterMoveEvents] Call to position move action " +
                 //    $"{_args.Move}");
+                Utils.Sound.Play(SystemSE.sel);
 #endif
                 CharPositionMovement.Move(_args.ChaType, _args.Move);
             };
@@ -85,6 +88,7 @@ namespace IDHIPlugIns
 #if DEBUG
                 //_Log.Info($"[RegisterRotationEvents] Call to rotation action " +
                 //    $"{_args.Move}");
+                Utils.Sound.Play(SystemSE.sel);
 #endif
                 CharRotationMovement.Move(_args.ChaType, _args.Move);
             };
