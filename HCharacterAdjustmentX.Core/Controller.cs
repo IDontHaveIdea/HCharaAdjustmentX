@@ -147,7 +147,7 @@ namespace IDHIPlugIns
                 {
                     if (MakerInfo.InRoomMaker)
                     {
-                        _Log.Message($"[{PluginName}] [OnReload] If you load a card " +
+                        _Log.Message($"[{PlugInName}] [OnReload] If you load a card " +
                             $"with Info selected you may lose move information.");
                     }
                 }
