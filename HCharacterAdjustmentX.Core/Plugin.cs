@@ -41,7 +41,7 @@ namespace IDHIPlugIns
     [BepInDependency(IDHIUtilsInfo.GUID, IDHIUtilsInfo.Version)]
     [BepInDependency(
         "essuhauled.animationloader", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInPlugin(GUID, PluginDisplayName, Version)]
+    [BepInPlugin(GUID, PlugInDisplayName, Version)]
     [BepInProcess(KoikatuAPI.GameProcessName)]
     public partial class HCharaAdjustmentX : BaseUnityPlugin
     {
@@ -79,7 +79,7 @@ namespace IDHIPlugIns
             }
             else
             {
-                Utils.CheckAnimationLoader();
+                PlugInUtils.CheckAnimationLoader();
             }
             CharacterApi.RegisterExtraBehaviour<CTRL>(GUID);
         }
