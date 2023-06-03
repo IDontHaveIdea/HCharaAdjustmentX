@@ -18,7 +18,8 @@ using static IDHIPlugIns.HCharaAdjustmentX;
 
 namespace IDHIPlugIns
 {
-    public class Utils
+    public class PlugInUtils
+
     {
         /// <summary>
         /// Return categories in the string form "{ cat 1, cat 2, ,,,}"
@@ -315,7 +316,7 @@ namespace IDHIPlugIns
 
             if (_animationLoaderMovementOk)
             {
-                var movement = Utils
+                var movement = PlugInUtils
                     .GetAnimationMovement(_nextAinmInfo);
 
                 var heroines = HPprocInstance.flags.lstHeroine;
