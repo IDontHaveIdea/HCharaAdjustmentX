@@ -28,4 +28,4 @@ using System.Diagnostics.CodeAnalysis;
     "IDE0060:Remove unused parameter",
     Justification = "Part of API",
     Scope = "member",
-    Target = "~M:IDHIPlugIns.Utils.SceneChanged(UnityEngine.SceneManagement.Scene,UnityEngine.SceneManagement.Scene)")]
+    Target = "~M:IDHIPlugIns.PlugInUtils.SceneChanged(UnityEngine.SceneManagement.Scene,UnityEngine.SceneManagement.Scene)")]
