@@ -77,7 +77,7 @@ namespace IDHIPlugIns
             HProcTraverse = new HSceneProcTraverse(instance);
 
             // set various flags
-            Utils.SetMode(HProcTraverse.flags.mode);
+            PlugInUtils.SetMode(HProcTraverse.flags.mode);
 
             // verify if is a scene we support
             if (!IsSupportedScene)
