@@ -62,8 +62,8 @@ namespace IDHIPlugIns
                 var callingMethod = Utilities.CallingMethod();
                 //_Log.Warning($"[{callingMethod}] Calling ChangeCategoryPostfix");
 #endif
-                Utils.SetOriginalPositionAll();
-                Utils.RecalcAdjustmentAll();
+                PlugInUtils.SetOriginalPositionAll();
+                PlugInUtils.RecalcAdjustmentAll();
             }
 
             [HarmonyPrefix]
@@ -102,9 +102,9 @@ namespace IDHIPlugIns
                 //}
 #endif
                 AnimationKey = "";
-                AnimationKey = Utils.GetAnimationKey(_nextAinmInfo);
-                Utils.SetALMove(_nextAinmInfo);
-                Utils.ResetPositionAll();
+                AnimationKey = PlugInUtils.GetAnimationKey(_nextAinmInfo);
+                PlugInUtils.SetALMove(_nextAinmInfo);
+                PlugInUtils.ResetPositionAll();
             }
 
             /// <summary>
@@ -154,12 +154,12 @@ namespace IDHIPlugIns
 #endif
                 //}
 #endif
-                AnimationKey = Utils.GetAnimationKey(_nextAinmInfo);
-                Utils.SetMode(_nextAinmInfo.mode);
-                Utils.SetALMove(_nextAinmInfo);
-                Utils.SetOriginalPositionAll();
-                Utils.RecalcAdjustmentAll();
-                Utils.InitialPosition();
+                AnimationKey = PlugInUtils.GetAnimationKey(_nextAinmInfo);
+                PlugInUtils.SetMode(_nextAinmInfo.mode);
+                PlugInUtils.SetALMove(_nextAinmInfo);
+                PlugInUtils.SetOriginalPositionAll();
+                PlugInUtils.RecalcAdjustmentAll();
+                PlugInUtils.InitialPosition();
             }
         }
     }
