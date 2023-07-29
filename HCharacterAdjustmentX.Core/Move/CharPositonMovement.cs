@@ -192,7 +192,7 @@ namespace IDHIPlugIns
                     if (DebugInfo.Value)
                     {
                         _Log.Debug($"[RecalcPosition] For {chaControl.name}\n" +
-                            $" Movement={fullMove.Format()}\n" +
+                            $" Movement={fullMove.Format()} " +
                             $"transform={transformMove.Format()}\n" +
                             $"     from={original.Format()}\n" +
                             $"       to={newPosition.Format()}\n" +
