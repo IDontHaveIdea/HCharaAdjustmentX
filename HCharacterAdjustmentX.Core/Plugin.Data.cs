@@ -105,8 +105,7 @@ namespace IDHIPlugIns
             internal MoveData(ChaControl chaControl)
             {
                 _chaControl = chaControl;
-                _data = new Dictionary<string,
-                    Dictionary<CharacterType, PositionData>>();
+                _data = [];
                 _data.Clear();
             }
 
