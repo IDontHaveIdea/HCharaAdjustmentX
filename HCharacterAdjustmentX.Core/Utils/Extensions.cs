@@ -1,7 +1,8 @@
 ﻿//
 // Extensions
 //
-using System;
+// Ignore Spelling: cha
+
 using UnityEngine;
 
 using CTRL = IDHIPlugIns.HCharaAdjustmentX.HCharaAdjustmentXController;
