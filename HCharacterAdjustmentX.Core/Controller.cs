@@ -62,7 +62,7 @@ namespace IDHIPlugIns
             #region public Methods
             public void ReadData()
             {
-                // Information for Player is save in Heroine card
+                // Information for Player is saved in Heroine card
                 if (ChaControl.sex == (byte)Sex.Male)
                 {
                     return;
