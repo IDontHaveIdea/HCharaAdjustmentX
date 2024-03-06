@@ -14,7 +14,7 @@ using ExtensibleSaveFormat;
 using IDHIUtils;
 
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
     {

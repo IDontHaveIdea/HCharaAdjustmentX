@@ -11,7 +11,7 @@ using IDHIUtils;
 using static FaceScreenShot;
 
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
     {

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using static IDHIPlugIns.HCharaAdjustmentX;
+using static IDHIPlugins.HCharaAdjustmentX;
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     public enum Axis
     {

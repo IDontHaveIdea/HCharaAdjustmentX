@@ -11,7 +11,7 @@ using KKAPI.Utilities;
 //using IDHIUtils;
 
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
     {

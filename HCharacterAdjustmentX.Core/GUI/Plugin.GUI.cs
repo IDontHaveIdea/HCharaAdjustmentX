@@ -9,10 +9,10 @@ using KKAPI;
 using UnityEngine;
 
 using IDHIUtils;
-using static IDHIPlugIns.HCharaAdjustmentX.HCharaAdjustmentXController;
+using static IDHIPlugins.HCharaAdjustmentX.HCharaAdjustmentXController;
 
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     public partial class HCharaAdjustmentX
     {

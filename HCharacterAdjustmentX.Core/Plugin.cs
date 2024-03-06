@@ -10,10 +10,10 @@ using KKAPI.Chara;
 
 using IDHIUtils;
 
-using CTRL = IDHIPlugIns.HCharaAdjustmentX.HCharaAdjustmentXController;
+using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjustmentXController;
 
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     /// <summary>
     /// This plug-in allows the position adjustment of the female character closer/apart,

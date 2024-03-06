@@ -1,6 +1,6 @@
 ﻿using BepInEx.Configuration;
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     /// <summary>
     /// Class for common keyboard shortcuts used.

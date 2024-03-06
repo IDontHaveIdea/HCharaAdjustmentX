@@ -15,7 +15,7 @@ using KKAPI.Chara;
 
 using IDHIUtils;
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     public enum CharacterType
     {

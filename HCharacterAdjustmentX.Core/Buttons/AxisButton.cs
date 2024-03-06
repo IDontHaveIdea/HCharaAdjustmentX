@@ -7,10 +7,10 @@ using UnityEngine;
 
 using IDHIUtils;
 
-using static IDHIPlugIns.HCharaAdjustmentX;
+using static IDHIPlugins.HCharaAdjustmentX;
 
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     public struct AxisButton : IColorButton
     {

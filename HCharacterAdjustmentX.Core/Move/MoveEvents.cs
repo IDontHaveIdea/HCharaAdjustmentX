@@ -5,10 +5,10 @@ using System;
 
 using Illusion.Game;
 
-using static IDHIPlugIns.HCharaAdjustmentX;
+using static IDHIPlugins.HCharaAdjustmentX;
 
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     public enum MoveType
     {

@@ -12,11 +12,11 @@ using BepInEx.Logging;
 
 using IDHIUtils;
 
-using CTRL = IDHIPlugIns.HCharaAdjustmentX.HCharaAdjustmentXController;
-using static IDHIPlugIns.HCharaAdjustmentX;
+using CTRL = IDHIPlugins.HCharaAdjustmentX.HCharaAdjustmentXController;
+using static IDHIPlugins.HCharaAdjustmentX;
 
 
-namespace IDHIPlugIns
+namespace IDHIPlugins
 {
     public class PlugInUtils
 
