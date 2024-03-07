@@ -23,7 +23,7 @@ namespace IDHIPlugins
     {
         public const string GUID = "com.ihavenoidea.hcharaadjustmentx";
 #if DEBUG
-        public const string PlugInDisplayName = "HScene Character AdjustmentX (Debug)";
+        public const string PluginDisplayName = "HScene Character AdjustmentX (Debug)";
 #else
         public const string PluginDisplayName = "HScene Character AdjustmentX";
 #endif
